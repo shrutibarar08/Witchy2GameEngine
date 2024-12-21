@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include "Components/W2Keyboard.h"
 
 #include "Exceptions/W2Exception.h"
 
@@ -14,6 +15,10 @@ public:
 	~W2Window();
 	W2Window(const W2Window&) = delete;
 	W2Window& operator=(const W2Window&) = delete;
+
+	//~ Components
+	W2Keyboard Keyboard;
+	
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
@@ -62,4 +67,3 @@ private:
 //~ Error Exception Helper Macros
 #define W2WND_EXCEPT(hr) W2Window::Exception(__LINE__, __FILE__, hr)
 #define W2WND_LAST_EXCEPT() W2Window::Exception(__LINE__, __FILE__, GetLastError())
-

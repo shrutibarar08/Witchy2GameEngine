@@ -150,10 +150,22 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\WindowSystem\W2Window.cpp" />
     <ClCompile Include="Engine\Exceptions\W2Exception.cpp" />
+    <ClCompile Include="Engine\WindowSystem\Components\W2Keyboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WindowSystem\W2Window.h" />
     <ClInclude Include="Engine\Exceptions\W2Exception.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Engine\WindowSystem\Components\W2Keyboard.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Witchy2GameEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Contents\Icons\TitleIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Contents\Cursors\Cursor_1.cur" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

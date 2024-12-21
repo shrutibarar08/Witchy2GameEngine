@@ -16,6 +16,11 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+
+			if (wnd.Keyboard.KeyIsPressed(VK_MENU))
+			{
+				MessageBox(nullptr, "Space is pressed", "Space", MB_OK);
+			}
 		}
 		return msg.wParam;
 	}

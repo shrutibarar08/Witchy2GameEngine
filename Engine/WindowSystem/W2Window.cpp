@@ -1,5 +1,7 @@
 #include "W2Window.h"
 
+#include "../resource.h"
+
 #include <sstream>
 
 //~ Static Declarations
@@ -62,13 +64,37 @@ LRESULT W2Window::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
 	switch (message)
 	{
-	case WM_CLOSE:
-	{
-		PostQuitMessage(0);
-		return S_OK;
+		case WM_CLOSE:
+		{
+			PostQuitMessage(0);
+			return S_OK;
+		}
+		case WM_SYSKEYDOWN:
+		case WM_KEYDOWN:
+		{
+			if (!(lParam & 0x40000000) || Keyboard.AutoRepeatIsEnabled())
+			{
+				Keyboard.OnKeyPressed(static_cast<unsigned char>(wParam));
+			}
+			return S_OK;
+		}
+		case WM_SYSKEYUP:
+		case WM_KEYUP:
+		{
+			Keyboard.OnKeyReleased(static_cast<unsigned char>(wParam));
+			return S_OK;
+		}
+		case WM_CHAR:
+		{
+			Keyboard.OnChar(static_cast<unsigned char>(wParam));
+			return S_OK;
+		}
+		case WM_KILLFOCUS:
+		{
+			Keyboard.ClearState();
+			return S_OK;
+		}
 	}
-	}
-
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 #pragma endregion
@@ -84,12 +110,12 @@ W2Window::W2WindowClass::W2WindowClass() noexcept
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = GetInstance();
-	wc.hIcon = nullptr;
-	wc.hCursor = nullptr;
+	wc.hIcon = static_cast<HICON>(LoadImage(m_hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 16, 16, 0));
+	wc.hCursor = static_cast<HCURSOR>(LoadImage(m_hInstance, MAKEINTRESOURCE(IDI_ICON2), IMAGE_ICON, 48, 48, 0));
 	wc.hbrBackground = nullptr;
 	wc.lpszClassName = GetName();
 	wc.lpszMenuName = nullptr;
-	wc.hIconSm = nullptr;
+	wc.hIconSm = static_cast<HICON>(LoadImage(m_hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 32, 32, 0));;
 
 	RegisterClassEx(&wc);
 }
