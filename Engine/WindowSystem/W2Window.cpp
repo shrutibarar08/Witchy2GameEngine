@@ -1,14 +1,19 @@
 #include "W2Window.h"
 
+#include <sstream>
+
 //~ Static Declarations
 W2Window::W2WindowClass W2Window::W2WindowClass::m_wndClass;
 
 #pragma region W2Window_Implemention
 
-W2Window::W2Window(RECT rect, const char* title) noexcept
+W2Window::W2Window(RECT rect, const char* title)
 	: m_rect(rect)
 {
-	AdjustWindowRect(&m_rect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+	if (FAILED(AdjustWindowRect(&m_rect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)))
+	{
+		throw W2WND_LAST_EXCEPT();
+	}
 
 	//~ Creates window
 	m_hWnd = CreateWindow(
@@ -19,6 +24,11 @@ W2Window::W2Window(RECT rect, const char* title) noexcept
 		m_rect.right - m_rect.left, m_rect.bottom - m_rect.top,
 		nullptr, nullptr, W2WindowClass::GetInstance(), this
 	);
+
+	if (m_hWnd == nullptr)
+	{
+		throw W2WND_LAST_EXCEPT();
+	}
 
 	ShowWindow(m_hWnd, SW_SHOWDEFAULT);
 }
@@ -98,4 +108,59 @@ W2Window::W2WindowClass::~W2WindowClass()
 {
 	UnregisterClass(m_wndClassName, GetInstance());
 }
+#pragma endregion
+
+#pragma region W2Window_Exception_Implemention
+
+W2Window::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
+	: W2Exception(line, file), m_hr(hr)
+{}
+
+const char* W2Window::Exception::what() const noexcept
+{
+	std::ostringstream oss;
+	oss << GetType() << std::endl
+		<< "[Error Code] " << GetErrorCode() << std::endl
+		<< "[Description] " << GetErrorString() << std::endl
+		<< GetOriginString();
+
+	m_whatBuffer = oss.str();
+	return m_whatBuffer.c_str();
+}
+
+const char* W2Window::Exception::GetType() const noexcept
+{
+	return "W2Window Exception";
+}
+
+HRESULT W2Window::Exception::GetErrorCode() const noexcept
+{
+	return m_hr;
+}
+
+std::string W2Window::Exception::GetErrorString() const noexcept
+{
+	return TranslateErrorCode(m_hr);
+}
+
+std::string W2Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
+{
+	char* pMsgBuf = nullptr;
+	DWORD nMsgLen = FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		reinterpret_cast<LPSTR>(&pMsgBuf), 0, nullptr
+	);
+
+	if (nMsgLen == 0)
+	{
+		return "Unidentified error code!.";
+	}
+
+	std::string errorString = pMsgBuf;
+	LocalFree(pMsgBuf);
+
+	return errorString;
+}
+
 #pragma endregion

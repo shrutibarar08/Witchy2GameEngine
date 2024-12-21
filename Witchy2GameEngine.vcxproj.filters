@@ -21,9 +21,15 @@
     <ClCompile Include="Engine\WindowSystem\W2Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Exceptions\W2Exception.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WindowSystem\W2Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Exceptions\W2Exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

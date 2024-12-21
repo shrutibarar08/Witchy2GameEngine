@@ -2,13 +2,15 @@
 
 #include <Windows.h>
 
+#include "Exceptions/W2Exception.h"
+
 /**
  * @brief A Window class that encapsulates the Win32 window creation and message handling.
  */
 class W2Window
 {
 public:
-	W2Window(RECT rect, const char* title) noexcept;
+	W2Window(RECT rect, const char* title);
 	~W2Window();
 	W2Window(const W2Window&) = delete;
 	W2Window& operator=(const W2Window&) = delete;
@@ -41,4 +43,23 @@ private:
 		static constexpr const char* m_wndClassName = "W2WindowClass";
 		HINSTANCE					 m_hInstance;
 	};
+
+	class Exception : public W2Exception
+	{
+	public:
+		Exception(int line, const char* file, HRESULT hr) noexcept;
+		const char* what() const noexcept override;
+		virtual const char* GetType() const noexcept override;
+		HRESULT GetErrorCode() const noexcept;
+		std::string GetErrorString() const noexcept;
+		static std::string TranslateErrorCode(HRESULT hr) noexcept;
+
+	private:
+		HRESULT m_hr;
+	};
 };
+
+//~ Error Exception Helper Macros
+#define W2WND_EXCEPT(hr) W2Window::Exception(__LINE__, __FILE__, hr)
+#define W2WND_LAST_EXCEPT() W2Window::Exception(__LINE__, __FILE__, GetLastError())
+
