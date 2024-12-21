@@ -1,7 +1,10 @@
 #include <Windows.h>
+#include <sstream>
 
 #include "WindowSystem/W2Window.h"
 #include "Exceptions/W2Exception.h"
+
+#include "WindowSystem/Components/W2Mouse.h"
 
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -16,13 +19,8 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-
-			if (wnd.Keyboard.KeyIsPressed(VK_MENU))
-			{
-				MessageBox(nullptr, "Space is pressed", "Space", MB_OK);
-			}
 		}
-		return msg.wParam;
+		return static_cast<int>(msg.wParam);
 	}
 	catch (const W2Exception& e)
 	{

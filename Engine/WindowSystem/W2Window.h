@@ -1,7 +1,9 @@
 #pragma once
 
 #include <Windows.h>
+
 #include "Components/W2Keyboard.h"
+#include "Components/W2Mouse.h"
 
 #include "Exceptions/W2Exception.h"
 
@@ -16,9 +18,12 @@ public:
 	W2Window(const W2Window&) = delete;
 	W2Window& operator=(const W2Window&) = delete;
 
+	void SetTitle(const std::string& newName);
+
 	//~ Components
 	W2Keyboard Keyboard;
-	
+	W2Mouse	   Mouse;
+
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
