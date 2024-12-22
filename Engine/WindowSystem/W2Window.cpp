@@ -10,7 +10,8 @@ W2Window::W2WindowClass W2Window::W2WindowClass::m_wndClass;
 #pragma region W2Window_Implemention
 
 W2Window::W2Window(RECT rect, const char* title)
-	: m_rect(rect)
+	: m_rect(rect),
+      m_titleName(title)
 {
 	if (AdjustWindowRect(&m_rect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0)
 	{
@@ -33,6 +34,9 @@ W2Window::W2Window(RECT rect, const char* title)
 	}
 
 	ShowWindow(m_hWnd, SW_SHOWDEFAULT);
+
+	//~ Creates RenderAPI
+	m_renderAPI = std::make_unique<W2RenderAPI>(m_hWnd);
 }
 
 W2Window::~W2Window()
@@ -40,12 +44,41 @@ W2Window::~W2Window()
 	DestroyWindow(m_hWnd);
 }
 
-void W2Window::SetTitle(const std::string& newName)
+const char* W2Window::GetTitleName() const noexcept
+{
+	return m_titleName;
+}
+
+void W2Window::SetTitleName(const std::string& newName) const
 {
 	if (SetWindowText(m_hWnd, newName.c_str()) == 0)
 	{
 		throw W2WND_LAST_EXCEPT();
 	}
+}
+
+std::optional<int> W2Window::ProcessMessages()
+{
+	MSG msg{};
+	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	{
+		if (msg.message == WM_QUIT)
+		{
+			return static_cast<int>(msg.wParam);
+		}
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+	return {};
+}
+
+W2RenderAPI& W2Window::RenderAPI()
+{
+	if (m_renderAPI == nullptr)
+	{
+		throw std::runtime_error("Calling RenderAPI when its NULL!");
+	}
+	return *m_renderAPI;
 }
 
 LRESULT W2Window::HandleMsgSetup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept
@@ -79,9 +112,14 @@ LRESULT W2Window::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		}
 		case WM_KILLFOCUS:
 		{
+			// TODO: Add Pause event or Callback
 			Keyboard.ClearState();
 			Mouse.Flush();
 			return S_OK;
+		}
+		case WM_SETFOCUS:
+		{
+			// TODO: Add Resume Event or Callback
 		}
 #pragma region Keyboard_Input
 		case WM_SYSKEYDOWN:

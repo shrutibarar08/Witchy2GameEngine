@@ -114,7 +114,6 @@ private:
 	void OnWheelDelta(int x, int y, int delta) noexcept;
 	void TrimBuffer() noexcept;
 
-
 private:
 	static constexpr unsigned int m_bufferSize{ 16u };
 	int m_x{ 0 };

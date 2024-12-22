@@ -1,10 +1,13 @@
 #pragma once
 
 #include <Windows.h>
+#include <optional>
+#include <memory>
 
 #include "Components/W2Keyboard.h"
 #include "Components/W2Mouse.h"
 
+#include "Renderer/W2RenderAPI.h"
 #include "Exceptions/W2Exception.h"
 
 /**
@@ -18,7 +21,11 @@ public:
 	W2Window(const W2Window&) = delete;
 	W2Window& operator=(const W2Window&) = delete;
 
-	void SetTitle(const std::string& newName);
+	const char* GetTitleName() const noexcept;
+	void SetTitleName(const std::string& newName) const;
+
+	static std::optional<int> ProcessMessages();
+	W2RenderAPI& RenderAPI();
 
 	//~ Components
 	W2Keyboard Keyboard;
@@ -32,6 +39,9 @@ private:
 	//~ Members
 	RECT m_rect;
 	HWND m_hWnd;
+	const char* m_titleName;
+	std::unique_ptr<W2RenderAPI> m_renderAPI;
+
 private:
 	/**
 	 * @brief A helper class that manages the registration and properties of the window class.
