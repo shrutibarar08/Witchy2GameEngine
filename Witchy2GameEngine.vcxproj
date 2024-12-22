@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Exceptions\dxerr.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\WindowSystem\W2Window.cpp" />
     <ClCompile Include="Engine\Exceptions\W2Exception.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Engine\Renderer\W2RenderAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Exceptions\dxerr.h" />
     <ClInclude Include="Engine\WindowSystem\W2Window.h" />
     <ClInclude Include="Engine\Exceptions\W2Exception.h" />
     <ClInclude Include="Engine\Renderer\W2RenderAPI.h" />
@@ -176,6 +178,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Contents\Cursors\Cursor_1.cur" />
+    <None Include="Engine\Exceptions\DXGetErrorDescription.inl" />
+    <None Include="Engine\Exceptions\DXGetErrorString.inl" />
+    <None Include="Engine\Exceptions\DXTrace.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

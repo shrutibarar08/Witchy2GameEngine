@@ -24,7 +24,7 @@ public:
 	const char* GetTitleName() const noexcept;
 	void SetTitleName(const std::string& newName) const;
 
-	static std::optional<int> ProcessMessages();
+	static std::optional<int> ProcessMessages() noexcept;
 	W2RenderAPI& RenderAPI();
 
 	//~ Components
@@ -66,19 +66,31 @@ private:
 
 	class Exception : public W2Exception
 	{
+		using W2Exception::W2Exception;
 	public:
-		Exception(int line, const char* file, HRESULT hr) noexcept;
+		static std::string TranslateErrorCode(HRESULT hr) noexcept;
+	};
+	class HRException : public Exception
+	{
+	public:
+		HRException(int line, const char* file, HRESULT hr) noexcept;
 		const char* what() const noexcept override;
 		virtual const char* GetType() const noexcept override;
 		HRESULT GetErrorCode() const noexcept;
 		std::string GetErrorString() const noexcept;
-		static std::string TranslateErrorCode(HRESULT hr) noexcept;
-
+		std::string GetErrorDescription() const noexcept;
 	private:
 		HRESULT m_hr;
+	};
+	class DeviceRemovedException : public Exception
+	{
+	public:
+		using Exception::Exception;
+		const char* GetType() const noexcept override;
 	};
 };
 
 //~ Error Exception Helper Macros
-#define W2WND_EXCEPT(hr) W2Window::Exception(__LINE__, __FILE__, hr)
-#define W2WND_LAST_EXCEPT() W2Window::Exception(__LINE__, __FILE__, GetLastError())
+#define W2WND_EXCEPT(hr) W2Window::HRException(__LINE__, __FILE__, (hr))
+#define W2WND_LAST_EXCEPT() W2Window::HRException(__LINE__, __FILE__, GetLastError())
+#define W2WND_NO_DEVICE_EXCEPT() W2Window::DeviceRemovedException(__LINE__, __FILE__)

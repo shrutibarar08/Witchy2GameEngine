@@ -57,7 +57,7 @@ void W2Window::SetTitleName(const std::string& newName) const
 	}
 }
 
-std::optional<int> W2Window::ProcessMessages()
+std::optional<int> W2Window::ProcessMessages() noexcept
 {
 	MSG msg{};
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -76,7 +76,7 @@ W2RenderAPI& W2Window::RenderAPI()
 {
 	if (m_renderAPI == nullptr)
 	{
-		throw std::runtime_error("Calling RenderAPI when its NULL!");
+		throw W2WND_NO_DEVICE_EXCEPT();
 	}
 	return *m_renderAPI;
 }
@@ -246,38 +246,7 @@ W2Window::W2WindowClass::~W2WindowClass()
 }
 #pragma endregion
 
-#pragma region W2Window_Exception_Implemention
-
-W2Window::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
-	: W2Exception(line, file), m_hr(hr)
-{}
-
-const char* W2Window::Exception::what() const noexcept
-{
-	std::ostringstream oss;
-	oss << GetType() << std::endl
-		<< "[Error Code] " << GetErrorCode() << std::endl
-		<< "[Description] " << GetErrorString() << std::endl
-		<< GetOriginString();
-
-	m_whatBuffer = oss.str();
-	return m_whatBuffer.c_str();
-}
-
-const char* W2Window::Exception::GetType() const noexcept
-{
-	return "W2Window Exception";
-}
-
-HRESULT W2Window::Exception::GetErrorCode() const noexcept
-{
-	return m_hr;
-}
-
-std::string W2Window::Exception::GetErrorString() const noexcept
-{
-	return TranslateErrorCode(m_hr);
-}
+#pragma region Exception_Implemention
 
 std::string W2Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 {
@@ -287,16 +256,61 @@ std::string W2Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 		nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		reinterpret_cast<LPSTR>(&pMsgBuf), 0, nullptr
 	);
-
 	if (nMsgLen == 0)
 	{
-		return "Unidentified error code!.";
+		return "Unidentified Error Code";
 	}
-
 	std::string errorString = pMsgBuf;
 	LocalFree(pMsgBuf);
-
 	return errorString;
+}
+
+W2Window::HRException::HRException(int line, const char* file, HRESULT hr) noexcept
+	: Exception(line, file), m_hr(hr)
+{}
+
+const char* W2Window::HRException::what() const noexcept
+{
+	std::ostringstream oss;
+	oss << GetType() << "\n"
+		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
+		<< std::dec << " (" << static_cast<unsigned long>(GetErrorCode()) << ")" << "\n"
+		<< "[Error String] " << GetErrorString() << "\n"
+		<< "[Description] " << GetErrorString() << "\n"
+		<< GetOriginString();
+	m_whatBuffer = oss.str();
+	return m_whatBuffer.c_str();
+}
+
+const char* W2Window::HRException::GetType() const noexcept
+{
+	return "Witchy Window Exception";
+}
+
+HRESULT W2Window::HRException::GetErrorCode() const noexcept
+{
+	return m_hr;
+}
+
+std::string W2Window::HRException::GetErrorString() const noexcept
+{
+	return TranslateErrorCode(m_hr);
+}
+
+std::string W2Window::HRException::GetErrorDescription() const noexcept
+{
+	char buf[512];
+	FormatMessage(
+		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		nullptr, m_hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		buf, sizeof(buf), nullptr
+	);
+	return buf;
+}
+
+const char* W2Window::DeviceRemovedException::GetType() const noexcept
+{
+	return "Witchy Window Exception [Removed Device]";
 }
 
 #pragma endregion
