@@ -64,6 +64,7 @@ private:
 		HINSTANCE					 m_hInstance;
 	};
 
+public:
 	class Exception : public W2Exception
 	{
 		using W2Exception::W2Exception;

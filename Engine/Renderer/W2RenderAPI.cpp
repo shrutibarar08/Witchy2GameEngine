@@ -28,15 +28,15 @@ W2RenderAPI::W2RenderAPI(HWND hWnd)
 	sd.SampleDesc.Count					  = 1u;
 	sd.SampleDesc.Quality				  = 0u;
 	sd.BufferUsage						  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.Flags							  = 0u;
+	sd.Flags							  = D3D11_CREATE_DEVICE_DEBUG;
 
 	HRESULT hr;
-	RENDER_API_FAILED(D3D11CreateDeviceAndSwapChain
+	RENDER_API_THROW(D3D11CreateDeviceAndSwapChain
 	(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
-		0u,
+		m_debugFlag,
 		nullptr,
 		0u,
 		D3D11_SDK_VERSION,
@@ -49,15 +49,13 @@ W2RenderAPI::W2RenderAPI(HWND hWnd)
 
 	//~ Creates RenderTarget
 	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
-	RENDER_API_FAILED(m_swapChain->GetBuffer(0u, __uuidof(ID3D11Resource), &pBackBuffer));
-
-	RENDER_API_FAILED(m_device->CreateRenderTargetView(pBackBuffer.Get(),
-		nullptr, &m_renderTV));
+	RENDER_API_THROW(m_swapChain->GetBuffer(0u, __uuidof(ID3D11Resource), &pBackBuffer));
+	RENDER_API_THROW(m_device->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &m_renderTV));
 }
 
 void W2RenderAPI::ClearBuffer() const
 {
-	m_deviceContext->ClearRenderTargetView(m_renderTV.Get(), _testColor);
+	m_deviceContext->ClearRenderTargetView(m_renderTV.Get(), _defaultColor);
 }
 
 void W2RenderAPI::PresentFrame() const
@@ -71,7 +69,7 @@ void W2RenderAPI::PresentFrame() const
 		}
 		else
 		{
-			RENDER_API_FAILED(hr);
+			throw RENDER_API_EXCEPT(hr);
 		}
 	}
 }
@@ -81,9 +79,19 @@ void W2RenderAPI::PresentFrame() const
 
 #pragma region Exception_Implemention
 
-W2RenderAPI::HRException::HRException(int line, const char* file, HRESULT hr) noexcept
+W2RenderAPI::HRException::HRException(int line, const char* file, HRESULT hr, std::vector<std::string> infoMessages) noexcept
 	: Exception(line, file), m_hr(hr)
-{}
+{
+	for (const auto& m : infoMessages)
+	{
+		m_info += m;
+		m_info.push_back('\n');
+	}
+	if (!m_info.empty())
+	{
+		m_info.pop_back();
+	}
+}
 
 const char* W2RenderAPI::HRException::what() const noexcept
 {
@@ -92,8 +100,12 @@ const char* W2RenderAPI::HRException::what() const noexcept
 		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
 		<< std::dec << " (" << static_cast<unsigned long>(GetErrorCode()) << ")" << "\n"
 		<< "[Error String] " << GetErrorString() << "\n"
-		<< "[Description] " << GetErrorDescription() << "\n"
-		<< GetOriginString();
+		<< "[Description] " << GetErrorDescription() << "\n";
+		if (!m_info.empty())
+		{
+			oss << "\n[Error Info]\n" << GetErrorInfo() << "\n\n";
+		}
+		oss << GetOriginString();
 
 	m_whatBuffer = oss.str();
 
@@ -120,6 +132,11 @@ std::string W2RenderAPI::HRException::GetErrorDescription() const noexcept
 	char buf[512];
 	DXGetErrorDescription(m_hr, buf, sizeof(buf));
 	return buf;
+}
+
+std::string W2RenderAPI::HRException::GetErrorInfo() const noexcept
+{
+	return m_info;
 }
 
 const char* W2RenderAPI::DeviceRemovedException::GetType() const noexcept

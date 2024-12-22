@@ -42,6 +42,9 @@
     <ClCompile Include="Engine\Exceptions\dxerr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Exceptions\DxgiInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WindowSystem\W2Window.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Exceptions\dxerr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Exceptions\DxgiInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
