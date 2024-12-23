@@ -26,13 +26,15 @@ public:
 	void PresentFrame() const;
 
 	//~ Just For Testing Everything Working Fine or not
-	void TestDraw();
+	void TestDraw(float time);
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device>		   m_device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>    m_deviceContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>		   m_swapChain;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_renderTV;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D>		   m_depthT2D;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthSV;
 
 #ifdef _DEBUG
 	DxgiInfoManager m_dxgiInfoManager;

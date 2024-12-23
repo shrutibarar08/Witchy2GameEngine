@@ -54,12 +54,36 @@ W2RenderAPI::W2RenderAPI(HWND hWnd)
 	RENDER_API_THROW(m_swapChain->GetBuffer(0u, __uuidof(ID3D11Resource), &pBackBuffer));
 	RENDER_API_THROW(m_device->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &m_renderTV));
 
-	m_deviceContext->OMSetRenderTargets(1u, m_renderTV.GetAddressOf(), nullptr);
+	//~ Creates Depth Stencil buffer and View
+	D3D11_TEXTURE2D_DESC td{};
+	td.Width = rt.right - rt.left;
+	td.Height = rt.bottom - rt.top;
+	td.MipLevels = 1u;
+	td.ArraySize = 1u;
+	td.Format = DXGI_FORMAT_D32_FLOAT;
+	td.SampleDesc.Count = 1u;
+	td.SampleDesc.Quality = 0u;
+	td.Usage = D3D11_USAGE_DEFAULT;
+	td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	td.CPUAccessFlags = 0u;
+	td.MiscFlags = 0u;
+
+	RENDER_API_THROW(m_device->CreateTexture2D(&td, nullptr, &m_depthT2D));
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvd{};
+	dsvd.Format = td.Format;
+	dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	dsvd.Texture2D.MipSlice = 0u;
+
+	RENDER_API_THROW(m_device->CreateDepthStencilView(m_depthT2D.Get(), &dsvd, &m_depthSV));
+
+	m_deviceContext->OMSetRenderTargets(1u, m_renderTV.GetAddressOf(), m_depthSV.Get());
 }
 
 void W2RenderAPI::ClearBuffer() const
 {
 	m_deviceContext->ClearRenderTargetView(m_renderTV.Get(), _defaultColor);
+	m_deviceContext->ClearDepthStencilView(m_depthSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 }
 
 void W2RenderAPI::PresentFrame() const
@@ -78,7 +102,7 @@ void W2RenderAPI::PresentFrame() const
 	}
 }
 
-void W2RenderAPI::TestDraw()
+void W2RenderAPI::TestDraw(float time)
 {
 	HRESULT hr;
 
@@ -101,32 +125,37 @@ void W2RenderAPI::TestDraw()
 	{
 		{
 			"POSITION", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u,
-			0u, D3D11_INPUT_PER_VERTEX_DATA, 0u
+			0, D3D11_INPUT_PER_VERTEX_DATA, 0u
+		},
+		{
+			"COLOR", 0u, DXGI_FORMAT_R32G32B32A32_FLOAT, 0u,
+			12, D3D11_INPUT_PER_VERTEX_DATA, 0u
 		},
 	};
+	UINT numElements = ARRAYSIZE(pInputLayout);
+
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayoutObj;
-	RENDER_API_THROW(m_device->CreateInputLayout(pInputLayout, 1u,
+	RENDER_API_THROW(m_device->CreateInputLayout(pInputLayout, numElements,
 		pBlobVS->GetBufferPointer(), pBlobVS->GetBufferSize(),
 		&pInputLayoutObj));
 
 	//~ Creates Vertices
 	struct Vertex
 	{
-		float x;
-		float y;
-		float z;
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT4 color;
 	};
 
-	Vertex vertices[]
+	Vertex vertices[] =
 	{
-		{-1, 1, -1},
-		{1, 1, -1},
-		{1, 1, 1},
-		{-1, 1, 1},
-		{-1, -1, -1},
-		{1, -1, -1},
-		{1, -1, 1},
-		{-1, -1, 1},
+		{DirectX::XMFLOAT3{-1.f,  1.f, -1.f}, DirectX::XMFLOAT4(0.2f, 0.4f, 0.5f, 1.f)},
+		{DirectX::XMFLOAT3{ 1.f,  1.f, -1.f}, DirectX::XMFLOAT4(0.6f, 0.3f, 0.8f, 1.f)},
+		{DirectX::XMFLOAT3{ 1.f,  1.f,  1.f}, DirectX::XMFLOAT4(0.1f, 0.9f, 0.4f, 1.f)},
+		{DirectX::XMFLOAT3{-1.f,  1.f,  1.f}, DirectX::XMFLOAT4(0.3f, 0.5f, 0.7f, 1.f)},
+		{DirectX::XMFLOAT3{-1.f, -1.f, -1.f}, DirectX::XMFLOAT4(0.9f, 0.2f, 0.6f, 1.f)},
+		{DirectX::XMFLOAT3{ 1.f, -1.f, -1.f}, DirectX::XMFLOAT4(0.4f, 0.8f, 0.1f, 1.f)},
+		{DirectX::XMFLOAT3{ 1.f, -1.f,  1.f}, DirectX::XMFLOAT4(0.7f, 0.3f, 0.9f, 1.f)},
+		{DirectX::XMFLOAT3{-1.f, -1.f,  1.f}, DirectX::XMFLOAT4(0.5f, 0.6f, 0.2f, 1.f)}
 	};
 
 	D3D11_BUFFER_DESC bufferDesc{};
@@ -220,7 +249,7 @@ void W2RenderAPI::TestDraw()
 	auto view = DirectX::XMMatrixLookAtLH(eye, at, up);
 	auto projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, 1280.f / 720.f, 0.01f, 100.f);
 
-	auto rotationY = DirectX::XMMatrixRotationY(0.4f);
+	auto rotationY = DirectX::XMMatrixRotationY(time);
 
 	ConstantBuffer cb;
 	cb.World = DirectX::XMMatrixTranspose(world);
