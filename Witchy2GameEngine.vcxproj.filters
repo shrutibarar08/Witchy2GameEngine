@@ -101,5 +101,11 @@
     <None Include="Engine\Exceptions\DXTrace.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Shaders\Compiled\VertexShader.cso" />
+    <None Include="Shaders\Compiled\PixelShader.cso" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\Code\TestShaders\VertexShader.hlsl" />
+    <FxCompile Include="Shaders\Code\TestShaders\PixelShader.hlsl" />
   </ItemGroup>
 </Project>

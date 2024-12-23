@@ -69,6 +69,16 @@ public:
 	private:
 		std::string m_description;
 	};
+	class InfoException : public Exception
+	{
+	public:
+		InfoException(int line, const char* file, std::vector<std::string> infoMessages) noexcept;
+		const char* what() const noexcept override;
+		const char* GetType() const noexcept override;
+		std::string GetErrorInfo() const noexcept;
+	private:
+		std::string m_info;
+	};
 };
 
 #define RENDER_API_EXCEPT_NOINFO(hr) W2RenderAPI::HRException(__LINE__, __FILE__, (hr))
@@ -78,6 +88,7 @@ public:
 #define RENDER_API_EXCEPT(hr) W2RenderAPI::HRException(__LINE__, __FILE__, (hr), m_dxgiInfoManager.GetMessage())
 #define RENDER_API_THROW(hrCall) m_dxgiInfoManager.Set(); if (FAILED(hr=(hrCall))) throw RENDER_API_EXCEPT(hr)
 #define RENDER_API_REMOVED_EXCEPT(hr) W2RenderAPI::DeviceRemovedException(__LINE__, __FILE__, (hr), m_dxgiInfoManager.GetMessage())
+#define RENDER_API_INFO_ONLY(hrCall) m_dxgiInfoManager.Set(); (hrCall); { auto v = m_dxgiInfoManager.GetMessage(); if (!v.empty()) throw W2RenderAPI::InfoException(__LINE__, __FILE__, std::move(v)); }
 #else
 #define RENDER_API_EXCEPT(hr) W2RenderAPI::HRException(__LINE__, __FILE__, (hr))
 #define RENDER_API_THROW(hrCall) RENDER_API_THROW_NOINFO(hrCall)

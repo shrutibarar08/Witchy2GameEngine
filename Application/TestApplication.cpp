@@ -27,6 +27,7 @@ void TestApplication::UpdateFrame()
 {
 	m_window.RenderAPI().ClearBuffer();
 	ComputeFPS();
+	m_window.RenderAPI().TestDraw();
 	m_window.RenderAPI().PresentFrame();
 }
 
