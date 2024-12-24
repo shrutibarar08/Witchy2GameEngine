@@ -159,10 +159,12 @@
     <ClCompile Include="Application\TestApplication.cpp" />
     <ClCompile Include="Engine\Utils\W2Timer.cpp" />
     <ClCompile Include="Engine\Renderer\W2RenderAPI.cpp" />
+    <ClCompile Include="Engine\src\WitchyEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Exceptions\DxgiInfoManager.h" />
     <ClInclude Include="Engine\Exceptions\dxerr.h" />
+    <ClInclude Include="Engine\Exceptions\RenderAPIMacros.h" />
     <ClInclude Include="Engine\WindowSystem\W2Window.h" />
     <ClInclude Include="Engine\Exceptions\W2Exception.h" />
     <ClInclude Include="Engine\Renderer\W2RenderAPI.h" />
@@ -171,6 +173,7 @@
     <ClInclude Include="Engine\WindowSystem\Components\W2Mouse.h" />
     <ClInclude Include="Application\TestApplication.h" />
     <ClInclude Include="Engine\Utils\W2Timer.h" />
+    <ClInclude Include="Engine\src\WitchyEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc" />

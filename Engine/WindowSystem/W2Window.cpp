@@ -34,9 +34,6 @@ W2Window::W2Window(RECT rect, const char* title)
 	}
 
 	ShowWindow(m_hWnd, SW_SHOWDEFAULT);
-
-	//~ Creates RenderAPI
-	m_renderAPI = std::make_unique<W2RenderAPI>(m_hWnd);
 }
 
 W2Window::~W2Window()
@@ -57,6 +54,11 @@ void W2Window::SetTitleName(const std::string& newName) const
 	}
 }
 
+HWND W2Window::GetHandleWindow() const noexcept
+{
+	return m_hWnd;
+}
+
 std::optional<int> W2Window::ProcessMessages() noexcept
 {
 	MSG msg{};
@@ -70,15 +72,6 @@ std::optional<int> W2Window::ProcessMessages() noexcept
 		DispatchMessage(&msg);
 	}
 	return {};
-}
-
-W2RenderAPI& W2Window::RenderAPI()
-{
-	if (m_renderAPI == nullptr)
-	{
-		throw W2WND_NO_DEVICE_EXCEPT();
-	}
-	return *m_renderAPI;
 }
 
 LRESULT W2Window::HandleMsgSetup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept

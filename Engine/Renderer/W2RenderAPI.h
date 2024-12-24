@@ -8,27 +8,34 @@
 #include "Exceptions/DxgiInfoManager.h"
 
 
+// TODO: Create PQ to manage priority for Construction and Destruction
+
 /**
  * @brief RenderAPI Class Based on DirectX 11
  */
 class W2RenderAPI
 {
 public:
-	W2RenderAPI(HWND hWnd);
-	~W2RenderAPI() = default;
-	W2RenderAPI(const W2RenderAPI&) = delete;
-	W2RenderAPI& operator=(const W2RenderAPI&) = delete;
-	W2RenderAPI(W2RenderAPI&&) = delete;
-	W2RenderAPI& operator=(W2RenderAPI&&) = delete;
+
+	static void Init(HWND hWnd);
+	static W2RenderAPI* Get();
 
 	//~ Render Methods
 	void ClearBuffer() const;
 	void PresentFrame() const;
 
-	//~ Just For Testing Everything Working Fine or not
-	void TestDraw(float time);
-
 private:
+	W2RenderAPI(HWND hWnd);
+	~W2RenderAPI();
+	W2RenderAPI(const W2RenderAPI&) = delete;
+	W2RenderAPI& operator=(const W2RenderAPI&) = delete;
+	W2RenderAPI(W2RenderAPI&&) = delete;
+	W2RenderAPI& operator=(W2RenderAPI&&) = delete;
+
+	static W2RenderAPI* m_instance;
+
+public:
+
 	Microsoft::WRL::ComPtr<ID3D11Device>		   m_device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>    m_deviceContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>		   m_swapChain;
@@ -82,17 +89,3 @@ public:
 		std::string m_info;
 	};
 };
-
-#define RENDER_API_EXCEPT_NOINFO(hr) W2RenderAPI::HRException(__LINE__, __FILE__, (hr))
-#define RENDER_API_THROW_NOINFO(hrCall) if (FAILED(hr=(hrCall))) throw RENDER_API_EXCEPT_NOINFO(hr)
-
-#ifdef _DEBUG
-#define RENDER_API_EXCEPT(hr) W2RenderAPI::HRException(__LINE__, __FILE__, (hr), m_dxgiInfoManager.GetMessage())
-#define RENDER_API_THROW(hrCall) m_dxgiInfoManager.Set(); if (FAILED(hr=(hrCall))) throw RENDER_API_EXCEPT(hr)
-#define RENDER_API_REMOVED_EXCEPT(hr) W2RenderAPI::DeviceRemovedException(__LINE__, __FILE__, (hr), m_dxgiInfoManager.GetMessage())
-#define RENDER_API_INFO_ONLY(hrCall) m_dxgiInfoManager.Set(); (hrCall); { auto v = m_dxgiInfoManager.GetMessage(); if (!v.empty()) throw W2RenderAPI::InfoException(__LINE__, __FILE__, std::move(v)); }
-#else
-#define RENDER_API_EXCEPT(hr) W2RenderAPI::HRException(__LINE__, __FILE__, (hr))
-#define RENDER_API_THROW(hrCall) RENDER_API_THROW_NOINFO(hrCall)
-#define RENDER_API_REMOVED_EXCEPT(hr) W2RenderAPI::DeviceRemovedException(__LINE__, __FILE__, (hr))
-#endif

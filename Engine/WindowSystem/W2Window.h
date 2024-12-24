@@ -7,7 +7,6 @@
 #include "Components/W2Keyboard.h"
 #include "Components/W2Mouse.h"
 
-#include "Renderer/W2RenderAPI.h"
 #include "Exceptions/W2Exception.h"
 
 /**
@@ -24,8 +23,9 @@ public:
 	const char* GetTitleName() const noexcept;
 	void SetTitleName(const std::string& newName) const;
 
+	HWND GetHandleWindow() const noexcept;
+
 	static std::optional<int> ProcessMessages() noexcept;
-	W2RenderAPI& RenderAPI();
 
 	//~ Components
 	W2Keyboard Keyboard;
@@ -40,7 +40,6 @@ private:
 	RECT m_rect;
 	HWND m_hWnd;
 	const char* m_titleName;
-	std::unique_ptr<W2RenderAPI> m_renderAPI;
 
 private:
 	/**
