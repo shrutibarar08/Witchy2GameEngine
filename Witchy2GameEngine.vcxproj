@@ -117,7 +117,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,7 +138,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,8 +149,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Contents\Shape\Box.cpp" />
+    <ClCompile Include="Engine\Renderer\Object\Drawable.cpp" />
+    <ClCompile Include="Engine\Renderer\Components\Bindable.cpp" />
     <ClCompile Include="Engine\Exceptions\DxgiInfoManager.cpp" />
     <ClCompile Include="Engine\Exceptions\dxerr.cpp" />
+    <ClCompile Include="Engine\Renderer\Components\IndexBuffer.cpp" />
+    <ClCompile Include="Engine\Renderer\Components\InputLayout.cpp" />
+    <ClCompile Include="Engine\Utils\DDSTextureLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\WindowSystem\W2Window.cpp" />
     <ClCompile Include="Engine\Exceptions\W2Exception.cpp" />
@@ -160,20 +166,50 @@
     <ClCompile Include="Engine\Utils\W2Timer.cpp" />
     <ClCompile Include="Engine\Renderer\W2RenderAPI.cpp" />
     <ClCompile Include="Engine\src\WitchyEngine.cpp" />
+    <ClCompile Include="Engine\Renderer\Components\PixelShader.cpp" />
+    <ClCompile Include="Engine\Renderer\Components\Topology.cpp" />
+    <ClCompile Include="Engine\Renderer\Components\VertexBuffer.cpp" />
+    <ClCompile Include="Engine\Renderer\Components\VertexShader.cpp" />
+    <ClCompile Include="Engine\Renderer\Components\Transforms.cpp" />
+    <ClCompile Include="Contents\Shape\ShapePyramid.cpp" />
+    <ClCompile Include="Engine\Renderer\Components\SurfaceTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Contents\Primitives\PrimitiveCone.h" />
+    <ClInclude Include="Contents\Primitives\PrimitiveCube.h" />
+    <ClInclude Include="Contents\Primitives\PrimitivePlane.h" />
+    <ClInclude Include="Contents\Primitives\PrimitivePrism.h" />
+    <ClInclude Include="Contents\Primitives\PrimitiveSphere.h" />
+    <ClInclude Include="Contents\Primitives\PrimitiveTriangle.h" />
+    <ClInclude Include="Contents\Shape\Box.h" />
+    <ClInclude Include="Engine\Renderer\Components\RenderInterface.h" />
+    <ClInclude Include="Engine\Renderer\Object\Drawable.h" />
+    <ClInclude Include="Engine\Renderer\Components\Bindable.h" />
     <ClInclude Include="Engine\Exceptions\DxgiInfoManager.h" />
     <ClInclude Include="Engine\Exceptions\dxerr.h" />
     <ClInclude Include="Engine\Exceptions\RenderAPIMacros.h" />
+    <ClInclude Include="Engine\Renderer\Components\ConstantBuffers.h" />
+    <ClInclude Include="Engine\Renderer\Object\WObject.h" />
+    <ClInclude Include="Engine\Utils\DDSTextureLoader.h" />
+    <ClInclude Include="Engine\Utils\MathLib.h" />
     <ClInclude Include="Engine\WindowSystem\W2Window.h" />
     <ClInclude Include="Engine\Exceptions\W2Exception.h" />
     <ClInclude Include="Engine\Renderer\W2RenderAPI.h" />
+    <ClInclude Include="Engine\Renderer\Components\IndexBuffer.h" />
+    <ClInclude Include="Engine\Renderer\Components\InputLayout.h" />
+    <ClInclude Include="Engine\Renderer\Components\PixelShader.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Engine\WindowSystem\Components\W2Keyboard.h" />
     <ClInclude Include="Engine\WindowSystem\Components\W2Mouse.h" />
     <ClInclude Include="Application\TestApplication.h" />
     <ClInclude Include="Engine\Utils\W2Timer.h" />
     <ClInclude Include="Engine\src\WitchyEngine.h" />
+    <ClInclude Include="Engine\Renderer\Components\Topology.h" />
+    <ClInclude Include="Engine\Renderer\Components\VertexBuffer.h" />
+    <ClInclude Include="Engine\Renderer\Components\VertexShader.h" />
+    <ClInclude Include="Engine\Renderer\Components\Transforms.h" />
+    <ClInclude Include="Contents\Shape\ShapePyramid.h" />
+    <ClInclude Include="Engine\Renderer\Components\SurfaceTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc" />
@@ -187,7 +223,9 @@
     <None Include="Engine\Exceptions\DXGetErrorString.inl" />
     <None Include="Engine\Exceptions\DXTrace.inl" />
     <None Include="Shaders\Compiled\PixelShader.cso" />
+    <None Include="Shaders\Compiled\PSBlend.cso" />
     <None Include="Shaders\Compiled\VertexShader.cso" />
+    <None Include="Shaders\Compiled\VSBlend.cso" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\Code\TestShaders\PixelShader.hlsl">
@@ -200,6 +238,36 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="Shaders\Code\TestShaders\PSBlend.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shaders\Code\TestShaders\TestTexturePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shaders\Code\TestShaders\TestTextureVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shaders\Code\TestShaders\VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -209,6 +277,16 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shaders\Code\TestShaders\VSBlend.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

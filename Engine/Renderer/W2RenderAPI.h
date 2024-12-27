@@ -1,11 +1,14 @@
 #pragma once
 #include <Windows.h>
 #include <d3d11.h>
+#include <d3dcompiler.h>
+#include <DirectXMath.h>
 #include <wrl.h>
 #include <vector>
 
 #include "Exceptions/W2Exception.h"
 #include "Exceptions/DxgiInfoManager.h"
+#include "Exceptions/RenderAPIMacros.h"
 
 
 // TODO: Create PQ to manage priority for Construction and Destruction
@@ -20,9 +23,17 @@ public:
 	static void Init(HWND hWnd);
 	static W2RenderAPI* Get();
 
+	ID3D11Device* GetDevice();
+	ID3D11DeviceContext* GetDeviceContext();
+	DxgiInfoManager& GetInfoManager() noexcept(ON_DEBUG);
+
 	//~ Render Methods
 	void ClearBuffer() const;
 	void PresentFrame() const;
+	void DrawIndexed(UINT count) noexcept(!ON_DEBUG);
+
+	void SetProjection(DirectX::XMMATRIX projection) noexcept;
+	DirectX::XMMATRIX GetProjection() const noexcept;
 
 private:
 	W2RenderAPI(HWND hWnd);
@@ -33,9 +44,9 @@ private:
 	W2RenderAPI& operator=(W2RenderAPI&&) = delete;
 
 	static W2RenderAPI* m_instance;
+	DirectX::XMMATRIX m_projection;
 
-public:
-
+private:
 	Microsoft::WRL::ComPtr<ID3D11Device>		   m_device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>    m_deviceContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>		   m_swapChain;

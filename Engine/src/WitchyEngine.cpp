@@ -7,7 +7,8 @@
 WitchyEngine::WitchyEngine(RECT rt, const char* gameName)
 	: m_window(rt, gameName)
 {
-	W2RenderAPI::Init(m_window.GetHandleWindow());
+	//~ Initialize Subsystems
+	W2RenderAPI::Init(m_window.GetHandleWindow());	// Init RenderManager (API)
 }
 
 int WitchyEngine::Execute()

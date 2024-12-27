@@ -1,7 +1,6 @@
 #include "W2RenderAPI.h"
 
 #include "Exceptions/dxerr.h"
-#include "Exceptions/RenderAPIMacros.h"
 
 #include <stdexcept>
 #include <sstream>
@@ -81,6 +80,16 @@ W2RenderAPI::W2RenderAPI(HWND hWnd)
 	RENDER_API_THROW(m_device->CreateDepthStencilView(m_depthT2D.Get(), &dsvd, &m_depthSV));
 
 	m_deviceContext->OMSetRenderTargets(1u, m_renderTV.GetAddressOf(), m_depthSV.Get());
+
+	//~ Set Viewport
+	D3D11_VIEWPORT vp{};
+	vp.Width = static_cast<float>(td.Width);
+	vp.Height = static_cast<float>(td.Height);
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	m_deviceContext->RSSetViewports(1u, &vp);
 }
 
 W2RenderAPI::~W2RenderAPI()
@@ -105,6 +114,24 @@ W2RenderAPI* W2RenderAPI::Get()
 	throw std::logic_error("RenderAPI Not Initialized!");
 }
 
+ID3D11Device* W2RenderAPI::GetDevice()
+{
+	return m_device.Get();
+}
+
+ID3D11DeviceContext* W2RenderAPI::GetDeviceContext()
+{
+	return m_deviceContext.Get();
+}
+
+DxgiInfoManager& W2RenderAPI::GetInfoManager() noexcept(ON_DEBUG)
+{
+#ifdef _DEBUG
+	return m_dxgiInfoManager;
+#endif
+	throw std::logic_error("Called Debug Functionality on release build!");
+}
+
 void W2RenderAPI::ClearBuffer() const
 {
 	m_deviceContext->ClearRenderTargetView(m_renderTV.Get(), _defaultColor);
@@ -125,6 +152,21 @@ void W2RenderAPI::PresentFrame() const
 			throw RENDER_API_EXCEPT(hr);
 		}
 	}
+}
+
+void W2RenderAPI::DrawIndexed(UINT count) noexcept(!ON_DEBUG)
+{
+	RENDER_API_INFO_ONLY(m_deviceContext->DrawIndexed(count, 0u, 0u));
+}
+
+void W2RenderAPI::SetProjection(DirectX::XMMATRIX projection) noexcept
+{
+	m_projection = projection;
+}
+
+DirectX::XMMATRIX W2RenderAPI::GetProjection() const noexcept
+{
+	return m_projection;
 }
 
 #pragma endregion
