@@ -1,4 +1,5 @@
 #pragma once
+#include "PrimitiveBase.h"
 
 #include <vector>
 #include <array>
@@ -10,7 +11,7 @@
 class PrimitivePlane
 {
 public:
-	template<class T>
+	template<Requirements T>
 	static PrimitiveTriangle<T> Tessellate(int divisions_x, int divisions_y)
 	{
 		namespace dx = DirectX;

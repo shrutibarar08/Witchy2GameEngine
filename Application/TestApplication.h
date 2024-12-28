@@ -16,4 +16,5 @@ public:
 
 private:
 	std::vector<std::unique_ptr<Drawable>> m_objects;
+	float m_speedFactor{ 1.f };
 };

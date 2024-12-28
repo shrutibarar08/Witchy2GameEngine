@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\WindowsManager\W2Window.cpp">
+    <ClCompile Include="Engine\WindowsManager\W2WindowAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine\ExceptionManager\W2Exception.cpp">
@@ -105,9 +105,12 @@
     <ClCompile Include="Externals\ImuGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GuiManager\W2GuiAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\WindowsManager\W2Window.h">
+    <ClInclude Include="Engine\WindowsManager\W2WindowAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\ExceptionManager\W2Exception.h">
@@ -234,6 +237,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Externals\ImuGui\imstb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GuiManager\W2GuiAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Contents\Primitives\PrimitiveBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

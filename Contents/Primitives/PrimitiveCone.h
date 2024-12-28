@@ -3,13 +3,14 @@
 #include "PrimitiveTriangle.h"
 #include <DirectXMath.h>
 
+#include "PrimitiveBase.h"
 #include "MathLib.h"
 
 
 class PrimitiveCone
 {
 public:
-	template<typename T>
+	template<Requirements T>
 	static PrimitiveTriangle<T> Tessellate(int longDiv)
 	{
 		assert(longDiv >= 3 && "Triangle Must be containing at least 3 points");
@@ -60,7 +61,7 @@ public:
 		return { std::move(vertices),std::move(indices) };
 	}
 
-	template<class T>
+	template<Requirements T>
 	static PrimitiveTriangle<T> Make()
 	{
 		return Tessellate<T>(24);

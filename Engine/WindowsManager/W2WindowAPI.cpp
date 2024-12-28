@@ -1,15 +1,18 @@
-#include "W2Window.h"
-
-#include "../resource.h"
+#include "W2WindowAPI.h"
+#include "ImuGui/imgui_impl_win32.h"
 
 #include <sstream>
 
+#include "../resource.h"
+
+
 //~ Static Declarations
-W2Window::W2WindowClass W2Window::W2WindowClass::m_wndClass;
+W2WindowAPI* W2WindowAPI::m_instance = nullptr;
+W2WindowAPI::W2WindowClass W2WindowAPI::W2WindowClass::m_wndClass;
 
 #pragma region W2Window_Implemention
 
-W2Window::W2Window(RECT rect, const char* title)
+W2WindowAPI::W2WindowAPI(RECT rect, const char* title)
 	: m_rect(rect),
       m_titleName(title)
 {
@@ -34,19 +37,36 @@ W2Window::W2Window(RECT rect, const char* title)
 	}
 
 	ShowWindow(m_hWnd, SW_SHOWDEFAULT);
+
 }
 
-W2Window::~W2Window()
+W2WindowAPI::~W2WindowAPI()
 {
+	ImGui_ImplWin32_Shutdown();
 	DestroyWindow(m_hWnd);
 }
 
-const char* W2Window::GetTitleName() const noexcept
+void W2WindowAPI::Init(RECT rect, const char* title)
+{
+	if (m_instance == nullptr)
+	{
+		m_instance = new W2WindowAPI(rect, title);
+	}
+}
+
+W2WindowAPI* W2WindowAPI::Get()
+{
+	if (m_instance != nullptr) return m_instance;
+
+	throw std::logic_error("Called To get W2WindowAPI when it is not Initialized!");
+}
+
+const char* W2WindowAPI::GetTitleName() const noexcept
 {
 	return m_titleName;
 }
 
-void W2Window::SetTitleName(const std::string& newName) const
+void W2WindowAPI::SetTitleName(const std::string& newName) const
 {
 	if (SetWindowText(m_hWnd, newName.c_str()) == 0)
 	{
@@ -54,12 +74,12 @@ void W2Window::SetTitleName(const std::string& newName) const
 	}
 }
 
-HWND W2Window::GetHandleWindow() const noexcept
+HWND W2WindowAPI::GetHandleWindow() const noexcept
 {
 	return m_hWnd;
 }
 
-std::optional<int> W2Window::ProcessMessages() noexcept
+std::optional<int> W2WindowAPI::ProcessMessages() noexcept
 {
 	MSG msg{};
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -74,30 +94,33 @@ std::optional<int> W2Window::ProcessMessages() noexcept
 	return {};
 }
 
-LRESULT W2Window::HandleMsgSetup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT W2WindowAPI::HandleMsgSetup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept
 {
 	if (message == WM_NCCREATE)
 	{
 		const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
-		W2Window* const pWnd = static_cast<W2Window*>(pCreate->lpCreateParams);
+		W2WindowAPI* const pWnd = static_cast<W2WindowAPI*>(pCreate->lpCreateParams);
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWnd));
-		SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&W2Window::HandleMsgThunk));
+		SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&W2WindowAPI::HandleMsgThunk));
 		return pWnd->HandleMsg(hWnd, message, wParam, lParam);
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-LRESULT W2Window::HandleMsgThunk(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT W2WindowAPI::HandleMsgThunk(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept
 {
 	// Retrieve pointer and forward message to window class
-	W2Window* const pWnd = reinterpret_cast<W2Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+	W2WindowAPI* const pWnd = reinterpret_cast<W2WindowAPI*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 	return pWnd->HandleMsg(hWnd, message, wParam, lParam);
 }
 
-LRESULT W2Window::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT W2WindowAPI::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) return S_OK;
+
 	switch (message)
 	{
+#pragma region Events
 		case WM_CLOSE:
 		{
 			PostQuitMessage(0);
@@ -114,6 +137,8 @@ LRESULT W2Window::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		{
 			// TODO: Add Resume Event or Callback
 		}
+#pragma endregion
+
 #pragma region Keyboard_Input
 		case WM_SYSKEYDOWN:
 		case WM_KEYDOWN:
@@ -196,6 +221,8 @@ LRESULT W2Window::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
 			Mouse.OnWheelDelta(pt.x, pt.y, delta);
 		}
+		default:
+			break;
 #pragma endregion Mouse_Input
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
@@ -203,7 +230,7 @@ LRESULT W2Window::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 #pragma endregion
 
 #pragma region W2WindowClass_Implemention
-W2Window::W2WindowClass::W2WindowClass() noexcept
+W2WindowAPI::W2WindowClass::W2WindowClass() noexcept
 	: m_hInstance(GetModuleHandle(nullptr))
 {
 	WNDCLASSEX wc{};
@@ -223,17 +250,17 @@ W2Window::W2WindowClass::W2WindowClass() noexcept
 	RegisterClassEx(&wc);
 }
 
-const char* W2Window::W2WindowClass::GetName() noexcept
+const char* W2WindowAPI::W2WindowClass::GetName() noexcept
 {
 	return m_wndClassName;
 }
 
-HINSTANCE W2Window::W2WindowClass::GetInstance() noexcept
+HINSTANCE W2WindowAPI::W2WindowClass::GetInstance() noexcept
 {
 	return m_wndClass.m_hInstance;
 }
 
-W2Window::W2WindowClass::~W2WindowClass()
+W2WindowAPI::W2WindowClass::~W2WindowClass()
 {
 	UnregisterClass(m_wndClassName, GetInstance());
 }
@@ -241,7 +268,7 @@ W2Window::W2WindowClass::~W2WindowClass()
 
 #pragma region Exception_Implemention
 
-std::string W2Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
+std::string W2WindowAPI::Exception::TranslateErrorCode(HRESULT hr) noexcept
 {
 	char* pMsgBuf = nullptr;
 	DWORD nMsgLen = FormatMessage(
@@ -258,11 +285,11 @@ std::string W2Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 	return errorString;
 }
 
-W2Window::HRException::HRException(int line, const char* file, HRESULT hr) noexcept
+W2WindowAPI::HRException::HRException(int line, const char* file, HRESULT hr) noexcept
 	: Exception(line, file), m_hr(hr)
 {}
 
-const char* W2Window::HRException::what() const noexcept
+const char* W2WindowAPI::HRException::what() const noexcept
 {
 	std::ostringstream oss;
 	oss << GetType() << "\n"
@@ -275,22 +302,22 @@ const char* W2Window::HRException::what() const noexcept
 	return m_whatBuffer.c_str();
 }
 
-const char* W2Window::HRException::GetType() const noexcept
+const char* W2WindowAPI::HRException::GetType() const noexcept
 {
 	return "Witchy Window Exception";
 }
 
-HRESULT W2Window::HRException::GetErrorCode() const noexcept
+HRESULT W2WindowAPI::HRException::GetErrorCode() const noexcept
 {
 	return m_hr;
 }
 
-std::string W2Window::HRException::GetErrorString() const noexcept
+std::string W2WindowAPI::HRException::GetErrorString() const noexcept
 {
 	return TranslateErrorCode(m_hr);
 }
 
-std::string W2Window::HRException::GetErrorDescription() const noexcept
+std::string W2WindowAPI::HRException::GetErrorDescription() const noexcept
 {
 	char buf[512];
 	FormatMessage(
@@ -301,7 +328,7 @@ std::string W2Window::HRException::GetErrorDescription() const noexcept
 	return buf;
 }
 
-const char* W2Window::DeviceRemovedException::GetType() const noexcept
+const char* W2WindowAPI::DeviceRemovedException::GetType() const noexcept
 {
 	return "Witchy Window Exception [Removed Device]";
 }

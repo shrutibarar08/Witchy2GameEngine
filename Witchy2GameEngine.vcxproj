@@ -117,7 +117,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;$(ProjectDir)Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;$(ProjectDir)Utils;$(ProjectDir)Externals;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,7 +138,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;$(ProjectDir)Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;$(ProjectDir)Utils;$(ProjectDir)Externals;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -164,7 +164,7 @@
     <ClCompile Include="Engine\RenderManager\Components\InputLayout.cpp" />
     <ClCompile Include="Utils\DDSTextureLoader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Engine\WindowsManager\W2Window.cpp" />
+    <ClCompile Include="Engine\WindowsManager\W2WindowAPI.cpp" />
     <ClCompile Include="Engine\ExceptionManager\W2Exception.cpp" />
     <ClCompile Include="Engine\WindowsManager\Components\W2Keyboard.cpp" />
     <ClCompile Include="Engine\WindowsManager\Components\W2Mouse.cpp" />
@@ -179,8 +179,10 @@
     <ClCompile Include="Engine\RenderManager\Components\Transforms.cpp" />
     <ClCompile Include="Contents\Shape\ShapePyramid.cpp" />
     <ClCompile Include="Engine\RenderManager\Components\SurfaceTexture.cpp" />
+    <ClCompile Include="Engine\GuiManager\W2GuiAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Contents\Primitives\PrimitiveBase.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveCone.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveCube.h" />
     <ClInclude Include="Contents\Primitives\PrimitivePlane.h" />
@@ -206,7 +208,7 @@
     <ClInclude Include="Engine\RenderManager\Object\WObject.h" />
     <ClInclude Include="Utils\DDSTextureLoader.h" />
     <ClInclude Include="Utils\MathLib.h" />
-    <ClInclude Include="Engine\WindowsManager\W2Window.h" />
+    <ClInclude Include="Engine\WindowsManager\W2WindowAPI.h" />
     <ClInclude Include="Engine\ExceptionManager\W2Exception.h" />
     <ClInclude Include="Engine\RenderManager\W2RenderAPI.h" />
     <ClInclude Include="Engine\RenderManager\Components\IndexBuffer.h" />
@@ -224,6 +226,7 @@
     <ClInclude Include="Engine\RenderManager\Components\Transforms.h" />
     <ClInclude Include="Contents\Shape\ShapePyramid.h" />
     <ClInclude Include="Engine\RenderManager\Components\SurfaceTexture.h" />
+    <ClInclude Include="Engine\GuiManager\W2GuiAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc" />

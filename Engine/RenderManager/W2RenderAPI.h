@@ -20,7 +20,7 @@ class W2RenderAPI
 {
 public:
 
-	static void Init(HWND hWnd);
+	static void Init();
 	static W2RenderAPI* Get();
 
 	ID3D11Device* GetDevice();
@@ -28,8 +28,8 @@ public:
 	DxgiInfoManager& GetInfoManager() noexcept(ON_DEBUG);
 
 	//~ Render Methods
-	void ClearBuffer() const;
-	void PresentFrame() const;
+	void RecordStart() const;
+	void RecordEnd() const;
 	void DrawIndexed(UINT count) noexcept(!ON_DEBUG);
 
 	void SetProjection(DirectX::XMMATRIX projection) noexcept;

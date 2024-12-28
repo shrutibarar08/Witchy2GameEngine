@@ -1,4 +1,6 @@
 #pragma once
+#include "PrimitiveBase.h"
+
 #include "PrimitiveTriangle.h"
 #include <DirectXMath.h>
 #include "MathLib.h"
@@ -7,8 +9,8 @@
 class PrimitivePrism
 {
 public:
-	template<class V>
-	static PrimitiveTriangle<V> Tessellate(int longDiv)
+	template<Requirements T>
+	static PrimitiveTriangle<T> Tessellate(int longDiv)
 	{
 		namespace dx = DirectX;
 		assert(longDiv >= 3);
@@ -18,7 +20,7 @@ public:
 		const float longitudeAngle = 2.0f * PI<float> / longDiv;
 
 		// near center
-		std::vector<V> vertices;
+		std::vector<T> vertices;
 		vertices.emplace_back();
 		vertices.back().pos = { 0.0f,0.0f,-1.0f };
 		const auto iCenterNear = (unsigned short)(vertices.size() - 1);
@@ -80,9 +82,9 @@ public:
 
 		return { std::move(vertices),std::move(indices) };
 	}
-	template<class V>
-	static PrimitiveTriangle<V> Make()
+	template<Requirements T>
+	static PrimitiveTriangle<T> Make()
 	{
-		return Tessellate<V>(24);
+		return Tessellate<T>(24);
 	}
 };

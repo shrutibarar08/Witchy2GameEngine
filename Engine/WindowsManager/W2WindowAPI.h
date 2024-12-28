@@ -12,13 +12,17 @@
 /**
  * @brief A Window class that encapsulates the Win32 window creation and message handling.
  */
-class W2Window
+class W2WindowAPI
 {
 public:
-	W2Window(RECT rect, const char* title);
-	~W2Window();
-	W2Window(const W2Window&) = delete;
-	W2Window& operator=(const W2Window&) = delete;
+
+	W2WindowAPI(const W2WindowAPI&) = delete;
+	W2WindowAPI& operator=(const W2WindowAPI&) = delete;
+	W2WindowAPI(W2WindowAPI&&) = delete;
+	W2WindowAPI& operator=(W2WindowAPI&&) = delete;
+
+	static void Init(RECT rect, const char* title);
+	static W2WindowAPI* Get();
 
 	const char* GetTitleName() const noexcept;
 	void SetTitleName(const std::string& newName) const;
@@ -32,6 +36,10 @@ public:
 	W2Mouse	   Mouse;
 
 private:
+
+	W2WindowAPI(RECT rect, const char* title);
+	~W2WindowAPI();
+
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
@@ -40,6 +48,7 @@ private:
 	RECT m_rect;
 	HWND m_hWnd;
 	const char* m_titleName;
+	static W2WindowAPI* m_instance;
 
 private:
 	/**
@@ -91,6 +100,6 @@ public:
 };
 
 //~ Error Exception Helper Macros
-#define W2WND_EXCEPT(hr) W2Window::HRException(__LINE__, __FILE__, (hr))
-#define W2WND_LAST_EXCEPT() W2Window::HRException(__LINE__, __FILE__, GetLastError())
-#define W2WND_NO_DEVICE_EXCEPT() W2Window::DeviceRemovedException(__LINE__, __FILE__)
+#define W2WND_EXCEPT(hr) W2WindowAPI::HRException(__LINE__, __FILE__, (hr))
+#define W2WND_LAST_EXCEPT() W2WindowAPI::HRException(__LINE__, __FILE__, GetLastError())
+#define W2WND_NO_DEVICE_EXCEPT() W2WindowAPI::DeviceRemovedException(__LINE__, __FILE__)

@@ -16,6 +16,7 @@
 #define RENDER_API_EXCEPT(hr) W2RenderAPI::HRException(__LINE__, __FILE__, (hr))
 #define RENDER_API_THROW(hrCall) RENDER_API_THROW_NOINFO(hrCall)
 #define RENDER_API_REMOVED_EXCEPT(hr) W2RenderAPI::DeviceRemovedException(__LINE__, __FILE__, (hr))
+#define RENDER_API_INFO_ONLY(hrCall) (hrCall)
 #endif
 
 

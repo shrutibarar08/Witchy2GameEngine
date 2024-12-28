@@ -1,6 +1,6 @@
 #include "DxgiInfoManager.h"
 
-#include "WindowsManager/W2Window.h"
+#include "WindowsManager/W2WindowAPI.h"
 #include "RenderManager/W2RenderAPI.h"
 
 #include <dxgidebug.h>

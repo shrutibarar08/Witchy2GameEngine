@@ -1,5 +1,6 @@
 #include "W2RenderAPI.h"
 
+#include "WindowsManager/W2WindowAPI.h"
 #include "ExceptionManager/dxerr.h"
 
 #include <stdexcept>
@@ -97,11 +98,11 @@ W2RenderAPI::~W2RenderAPI()
 	if (m_instance) delete m_instance;
 }
 
-void W2RenderAPI::Init(HWND hWnd)
+void W2RenderAPI::Init()
 {
 	if (m_instance == nullptr)
 	{
-		m_instance = new W2RenderAPI(hWnd);
+		m_instance = new W2RenderAPI(W2WindowAPI::Get()->GetHandleWindow());
 	}
 }
 
@@ -132,13 +133,13 @@ DxgiInfoManager& W2RenderAPI::GetInfoManager() noexcept(ON_DEBUG)
 	throw std::logic_error("Called Debug Functionality on release build!");
 }
 
-void W2RenderAPI::ClearBuffer() const
+void W2RenderAPI::RecordStart() const
 {
 	m_deviceContext->ClearRenderTargetView(m_renderTV.Get(), _defaultColor);
 	m_deviceContext->ClearDepthStencilView(m_depthSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 }
 
-void W2RenderAPI::PresentFrame() const
+void W2RenderAPI::RecordEnd() const
 {
 	HRESULT hr;
 	if (FAILED(hr = m_swapChain->Present(1u, 0u)))

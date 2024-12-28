@@ -8,6 +8,8 @@
 #include <DirectXMath.h>
 #include <algorithm>
 
+#include "ImuGui/imgui_impl_dx11.h"
+
 
 TestApplication::TestApplication()
 	: WitchyEngine({0, 0, 1280, 720}, 
@@ -65,7 +67,16 @@ void TestApplication::Tick(float deltaTime)
 {
 	for (auto& b: m_objects)
 	{
-		b->Update(deltaTime);
+		b->Update(deltaTime * m_speedFactor);
 		b->Draw();
 	}
+
+	static char buffer[1024];
+	if (ImGui::Begin("Simulation Speed"))
+	{
+		ImGui::SliderFloat("Speed Factor", &m_speedFactor, 0.0f, 4.0f);
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::InputText("Butts", buffer, sizeof(buffer));
+	}
+	ImGui::End();
 }

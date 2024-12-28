@@ -1,5 +1,6 @@
 #pragma once
 
+#include "PrimitiveBase.h"
 #include "PrimitiveTriangle.h"
 #include <DirectXMath.h>
 
@@ -7,7 +8,7 @@
 class PrimitiveCube
 {
 public:
-	template<typename T>
+	template<Requirements T>
 	static PrimitiveTriangle<T> Make()
 	{
 

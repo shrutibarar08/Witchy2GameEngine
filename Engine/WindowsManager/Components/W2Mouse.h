@@ -4,7 +4,7 @@
 
 class W2Mouse
 {
-	friend class W2Window;
+	friend class W2WindowAPI;
 public:
 	class Event
 	{

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "WindowsManager/W2Window.h"
-#include "RenderManager/W2RenderAPI.h"
+#include "WindowsManager/W2WindowAPI.h"
 #include "W2Timer.h"
 
 
@@ -14,7 +13,7 @@ class WitchyEngine
 public:
 	// TODO: Create Config file for the engine
 	WitchyEngine(RECT rt, const char* gameName);
-	virtual ~WitchyEngine() = default;
+	virtual ~WitchyEngine();
 
 	int Execute();
 	void UpdateFrame();
@@ -27,7 +26,6 @@ private:
 
 private:
 	W2Timer  m_timer{};
-	W2Window m_window;
 
 	//~ Logic members
 	int   m_updateCount{ 0 };

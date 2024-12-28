@@ -5,7 +5,7 @@
 
 class W2Keyboard
 {
-	friend class W2Window;
+	friend class W2WindowAPI;
 public:
 	class Event
 	{

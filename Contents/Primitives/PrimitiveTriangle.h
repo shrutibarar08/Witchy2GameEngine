@@ -1,10 +1,11 @@
 #pragma once
-
+#include "PrimitiveBase.h"
 #include <DirectXMath.h>
 #include <vector>
 
-// TODO: Write Concept checking for .pos
-template<class T>
+
+
+template<Requirements T>
 class PrimitiveTriangle
 {
 public:
