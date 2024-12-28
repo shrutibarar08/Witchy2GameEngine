@@ -18,61 +18,61 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\WindowSystem\W2Window.cpp">
+    <ClCompile Include="Engine\WindowsManager\W2Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Exceptions\W2Exception.cpp">
+    <ClCompile Include="Engine\ExceptionManager\W2Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\WindowSystem\Components\W2Keyboard.cpp">
+    <ClCompile Include="Engine\WindowsManager\Components\W2Keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\WindowSystem\Components\W2Mouse.cpp">
+    <ClCompile Include="Engine\WindowsManager\Components\W2Mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\TestApplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Utils\W2Timer.cpp">
+    <ClCompile Include="Utils\W2Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\W2RenderAPI.cpp">
+    <ClCompile Include="Engine\RenderManager\W2RenderAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Exceptions\dxerr.cpp">
+    <ClCompile Include="Engine\ExceptionManager\dxerr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Exceptions\DxgiInfoManager.cpp">
+    <ClCompile Include="Engine\ExceptionManager\DxgiInfoManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\src\WitchyEngine.cpp">
+    <ClCompile Include="Engine\EngineManager\WitchyEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Components\Bindable.cpp">
+    <ClCompile Include="Engine\RenderManager\Components\Bindable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Components\IndexBuffer.cpp">
+    <ClCompile Include="Engine\RenderManager\Components\IndexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Components\InputLayout.cpp">
+    <ClCompile Include="Engine\RenderManager\Components\InputLayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Components\PixelShader.cpp">
+    <ClCompile Include="Engine\RenderManager\Components\PixelShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Components\Topology.cpp">
+    <ClCompile Include="Engine\RenderManager\Components\Topology.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Components\VertexBuffer.cpp">
+    <ClCompile Include="Engine\RenderManager\Components\VertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Components\VertexShader.cpp">
+    <ClCompile Include="Engine\RenderManager\Components\VertexShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Components\Transforms.cpp">
+    <ClCompile Include="Engine\RenderManager\Components\Transforms.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Object\Drawable.cpp">
+    <ClCompile Include="Engine\RenderManager\Object\Drawable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Contents\Shape\Box.cpp">
@@ -81,93 +81,111 @@
     <ClCompile Include="Contents\Shape\ShapePyramid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Utils\DDSTextureLoader.cpp">
+    <ClCompile Include="Utils\DDSTextureLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Renderer\Components\SurfaceTexture.cpp">
+    <ClCompile Include="Engine\RenderManager\Components\SurfaceTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Externals\ImuGui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Externals\ImuGui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Externals\ImuGui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Externals\ImuGui\imgui_impl_dx11.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Externals\ImuGui\imgui_impl_win32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Externals\ImuGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\WindowSystem\W2Window.h">
+    <ClInclude Include="Engine\WindowsManager\W2Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Exceptions\W2Exception.h">
+    <ClInclude Include="Engine\ExceptionManager\W2Exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\WindowSystem\Components\W2Keyboard.h">
+    <ClInclude Include="Engine\WindowsManager\Components\W2Keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\WindowSystem\Components\W2Mouse.h">
+    <ClInclude Include="Engine\WindowsManager\Components\W2Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\TestApplication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Utils\W2Timer.h">
+    <ClInclude Include="Utils\W2Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\W2RenderAPI.h">
+    <ClInclude Include="Engine\RenderManager\W2RenderAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Exceptions\dxerr.h">
+    <ClInclude Include="Engine\ExceptionManager\dxerr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Exceptions\DxgiInfoManager.h">
+    <ClInclude Include="Engine\ExceptionManager\DxgiInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\src\WitchyEngine.h">
+    <ClInclude Include="Engine\EngineManager\WitchyEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Exceptions\RenderAPIMacros.h">
+    <ClInclude Include="Engine\ExceptionManager\RenderAPIMacros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\Bindable.h">
+    <ClInclude Include="Engine\RenderManager\Components\Bindable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\ConstantBuffers.h">
+    <ClInclude Include="Engine\RenderManager\Components\ConstantBuffers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\IndexBuffer.h">
+    <ClInclude Include="Engine\RenderManager\Components\IndexBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\InputLayout.h">
+    <ClInclude Include="Engine\RenderManager\Components\InputLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\PixelShader.h">
+    <ClInclude Include="Engine\RenderManager\Components\PixelShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\Topology.h">
+    <ClInclude Include="Engine\RenderManager\Components\Topology.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\VertexBuffer.h">
+    <ClInclude Include="Engine\RenderManager\Components\VertexBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\VertexShader.h">
+    <ClInclude Include="Engine\RenderManager\Components\VertexShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\Transforms.h">
+    <ClInclude Include="Engine\RenderManager\Components\Transforms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Object\Drawable.h">
+    <ClInclude Include="Engine\RenderManager\Object\Drawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\RenderInterface.h">
+    <ClInclude Include="Engine\RenderManager\RenderInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Contents\Shape\Box.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Object\WObject.h">
+    <ClInclude Include="Engine\RenderManager\Object\WObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Contents\Primitives\PrimitiveTriangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Utils\MathLib.h">
+    <ClInclude Include="Utils\MathLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Contents\Primitives\PrimitiveCone.h">
@@ -188,10 +206,34 @@
     <ClInclude Include="Contents\Shape\ShapePyramid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Utils\DDSTextureLoader.h">
+    <ClInclude Include="Utils\DDSTextureLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Renderer\Components\SurfaceTexture.h">
+    <ClInclude Include="Engine\RenderManager\Components\SurfaceTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Externals\ImuGui\imconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Externals\ImuGui\imgui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Externals\ImuGui\imgui_impl_dx11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Externals\ImuGui\imgui_impl_win32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Externals\ImuGui\imgui_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Externals\ImuGui\imstb_rectpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Externals\ImuGui\imstb_textedit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Externals\ImuGui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -209,13 +251,13 @@
     <None Include="Contents\Cursors\Cursor_1.cur">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Engine\Exceptions\DXGetErrorDescription.inl">
+    <None Include="Engine\ExceptionManager\DXGetErrorDescription.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="Engine\Exceptions\DXGetErrorString.inl">
+    <None Include="Engine\ExceptionManager\DXGetErrorString.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="Engine\Exceptions\DXTrace.inl">
+    <None Include="Engine\ExceptionManager\DXTrace.inl">
       <Filter>Header Files</Filter>
     </None>
     <None Include="Shaders\Compiled\VertexShader.cso" />

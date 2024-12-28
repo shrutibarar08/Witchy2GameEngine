@@ -4,7 +4,7 @@
 #include <array>
 
 #include "PrimitiveTriangle.h"
-#include "Utils/MathLib.h"
+#include "MathLib.h"
 
 
 class PrimitivePlane

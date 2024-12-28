@@ -1,6 +1,6 @@
 #include "W2RenderAPI.h"
 
-#include "Exceptions/dxerr.h"
+#include "ExceptionManager/dxerr.h"
 
 #include <stdexcept>
 #include <sstream>

@@ -1,6 +1,6 @@
 #include "Box.h"
-#include "Renderer/Components/RenderInterface.h"
-#include "Exceptions/RenderAPIMacros.h"
+#include "RenderManager/RenderInterface.h"
+#include "ExceptionManager/RenderAPIMacros.h"
 
 #include "Primitives/PrimitiveSphere.h"
 #include "Primitives/PrimitiveCone.h"

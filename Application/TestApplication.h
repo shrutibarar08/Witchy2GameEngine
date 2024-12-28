@@ -1,7 +1,7 @@
 #pragma once
 
-#include "src/WitchyEngine.h"
-#include "Renderer/Object/Drawable.h"
+#include "EngineManager/WitchyEngine.h"
+#include "RenderManager/Object/Drawable.h"
 
 /**
  * @brief Test Application Class

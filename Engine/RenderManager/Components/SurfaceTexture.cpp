@@ -1,7 +1,7 @@
 #include "SurfaceTexture.h"
-#include "Utils/DDSTextureLoader.h"
+#include "DDSTextureLoader.h"
 
-#include "Exceptions/RenderAPIMacros.h"
+#include "ExceptionManager/RenderAPIMacros.h"
 
 
 void SurfaceTexture::AddTexture(const std::wstring& texturePath)

@@ -1,7 +1,7 @@
 #include "TestApplication.h"
 #include "Shape/Box.h"
 #include "Shape/ShapePyramid.h"
-#include "Utils/MathLib.h"
+#include "MathLib.h"
 
 #include <memory>
 #include <random>

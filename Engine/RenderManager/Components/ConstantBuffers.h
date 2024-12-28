@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Bindable.h"
-#include "Exceptions/RenderAPIMacros.h"
+#include "ExceptionManager/RenderAPIMacros.h"
 
 template<typename T>
 class ConstantBuffer : public Bindable

@@ -3,7 +3,7 @@
 #include "PrimitiveTriangle.h"
 #include <DirectXMath.h>
 
-#include "Utils/MathLib.h"
+#include "MathLib.h"
 
 
 class PrimitiveCone

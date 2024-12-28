@@ -1,6 +1,6 @@
 #include "Drawable.h"
-#include "Exceptions/RenderAPIMacros.h"
-#include "Renderer/Components/IndexBuffer.h"
+#include "ExceptionManager/RenderAPIMacros.h"
+#include "RenderManager/Components/IndexBuffer.h"
 
 #include <cassert>
 #include <typeinfo>

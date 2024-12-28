@@ -1,7 +1,7 @@
 #include "ShapePyramid.h"
-#include "Renderer/Components/RenderInterface.h"
+#include "RenderManager/RenderInterface.h"
 #include "Primitives/PrimitiveCone.h"
-#include "Exceptions/RenderAPIMacros.h"
+#include "ExceptionManager/RenderAPIMacros.h"
 
 
 ShapePyramid::ShapePyramid(

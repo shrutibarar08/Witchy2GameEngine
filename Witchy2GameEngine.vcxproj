@@ -117,7 +117,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;$(ProjectDir)Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,7 +138,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Shaders;$(ProjectDir)Contents;$(ProjectDir)Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,29 +150,35 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Contents\Shape\Box.cpp" />
-    <ClCompile Include="Engine\Renderer\Object\Drawable.cpp" />
-    <ClCompile Include="Engine\Renderer\Components\Bindable.cpp" />
-    <ClCompile Include="Engine\Exceptions\DxgiInfoManager.cpp" />
-    <ClCompile Include="Engine\Exceptions\dxerr.cpp" />
-    <ClCompile Include="Engine\Renderer\Components\IndexBuffer.cpp" />
-    <ClCompile Include="Engine\Renderer\Components\InputLayout.cpp" />
-    <ClCompile Include="Engine\Utils\DDSTextureLoader.cpp" />
+    <ClCompile Include="Externals\ImuGui\imgui.cpp" />
+    <ClCompile Include="Externals\ImuGui\imgui_demo.cpp" />
+    <ClCompile Include="Externals\ImuGui\imgui_draw.cpp" />
+    <ClCompile Include="Externals\ImuGui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Externals\ImuGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Externals\ImuGui\imgui_widgets.cpp" />
+    <ClCompile Include="Engine\RenderManager\Object\Drawable.cpp" />
+    <ClCompile Include="Engine\RenderManager\Components\Bindable.cpp" />
+    <ClCompile Include="Engine\ExceptionManager\DxgiInfoManager.cpp" />
+    <ClCompile Include="Engine\ExceptionManager\dxerr.cpp" />
+    <ClCompile Include="Engine\RenderManager\Components\IndexBuffer.cpp" />
+    <ClCompile Include="Engine\RenderManager\Components\InputLayout.cpp" />
+    <ClCompile Include="Utils\DDSTextureLoader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Engine\WindowSystem\W2Window.cpp" />
-    <ClCompile Include="Engine\Exceptions\W2Exception.cpp" />
-    <ClCompile Include="Engine\WindowSystem\Components\W2Keyboard.cpp" />
-    <ClCompile Include="Engine\WindowSystem\Components\W2Mouse.cpp" />
+    <ClCompile Include="Engine\WindowsManager\W2Window.cpp" />
+    <ClCompile Include="Engine\ExceptionManager\W2Exception.cpp" />
+    <ClCompile Include="Engine\WindowsManager\Components\W2Keyboard.cpp" />
+    <ClCompile Include="Engine\WindowsManager\Components\W2Mouse.cpp" />
     <ClCompile Include="Application\TestApplication.cpp" />
-    <ClCompile Include="Engine\Utils\W2Timer.cpp" />
-    <ClCompile Include="Engine\Renderer\W2RenderAPI.cpp" />
-    <ClCompile Include="Engine\src\WitchyEngine.cpp" />
-    <ClCompile Include="Engine\Renderer\Components\PixelShader.cpp" />
-    <ClCompile Include="Engine\Renderer\Components\Topology.cpp" />
-    <ClCompile Include="Engine\Renderer\Components\VertexBuffer.cpp" />
-    <ClCompile Include="Engine\Renderer\Components\VertexShader.cpp" />
-    <ClCompile Include="Engine\Renderer\Components\Transforms.cpp" />
+    <ClCompile Include="Utils\W2Timer.cpp" />
+    <ClCompile Include="Engine\RenderManager\W2RenderAPI.cpp" />
+    <ClCompile Include="Engine\EngineManager\WitchyEngine.cpp" />
+    <ClCompile Include="Engine\RenderManager\Components\PixelShader.cpp" />
+    <ClCompile Include="Engine\RenderManager\Components\Topology.cpp" />
+    <ClCompile Include="Engine\RenderManager\Components\VertexBuffer.cpp" />
+    <ClCompile Include="Engine\RenderManager\Components\VertexShader.cpp" />
+    <ClCompile Include="Engine\RenderManager\Components\Transforms.cpp" />
     <ClCompile Include="Contents\Shape\ShapePyramid.cpp" />
-    <ClCompile Include="Engine\Renderer\Components\SurfaceTexture.cpp" />
+    <ClCompile Include="Engine\RenderManager\Components\SurfaceTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Contents\Primitives\PrimitiveCone.h" />
@@ -182,34 +188,42 @@
     <ClInclude Include="Contents\Primitives\PrimitiveSphere.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveTriangle.h" />
     <ClInclude Include="Contents\Shape\Box.h" />
-    <ClInclude Include="Engine\Renderer\Components\RenderInterface.h" />
-    <ClInclude Include="Engine\Renderer\Object\Drawable.h" />
-    <ClInclude Include="Engine\Renderer\Components\Bindable.h" />
-    <ClInclude Include="Engine\Exceptions\DxgiInfoManager.h" />
-    <ClInclude Include="Engine\Exceptions\dxerr.h" />
-    <ClInclude Include="Engine\Exceptions\RenderAPIMacros.h" />
-    <ClInclude Include="Engine\Renderer\Components\ConstantBuffers.h" />
-    <ClInclude Include="Engine\Renderer\Object\WObject.h" />
-    <ClInclude Include="Engine\Utils\DDSTextureLoader.h" />
-    <ClInclude Include="Engine\Utils\MathLib.h" />
-    <ClInclude Include="Engine\WindowSystem\W2Window.h" />
-    <ClInclude Include="Engine\Exceptions\W2Exception.h" />
-    <ClInclude Include="Engine\Renderer\W2RenderAPI.h" />
-    <ClInclude Include="Engine\Renderer\Components\IndexBuffer.h" />
-    <ClInclude Include="Engine\Renderer\Components\InputLayout.h" />
-    <ClInclude Include="Engine\Renderer\Components\PixelShader.h" />
+    <ClInclude Include="Externals\ImuGui\imconfig.h" />
+    <ClInclude Include="Externals\ImuGui\imgui.h" />
+    <ClInclude Include="Externals\ImuGui\imgui_impl_dx11.h" />
+    <ClInclude Include="Externals\ImuGui\imgui_impl_win32.h" />
+    <ClInclude Include="Externals\ImuGui\imgui_internal.h" />
+    <ClInclude Include="Externals\ImuGui\imstb_rectpack.h" />
+    <ClInclude Include="Externals\ImuGui\imstb_textedit.h" />
+    <ClInclude Include="Externals\ImuGui\imstb_truetype.h" />
+    <ClInclude Include="Engine\RenderManager\RenderInterface.h" />
+    <ClInclude Include="Engine\RenderManager\Object\Drawable.h" />
+    <ClInclude Include="Engine\RenderManager\Components\Bindable.h" />
+    <ClInclude Include="Engine\ExceptionManager\DxgiInfoManager.h" />
+    <ClInclude Include="Engine\ExceptionManager\dxerr.h" />
+    <ClInclude Include="Engine\ExceptionManager\RenderAPIMacros.h" />
+    <ClInclude Include="Engine\RenderManager\Components\ConstantBuffers.h" />
+    <ClInclude Include="Engine\RenderManager\Object\WObject.h" />
+    <ClInclude Include="Utils\DDSTextureLoader.h" />
+    <ClInclude Include="Utils\MathLib.h" />
+    <ClInclude Include="Engine\WindowsManager\W2Window.h" />
+    <ClInclude Include="Engine\ExceptionManager\W2Exception.h" />
+    <ClInclude Include="Engine\RenderManager\W2RenderAPI.h" />
+    <ClInclude Include="Engine\RenderManager\Components\IndexBuffer.h" />
+    <ClInclude Include="Engine\RenderManager\Components\InputLayout.h" />
+    <ClInclude Include="Engine\RenderManager\Components\PixelShader.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Engine\WindowSystem\Components\W2Keyboard.h" />
-    <ClInclude Include="Engine\WindowSystem\Components\W2Mouse.h" />
+    <ClInclude Include="Engine\WindowsManager\Components\W2Keyboard.h" />
+    <ClInclude Include="Engine\WindowsManager\Components\W2Mouse.h" />
     <ClInclude Include="Application\TestApplication.h" />
-    <ClInclude Include="Engine\Utils\W2Timer.h" />
-    <ClInclude Include="Engine\src\WitchyEngine.h" />
-    <ClInclude Include="Engine\Renderer\Components\Topology.h" />
-    <ClInclude Include="Engine\Renderer\Components\VertexBuffer.h" />
-    <ClInclude Include="Engine\Renderer\Components\VertexShader.h" />
-    <ClInclude Include="Engine\Renderer\Components\Transforms.h" />
+    <ClInclude Include="Utils\W2Timer.h" />
+    <ClInclude Include="Engine\EngineManager\WitchyEngine.h" />
+    <ClInclude Include="Engine\RenderManager\Components\Topology.h" />
+    <ClInclude Include="Engine\RenderManager\Components\VertexBuffer.h" />
+    <ClInclude Include="Engine\RenderManager\Components\VertexShader.h" />
+    <ClInclude Include="Engine\RenderManager\Components\Transforms.h" />
     <ClInclude Include="Contents\Shape\ShapePyramid.h" />
-    <ClInclude Include="Engine\Renderer\Components\SurfaceTexture.h" />
+    <ClInclude Include="Engine\RenderManager\Components\SurfaceTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc" />
@@ -219,9 +233,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Contents\Cursors\Cursor_1.cur" />
-    <None Include="Engine\Exceptions\DXGetErrorDescription.inl" />
-    <None Include="Engine\Exceptions\DXGetErrorString.inl" />
-    <None Include="Engine\Exceptions\DXTrace.inl" />
+    <None Include="Engine\ExceptionManager\DXGetErrorDescription.inl" />
+    <None Include="Engine\ExceptionManager\DXGetErrorString.inl" />
+    <None Include="Engine\ExceptionManager\DXTrace.inl" />
     <None Include="Shaders\Compiled\PixelShader.cso" />
     <None Include="Shaders\Compiled\PSBlend.cso" />
     <None Include="Shaders\Compiled\VertexShader.cso" />

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "WindowSystem/W2Window.h"
-#include "Renderer/W2RenderAPI.h"
-#include "Utils/W2Timer.h"
+#include "WindowsManager/W2Window.h"
+#include "RenderManager/W2RenderAPI.h"
+#include "W2Timer.h"
 
 
 /*

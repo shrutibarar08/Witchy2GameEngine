@@ -1,5 +1,5 @@
 #include "IndexBuffer.h"
-#include "Exceptions/RenderAPIMacros.h"
+#include "ExceptionManager/RenderAPIMacros.h"
 
 IndexBuffer::IndexBuffer(const std::vector<unsigned short>& indices)
 	:

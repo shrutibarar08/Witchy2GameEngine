@@ -6,9 +6,9 @@
 #include <wrl.h>
 #include <vector>
 
-#include "Exceptions/W2Exception.h"
-#include "Exceptions/DxgiInfoManager.h"
-#include "Exceptions/RenderAPIMacros.h"
+#include "ExceptionManager/W2Exception.h"
+#include "ExceptionManager/DxgiInfoManager.h"
+#include "ExceptionManager/RenderAPIMacros.h"
 
 
 // TODO: Create PQ to manage priority for Construction and Destruction

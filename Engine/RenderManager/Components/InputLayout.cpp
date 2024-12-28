@@ -1,5 +1,5 @@
 #include "InputLayout.h"
-#include "Exceptions/RenderAPIMacros.h"
+#include "ExceptionManager/RenderAPIMacros.h"
 
 
 InputLayout::InputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& layout,

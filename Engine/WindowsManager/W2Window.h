@@ -7,7 +7,7 @@
 #include "Components/W2Keyboard.h"
 #include "Components/W2Mouse.h"
 
-#include "Exceptions/W2Exception.h"
+#include "ExceptionManager/W2Exception.h"
 
 /**
  * @brief A Window class that encapsulates the Win32 window creation and message handling.

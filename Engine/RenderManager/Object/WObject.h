@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Renderer/Object/Drawable.h"
-#include "Renderer/Components/IndexBuffer.h"
+#include "RenderManager/Object/Drawable.h"
+#include "RenderManager/Components/IndexBuffer.h"
 
 
 template<typename T>
