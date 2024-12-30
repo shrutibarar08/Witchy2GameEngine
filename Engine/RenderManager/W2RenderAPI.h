@@ -20,8 +20,14 @@ class W2RenderAPI
 {
 public:
 
+	W2RenderAPI(const W2RenderAPI&) = delete;
+	W2RenderAPI& operator=(const W2RenderAPI&) = delete;
+	W2RenderAPI(W2RenderAPI&&) = delete;
+	W2RenderAPI& operator=(W2RenderAPI&&) = delete;
+
 	static void Init();
 	static W2RenderAPI* Get();
+	static void Release();
 
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
@@ -35,10 +41,7 @@ public:
 private:
 	W2RenderAPI(HWND hWnd);
 	~W2RenderAPI();
-	W2RenderAPI(const W2RenderAPI&) = delete;
-	W2RenderAPI& operator=(const W2RenderAPI&) = delete;
-	W2RenderAPI(W2RenderAPI&&) = delete;
-	W2RenderAPI& operator=(W2RenderAPI&&) = delete;
+
 
 	static W2RenderAPI* m_instance;
 

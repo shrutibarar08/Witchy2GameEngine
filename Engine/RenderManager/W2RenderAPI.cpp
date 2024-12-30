@@ -115,6 +115,15 @@ W2RenderAPI* W2RenderAPI::Get()
 	throw std::logic_error("RenderAPI Not Initialized!");
 }
 
+void W2RenderAPI::Release()
+{
+	if (m_instance)
+	{
+		delete m_instance;
+		m_instance = nullptr;
+	}
+}
+
 ID3D11Device* W2RenderAPI::GetDevice()
 {
 	return m_device.Get();

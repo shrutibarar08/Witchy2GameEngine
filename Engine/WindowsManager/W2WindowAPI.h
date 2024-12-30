@@ -23,6 +23,7 @@ public:
 
 	static void Init(RECT rect, const char* title);
 	static W2WindowAPI* Get();
+	static void Release();
 
 	const char* GetTitleName() const noexcept;
 	void SetTitleName(const std::string& newName) const;

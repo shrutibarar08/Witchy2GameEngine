@@ -61,6 +61,15 @@ W2WindowAPI* W2WindowAPI::Get()
 	throw std::logic_error("Called To get W2WindowAPI when it is not Initialized!");
 }
 
+void W2WindowAPI::Release()
+{
+	if (m_instance)
+	{
+		delete m_instance;
+		m_instance = nullptr;
+	}
+}
+
 const char* W2WindowAPI::GetTitleName() const noexcept
 {
 	return m_titleName;
