@@ -13,6 +13,7 @@ public:
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
+	virtual void DebugUI() override;
 
 private:
 	std::vector<std::unique_ptr<Drawable>> m_objects;

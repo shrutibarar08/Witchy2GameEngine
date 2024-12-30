@@ -11,16 +11,16 @@ public:
 	{
 		DirectX::XMMATRIX WorldMatrix;	// expecting Identity Matrix with xyz...
 		DirectX::XMMATRIX ProjectionMatrix;
-		DirectX::XMMATRIX ViewMatrix;
 	};
 
 	static void Init(const W2Camera_INIT_DESC& desc) noexcept;	// TODO: do something for saving and loading initial camera location
 	static W2Camera* Get();
 	static void Release();
 
-	DirectX::XMMATRIX GetTransformMatrix() const noexcept;
-	DirectX::XMMATRIX GetWorldMatrix() const noexcept;
+	void InitControlWindow() noexcept;
+
 	DirectX::XMMATRIX GetViewMatrix() const noexcept;
+	DirectX::XMMATRIX GetWorldMatrix() const noexcept;
 	DirectX::XMMATRIX GetProjectionMatrix() const noexcept;
 
 	W2Camera(const W2Camera&) = delete;
@@ -44,5 +44,4 @@ private:
 
 	DirectX::XMMATRIX mWorldMatrix;
 	DirectX::XMMATRIX mProjectionMatrix;
-	DirectX::XMMATRIX mViewMatrix;
 };

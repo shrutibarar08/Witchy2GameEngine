@@ -71,6 +71,12 @@ void TestApplication::Tick(float deltaTime)
 		b->Draw();
 	}
 
+}
+
+void TestApplication::DebugUI()
+{
+	WitchyEngine::DebugUI(); // TODO: Implement another way for this please
+
 	if (ImGui::Begin("Simulation Speed"))
 	{
 		ImGui::SliderFloat("Speed Factor", &m_speedFactor, 0.0f, 4.0f);

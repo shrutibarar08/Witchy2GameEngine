@@ -20,6 +20,7 @@ public:
 
 	virtual void BeginPlay() = 0;
 	virtual void Tick(float deltaTime) = 0;
+	virtual void DebugUI();
 
 private:
 	void ComputeFPS();

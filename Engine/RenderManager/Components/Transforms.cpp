@@ -14,7 +14,11 @@ Transforms::Transforms(const Drawable& parent)
 void Transforms::Bind() noexcept
 {
 	m_vertexConstantBuffer->Update(
-		DirectX::XMMatrixTranspose(m_parent.GetTransformXM() * W2Camera::Get()->GetTransformMatrix()));
+		DirectX::XMMatrixTranspose(
+			m_parent.GetTransformXM() *
+			W2Camera::Get()->GetViewMatrix() *
+			W2Camera::Get()->GetProjectionMatrix()
+		));
 	m_vertexConstantBuffer->Bind();
 }
 

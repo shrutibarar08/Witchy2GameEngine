@@ -20,12 +20,7 @@ WitchyEngine::WitchyEngine(RECT rt, const char* gameName)
 	GetClientRect(W2WindowAPI::Get()->GetHandleWindow(), &rt);
 	const float width = rt.right - rt.left;
 	const float height = rt.bottom - rt.top;
-	desc.ProjectionMatrix = DirectX::XMMatrixPerspectiveLH(DirectX::XM_PIDIV2, width / height, 0.01f, 100.f);
-
-	DirectX::XMVECTOR Eye = DirectX::XMVectorSet(0.0f, 3.0f, -5.0f, 0.0f);
-	DirectX::XMVECTOR At = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	DirectX::XMVECTOR Up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	desc.ViewMatrix = DirectX::XMMatrixLookAtLH(Eye, At, Up);
+	desc.ProjectionMatrix = DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f);
 	desc.WorldMatrix = DirectX::XMMatrixIdentity();
 
 	W2Camera::Init(desc);	// TODO: create a way of saving and passing it as a start position.
@@ -70,9 +65,15 @@ void WitchyEngine::UpdateFrame()
 
 	Tick(m_timer.DeltaTime());	// Sent Update Event to Applications Inherited this Engine
 	ComputeFPS();
-
+	DebugUI();
+	//~ End Recordings
 	W2GuiAPI::Get()->RecordEnd();
 	W2RenderAPI::Get()->RecordEnd();
+}
+
+void WitchyEngine::DebugUI()
+{
+	W2Camera::Get()->InitControlWindow();
 }
 
 void WitchyEngine::ComputeFPS()
