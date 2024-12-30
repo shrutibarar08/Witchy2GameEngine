@@ -32,9 +32,6 @@ public:
 	void RecordEnd() const;
 	void DrawIndexed(UINT count) noexcept(!ON_DEBUG);
 
-	void SetProjection(DirectX::XMMATRIX projection) noexcept;
-	DirectX::XMMATRIX GetProjection() const noexcept;
-
 private:
 	W2RenderAPI(HWND hWnd);
 	~W2RenderAPI();
@@ -44,7 +41,6 @@ private:
 	W2RenderAPI& operator=(W2RenderAPI&&) = delete;
 
 	static W2RenderAPI* m_instance;
-	DirectX::XMMATRIX m_projection;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device>		   m_device;

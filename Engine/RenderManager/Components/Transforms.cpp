@@ -1,4 +1,5 @@
 #include "Transforms.h"
+#include "EngineManager/Components/W2Camera.h"
 
 
 Transforms::Transforms(const Drawable& parent)
@@ -13,7 +14,7 @@ Transforms::Transforms(const Drawable& parent)
 void Transforms::Bind() noexcept
 {
 	m_vertexConstantBuffer->Update(
-		DirectX::XMMatrixTranspose(m_parent.GetTransformXM() * W2RenderAPI::Get()->GetProjection()));
+		DirectX::XMMatrixTranspose(m_parent.GetTransformXM() * W2Camera::Get()->GetTransformMatrix()));
 	m_vertexConstantBuffer->Bind();
 }
 

@@ -2,6 +2,7 @@
 
 #include "RenderManager/W2RenderAPI.h"
 #include "GuiManager/W2GuiAPI.h"
+#include "Components/W2Camera.h"
 
 #include <sstream>
 
@@ -10,8 +11,25 @@ WitchyEngine::WitchyEngine(RECT rt, const char* gameName)
 {
 	//~ Initialize Subsystems
 
-	//Init WindowsAPI
+	// Init WindowsAPI
 	W2WindowAPI::Init(rt, gameName);
+
+	// Init Engine Components
+	W2Camera::W2Camera_INIT_DESC desc{};
+	
+	GetClientRect(W2WindowAPI::Get()->GetHandleWindow(), &rt);
+	const float width = rt.right - rt.left;
+	const float height = rt.bottom - rt.top;
+	desc.ProjectionMatrix = DirectX::XMMatrixPerspectiveLH(DirectX::XM_PIDIV2, width / height, 0.01f, 100.f);
+
+	DirectX::XMVECTOR Eye = DirectX::XMVectorSet(0.0f, 3.0f, -5.0f, 0.0f);
+	DirectX::XMVECTOR At = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR Up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	desc.ViewMatrix = DirectX::XMMatrixLookAtLH(Eye, At, Up);
+	desc.WorldMatrix = DirectX::XMMatrixIdentity();
+
+	W2Camera::Init(desc);	// TODO: create a way of saving and passing it as a start position.
+
 	// Init RenderAPI
 	W2RenderAPI::Init();	// Init RenderManager (API)
 	// Init GuiAPI

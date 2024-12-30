@@ -160,16 +160,6 @@ void W2RenderAPI::DrawIndexed(UINT count) noexcept(!ON_DEBUG)
 	RENDER_API_INFO_ONLY(m_deviceContext->DrawIndexed(count, 0u, 0u));
 }
 
-void W2RenderAPI::SetProjection(DirectX::XMMATRIX projection) noexcept
-{
-	m_projection = projection;
-}
-
-DirectX::XMMATRIX W2RenderAPI::GetProjection() const noexcept
-{
-	return m_projection;
-}
-
 #pragma endregion
 
 

@@ -11,6 +11,9 @@
 #include "ImuGui/imgui_impl_dx11.h"
 
 
+/*
+ * @brief Tests Engine Functionality
+ */
 TestApplication::TestApplication()
 	: WitchyEngine({0, 0, 1280, 720}, 
 		"Application_1")
@@ -53,9 +56,6 @@ TestApplication::TestApplication()
 	Factory f{};
 	m_objects.reserve(120);
 	std::generate_n(std::back_inserter(m_objects), 120, f);
-
-
-	W2RenderAPI::Get()->SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 }
 
 void TestApplication::BeginPlay()
@@ -71,12 +71,10 @@ void TestApplication::Tick(float deltaTime)
 		b->Draw();
 	}
 
-	static char buffer[1024];
 	if (ImGui::Begin("Simulation Speed"))
 	{
 		ImGui::SliderFloat("Speed Factor", &m_speedFactor, 0.0f, 4.0f);
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::InputText("Butts", buffer, sizeof(buffer));
+		ImGui::Text("Application average %.3f", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	}
 	ImGui::End();
 }
