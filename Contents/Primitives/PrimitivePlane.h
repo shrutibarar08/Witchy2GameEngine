@@ -11,7 +11,7 @@
 class PrimitivePlane
 {
 public:
-	template<Requirements T>
+	template<RequirePos T>
 	static PrimitiveTriangle<T> Tessellate(int divisions_x, int divisions_y)
 	{
 		namespace dx = DirectX;

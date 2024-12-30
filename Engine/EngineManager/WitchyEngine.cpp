@@ -9,6 +9,7 @@
 
 WitchyEngine::WitchyEngine(RECT rt, const char* gameName)
 {
+	// TODO: Create Initializer PQ for this based on Importance and Dependencies.
 	//~ Initialize Subsystems
 
 	// Init WindowsAPI
@@ -36,11 +37,11 @@ WitchyEngine::WitchyEngine(RECT rt, const char* gameName)
 WitchyEngine::~WitchyEngine()
 {
 	// TODO: Create PQ for structured release.
-	W2RenderAPI::Release();
 	W2Camera::Release();
 #ifdef _DEBUG
 	W2GuiAPI::Release();
 #endif
+	W2RenderAPI::Release();
 	W2WindowAPI::Release();
 }
 
@@ -67,7 +68,7 @@ void WitchyEngine::UpdateFrame()
 	W2RenderAPI::Get()->RecordStart();
 	W2GuiAPI::Get()->RecordStart();
 
-	Tick(m_timer.DeltaTime());	// Sent Update Event to Applications Inherited this Engine
+	Tick(m_timer.DeltaTime());	// Sends Update Event to Application Inherited this Engine
 	ComputeFPS();
 	DebugUI();
 

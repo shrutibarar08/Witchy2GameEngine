@@ -4,8 +4,7 @@
 #include <vector>
 
 
-
-template<Requirements T>
+template<RequirePos T>
 class PrimitiveTriangle
 {
 public:

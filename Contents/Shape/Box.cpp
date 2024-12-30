@@ -33,48 +33,15 @@ Box::Box(std::mt19937& rng,
 			DirectX::XMFLOAT3 pos;
 			DirectX::XMFLOAT2 tex;
 		};
-		auto model = PrimitiveCube::Make<Vertex>();
+		auto model = PrimitiveCube()
+		.BuildTexcord<Vertex>()
+		.BuildPosition<Vertex>()
+		.GetTopology<Vertex>();
+
 		model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 		// Update Color on Each vertex
 
 		// TODO: Make Texture Coordinate Dynamic (Update Primitve Class to Consider Texture Coordinates as well).
-		std::vector<DirectX::XMFLOAT2> texcoords
-		{
-			{ 1.0f, 0.0f },
-			{ 0.0f, 0.0f },
-			{ 0.0f, 1.0f },
-			{ 1.0f, 1.0f },
-
-			{ 0.0f, 0.0f },
-			{ 1.0f, 0.0f },
-			{ 1.0f, 1.0f },
-			{ 0.0f, 1.0f },
-
-			{ 0.0f, 1.0f },
-			{ 1.0f, 1.0f },
-			{ 1.0f, 0.0f },
-			{ 0.0f, 0.0f },
-
-			{ 1.0f, 1.0f },
-			{ 0.0f, 1.0f },
-			{ 0.0f, 0.0f },
-			{ 1.0f, 0.0f },
-
-			{ 0.0f, 1.0f },
-			{ 1.0f, 1.0f },
-			{ 1.0f, 0.0f },
-			{ 0.0f, 0.0f },
-
-			{ 1.0f, 1.0f },
-			{ 0.0f, 1.0f },
-			{ 0.0f, 0.0f },
-			{ 1.0f, 0.0f }
-		};
-
-		for (int i = 0; i < model.m_vertices.size(); i++)
-		{
-			model.m_vertices[i].tex = texcoords[i];
-		}
 
 		AddStaticBind(std::make_unique<VertexBuffer>(model.m_vertices));
 

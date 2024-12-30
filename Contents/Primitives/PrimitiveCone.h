@@ -10,7 +10,7 @@
 class PrimitiveCone
 {
 public:
-	template<Requirements T>
+	template<RequirePos T>
 	static PrimitiveTriangle<T> Tessellate(int longDiv)
 	{
 		assert(longDiv >= 3 && "Triangle Must be containing at least 3 points");
@@ -61,9 +61,10 @@ public:
 		return { std::move(vertices),std::move(indices) };
 	}
 
-	template<Requirements T>
+	template<RequirePos T>
 	static PrimitiveTriangle<T> Make()
 	{
 		return Tessellate<T>(24);
 	}
+
 };

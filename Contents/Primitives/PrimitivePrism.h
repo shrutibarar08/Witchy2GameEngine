@@ -9,7 +9,7 @@
 class PrimitivePrism
 {
 public:
-	template<Requirements T>
+	template<RequirePos T>
 	static PrimitiveTriangle<T> Tessellate(int longDiv)
 	{
 		namespace dx = DirectX;
@@ -82,7 +82,7 @@ public:
 
 		return { std::move(vertices),std::move(indices) };
 	}
-	template<Requirements T>
+	template<RequirePos T>
 	static PrimitiveTriangle<T> Make()
 	{
 		return Tessellate<T>(24);

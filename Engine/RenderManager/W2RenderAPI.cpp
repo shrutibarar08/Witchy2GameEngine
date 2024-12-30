@@ -94,9 +94,7 @@ W2RenderAPI::W2RenderAPI(HWND hWnd)
 }
 
 W2RenderAPI::~W2RenderAPI()
-{
-	if (m_instance) delete m_instance;
-}
+{}
 
 void W2RenderAPI::Init()
 {

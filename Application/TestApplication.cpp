@@ -54,8 +54,8 @@ TestApplication::TestApplication()
 	};
 
 	Factory f{};
-	m_objects.reserve(120);
-	std::generate_n(std::back_inserter(m_objects), 120, f);
+	m_objects.reserve(200);
+	std::generate_n(std::back_inserter(m_objects), 200, f);
 }
 
 void TestApplication::BeginPlay()
