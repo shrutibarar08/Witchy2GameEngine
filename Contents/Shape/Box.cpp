@@ -37,7 +37,6 @@ Box::Box(std::mt19937& rng,
 		.BuildTexcord<Vertex>()
 		.BuildPosition<Vertex>()
 		.GetTopology<Vertex>();
-	
 		model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 		// Update Color on Each vertex
 
