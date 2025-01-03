@@ -42,7 +42,6 @@ private:
 	W2RenderAPI(HWND hWnd);
 	~W2RenderAPI();
 
-
 	static W2RenderAPI* m_instance;
 
 private:
@@ -59,7 +58,7 @@ private:
 #else
 	UINT m_debugFlag = 0u;
 #endif
-	const float _defaultColor[4]{ 0.3f, 0.2f, 0.1f, 1.f };
+	const float _defaultColor[4]{ 0.19f, 0.19f, 0.19f, 1.f };
 
 public:
 	class Exception : public W2Exception

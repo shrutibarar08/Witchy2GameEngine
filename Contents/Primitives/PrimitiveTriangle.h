@@ -18,7 +18,7 @@ public:
 
 	void Transform(DirectX::XMMATRIX matrix)
 	{
-		for (auto& v: m_vertices)
+		for (auto& v : m_vertices)
 		{
 			const DirectX::XMVECTOR pos = DirectX::XMLoadFloat3(&v.pos);
 			DirectX::XMStoreFloat3

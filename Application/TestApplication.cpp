@@ -50,12 +50,12 @@ TestApplication::TestApplication()
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
 		std::uniform_int_distribution<int> latdist{ 5,20 };
 		std::uniform_int_distribution<int> longdist{ 10,40 };
-		std::uniform_int_distribution<int> typedist{ 0,1};
+		std::uniform_int_distribution<int> typedist{ 1,1};
 	};
 
 	Factory f{};
-	m_objects.reserve(200);
-	std::generate_n(std::back_inserter(m_objects), 200, f);
+	m_objects.reserve(50);
+	std::generate_n(std::back_inserter(m_objects), 50, f);
 }
 
 void TestApplication::BeginPlay()
@@ -75,12 +75,12 @@ void TestApplication::Tick(float deltaTime)
 
 void TestApplication::DebugUI()
 {
-	WitchyEngine::DebugUI(); // TODO: Implement another way for this please
+	//WitchyEngine::DebugUI(); // TODO: Implement another way for this please
 
-	if (ImGui::Begin("Simulation Speed"))
-	{
-		ImGui::SliderFloat("Speed Factor", &m_speedFactor, 0.0f, 4.0f);
-		ImGui::Text("Application average %.3f", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	}
-	ImGui::End();
+	//if (ImGui::Begin("Simulation Speed"))
+	//{
+		//ImGui::SliderFloat("Speed Factor", &m_speedFactor, 0.0f, 4.0f);
+	//	ImGui::Text("Application average %.3f", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	// }
+	// ImGui::End();
 }

@@ -181,10 +181,11 @@
     <ClCompile Include="Contents\Shape\ShapePyramid.cpp" />
     <ClCompile Include="Engine\RenderManager\Components\SurfaceTexture.cpp" />
     <ClCompile Include="Engine\GuiManager\W2GuiAPI.cpp" />
+    <ClCompile Include="Engine\EngineManager\Components\W2IntializerEventPQ.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\EngineManager\Components\W2Camera.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveBase.h" />
+    <ClInclude Include="Engine\EngineManager\Components\W2Camera.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveCone.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveCube.h" />
     <ClInclude Include="Contents\Primitives\PrimitivePlane.h" />
@@ -229,6 +230,7 @@
     <ClInclude Include="Contents\Shape\ShapePyramid.h" />
     <ClInclude Include="Engine\RenderManager\Components\SurfaceTexture.h" />
     <ClInclude Include="Engine\GuiManager\W2GuiAPI.h" />
+    <ClInclude Include="Engine\EngineManager\Components\W2IntializerEventPQ.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc" />
@@ -247,6 +249,16 @@
     <None Include="Shaders\Compiled\VSBlend.cso" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Shaders\Code\LightShaders\PointLight\PointPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shaders\Code\TestShaders\PixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -256,6 +268,16 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shaders\Code\LightShaders\PointLight\PointVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Shaders\Compiled\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shaders\Code\TestShaders\PSBlend.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

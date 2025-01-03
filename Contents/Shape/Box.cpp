@@ -37,7 +37,7 @@ Box::Box(std::mt19937& rng,
 		.BuildTexcord<Vertex>()
 		.BuildPosition<Vertex>()
 		.GetTopology<Vertex>();
-
+	
 		model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 		// Update Color on Each vertex
 
@@ -53,7 +53,7 @@ Box::Box(std::mt19937& rng,
 		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(model.m_indices));
 
 		auto texture = std::make_unique<SurfaceTexture>();
-		texture->AddTexture(L"Contents/Textures/Wood.dds");
+		texture->AddTexture(L"Contents/Textures/CubTextures/pexels_didsss.dds");
 		texture->AddSampler(); // TODO: Can be included inside add Texture since I only need it once.
 
 		AddStaticBind(std::move(texture));

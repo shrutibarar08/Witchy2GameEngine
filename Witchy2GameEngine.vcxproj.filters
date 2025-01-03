@@ -111,6 +111,9 @@
     <ClCompile Include="Engine\EngineManager\Components\W2Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\EngineManager\Components\W2IntializerEventPQ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WindowsManager\W2WindowAPI.h">
@@ -245,10 +248,13 @@
     <ClInclude Include="Engine\GuiManager\W2GuiAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Contents\Primitives\PrimitiveBase.h">
+    <ClInclude Include="Engine\EngineManager\Components\W2Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EngineManager\Components\W2Camera.h">
+    <ClInclude Include="Engine\EngineManager\Components\W2IntializerEventPQ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Contents\Primitives\PrimitiveBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -287,5 +293,7 @@
     <FxCompile Include="Shaders\Code\TestShaders\PSBlend.hlsl" />
     <FxCompile Include="Shaders\Code\TestShaders\TestTextureVS.hlsl" />
     <FxCompile Include="Shaders\Code\TestShaders\TestTexturePS.hlsl" />
+    <FxCompile Include="Shaders\Code\LightShaders\PointLight\PointVS.hlsl" />
+    <FxCompile Include="Shaders\Code\LightShaders\PointLight\PointPS.hlsl" />
   </ItemGroup>
 </Project>
