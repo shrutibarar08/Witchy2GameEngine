@@ -25,5 +25,6 @@ VSOut main(VSIn input)
     vs.worldPosition = (float3) mul(float4(input.pos, 1.0f), world);
     vs.pos = mul(float4(input.pos, 1.0f), projection);
     vs.normal = mul(input.normal, (float3x3) world);
+    vs.tex = input.tex;
 	return vs;
 }

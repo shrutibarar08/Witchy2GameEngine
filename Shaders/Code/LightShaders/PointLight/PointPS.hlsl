@@ -47,6 +47,5 @@ float4 main(float3 worldPos : POSITION, float2 tex : TEXTCORD, float3 n : NORMAL
 
     // Output final color
 
-    //return float4(finalColor, colorMat.a);
-    return txColorMat.Sample(txSampler, tex);
+    return float4(finalColor, colorMat.a);
 }
