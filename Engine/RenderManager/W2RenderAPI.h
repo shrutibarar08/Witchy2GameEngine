@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 #include <wrl.h>
 #include <vector>
+#include <unordered_map>
 
 #include "ExceptionManager/W2Exception.h"
 #include "ExceptionManager/DxgiInfoManager.h"
@@ -33,11 +34,15 @@ public:
 	ID3D11DeviceContext* GetDeviceContext();
 	DxgiInfoManager& GetInfoManager() noexcept(ON_DEBUG);
 
+	//~ Render Setups
+	void SetBackgroundColor(float color[]);
+	void SetPSShaderResources(ID3D11ShaderResourceView* srv, UINT slot) const;
+	void SetPSShaderResources(const std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>& srv, UINT slot) const;
+
 	//~ Render Methods
 	void RecordStart() const;
 	void RecordEnd() const;
 	void DrawIndexed(UINT count) noexcept(!ON_DEBUG);
-	void SetBackgroundColor(float color[]);
 
 private:
 	W2RenderAPI(HWND hWnd);
@@ -52,6 +57,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_renderTV;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D>		   m_depthT2D;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthSV;
+
+	mutable std::unordered_map<UINT, bool> m_psSlotCheck;
 
 #ifdef _DEBUG
 	DxgiInfoManager m_dxgiInfoManager;

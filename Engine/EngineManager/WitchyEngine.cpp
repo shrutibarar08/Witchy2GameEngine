@@ -2,7 +2,7 @@
 
 #include "RenderManager/W2RenderAPI.h"
 #include "GuiManager/W2GuiAPI.h"
-#include "Components/W2Camera.h"
+#include "Player/W2Camera.h"
 
 #include <sstream>
 

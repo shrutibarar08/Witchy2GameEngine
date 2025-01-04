@@ -1,6 +1,6 @@
 #include "W2PointLight.h"
 
-#include "W2Camera.h"
+#include "EngineManager/Player/W2Camera.h"
 #include "ImuGui/imgui.h"
 
 

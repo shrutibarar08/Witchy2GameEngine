@@ -1,5 +1,5 @@
 #include "Transforms.h"
-#include "EngineManager/Components/W2Camera.h"
+#include "EngineManager/Player/W2Camera.h"
 
 
 Transforms::Transforms(const Drawable& parent, UINT slot)

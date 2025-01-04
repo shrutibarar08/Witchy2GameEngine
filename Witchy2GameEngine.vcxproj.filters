@@ -108,16 +108,19 @@
     <ClCompile Include="Engine\GuiManager\W2GuiAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\EngineManager\Components\W2Camera.cpp">
+    <ClCompile Include="Engine\EngineManager\Player\W2Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\EngineManager\Components\W2IntializerEventPQ.cpp">
+    <ClCompile Include="Engine\EngineManager\System\W2IntializerEventPQ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\EngineManager\Components\W2PointLight.cpp">
+    <ClCompile Include="Engine\EngineManager\Light\W2PointLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Contents\Shape\ShapeSphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EngineManager\Components\LightComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -254,19 +257,22 @@
     <ClInclude Include="Engine\GuiManager\W2GuiAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EngineManager\Components\W2Camera.h">
+    <ClInclude Include="Engine\EngineManager\Player\W2Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EngineManager\Components\W2IntializerEventPQ.h">
+    <ClInclude Include="Engine\EngineManager\System\W2IntializerEventPQ.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Contents\Primitives\PrimitiveBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EngineManager\Components\W2PointLight.h">
+    <ClInclude Include="Engine\EngineManager\Light\W2PointLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Contents\Shape\ShapeSphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineManager\Components\LightComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

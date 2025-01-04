@@ -5,7 +5,6 @@
 #include "Primitives/PrimitiveSphere.h"
 #include "Primitives/PrimitiveCone.h"
 #include "Primitives/PrimitiveCube.h"
-#include "Primitives/PrimitivePrism.h"
 
 
 Box::Box(std::mt19937& rng,

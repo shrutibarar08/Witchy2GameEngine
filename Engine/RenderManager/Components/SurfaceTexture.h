@@ -9,6 +9,7 @@ class SurfaceTexture final: public Bindable
 {
 public:
 	SurfaceTexture() = default;
+	~SurfaceTexture() override;
 
 	SurfaceTexture(const SurfaceTexture&) = delete;
 	SurfaceTexture& operator=(const SurfaceTexture&) = delete;
@@ -23,8 +24,8 @@ public:
 	void AddSampler();
 
 private:
-	std::vector<ID3D11ShaderResourceView*> m_shaderRV;
-	std::vector<ID3D11SamplerState*> m_samplerState;
+	std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> m_shaderRV;
+	std::vector<Microsoft::WRL::ComPtr<ID3D11SamplerState>> m_samplerState;
 	std::unordered_map<std::wstring, bool> m_cacheInfo;
 	std::wstring m_topTexture;
 };

@@ -149,7 +149,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\EngineManager\Components\W2Camera.cpp" />
+    <ClCompile Include="Engine\EngineManager\Components\LightComponent.cpp" />
+    <ClCompile Include="Engine\EngineManager\Player\W2Camera.cpp" />
     <ClCompile Include="Contents\Shape\Box.cpp" />
     <ClCompile Include="Externals\ImuGui\imgui.cpp" />
     <ClCompile Include="Externals\ImuGui\imgui_demo.cpp" />
@@ -182,12 +183,13 @@
     <ClCompile Include="Contents\Shape\ShapePyramid.cpp" />
     <ClCompile Include="Engine\RenderManager\Components\SurfaceTexture.cpp" />
     <ClCompile Include="Engine\GuiManager\W2GuiAPI.cpp" />
-    <ClCompile Include="Engine\EngineManager\Components\W2IntializerEventPQ.cpp" />
-    <ClCompile Include="Engine\EngineManager\Components\W2PointLight.cpp" />
+    <ClCompile Include="Engine\EngineManager\System\W2IntializerEventPQ.cpp" />
+    <ClCompile Include="Engine\EngineManager\Light\W2PointLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Contents\Primitives\PrimitiveBase.h" />
-    <ClInclude Include="Engine\EngineManager\Components\W2Camera.h" />
+    <ClInclude Include="Engine\EngineManager\Components\LightComponent.h" />
+    <ClInclude Include="Engine\EngineManager\Player\W2Camera.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveCone.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveCube.h" />
     <ClInclude Include="Contents\Primitives\PrimitivePlane.h" />
@@ -233,8 +235,8 @@
     <ClInclude Include="Contents\Shape\ShapePyramid.h" />
     <ClInclude Include="Engine\RenderManager\Components\SurfaceTexture.h" />
     <ClInclude Include="Engine\GuiManager\W2GuiAPI.h" />
-    <ClInclude Include="Engine\EngineManager\Components\W2IntializerEventPQ.h" />
-    <ClInclude Include="Engine\EngineManager\Components\W2PointLight.h" />
+    <ClInclude Include="Engine\EngineManager\System\W2IntializerEventPQ.h" />
+    <ClInclude Include="Engine\EngineManager\Light\W2PointLight.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc" />

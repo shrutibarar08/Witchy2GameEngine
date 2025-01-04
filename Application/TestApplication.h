@@ -2,7 +2,7 @@
 
 #include "EngineManager/WitchyEngine.h"
 #include "RenderManager/Object/Drawable.h"
-#include "EngineManager/Components/W2PointLight.h"
+#include "EngineManager/Light/W2PointLight.h"
 
 /**
  * @brief Test Application Class

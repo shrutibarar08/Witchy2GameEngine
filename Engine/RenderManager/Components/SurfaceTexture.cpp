@@ -60,12 +60,17 @@ void SurfaceTexture::AddSampler()
 	m_samplerState.emplace_back(std::move(ss));
 }
 
+SurfaceTexture::~SurfaceTexture()
+{
+	for (auto& x: m_shaderRV) x->Release();
+	for (auto& x: m_samplerState) x->Release();
+}
+
 void SurfaceTexture::Bind() noexcept
 {
-	W2RenderAPI::Get()->GetDeviceContext()->PSSetShaderResources(0,
-		m_shaderRV.size(), m_shaderRV.data());
+	W2RenderAPI::Get()->SetPSShaderResources(m_shaderRV, 0u);
 
 	W2RenderAPI::Get()->GetDeviceContext()->PSSetSamplers(
-		0u, m_samplerState.size(), m_samplerState.data()
+		0u, m_samplerState.size(), m_samplerState.data()->GetAddressOf()
 	);
 }
