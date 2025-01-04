@@ -9,8 +9,13 @@ class W2PointLight
 public:
 	struct LightBuffer
 	{
-		DirectX::XMFLOAT3 translation;
-		float offset;
+		alignas(16) DirectX::XMFLOAT3 LightPosition;
+		alignas(16) DirectX::XMFLOAT3 Ambient;
+		alignas(16) DirectX::XMFLOAT3 DiffuseColor;
+		float DiffuseIntensity;
+		float AttConst;
+		float AttLin;
+		float AttQuad;
 	};
 public:
 	W2PointLight(float radius = 1.f);
@@ -18,7 +23,7 @@ public:
 	void Draw() const noexcept;
 	void Bind() const noexcept;
 private:
-	DirectX::XMFLOAT3 m_translation{ 0.0f, 0.0f, 0.0f };
+	LightBuffer m_data;
 	mutable ShapeSphere m_sphereMesh;
-	mutable PixelConstantBuffer<LightBuffer> m_lightBuffer{};
+	mutable PixelConstantBuffer<LightBuffer> m_lightBuffer;
 };

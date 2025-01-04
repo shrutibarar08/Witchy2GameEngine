@@ -2,22 +2,22 @@
 #include "EngineManager/Components/W2Camera.h"
 
 
-Transforms::Transforms(const Drawable& parent)
+Transforms::Transforms(const Drawable& parent, UINT slot)
 	: m_parent(parent)
 {
 	if (m_vertexConstantBuffer == nullptr)
 	{
-		m_vertexConstantBuffer = std::make_unique<VertexConstantBuffer<TRANSFORM_DESC>>();
+		m_vertexConstantBuffer = std::make_unique<VertexConstantBuffer<TRANSFORM_DESC>>(slot);
 	}
 }
 
 void Transforms::Bind() noexcept
 {
-	const auto transform = m_parent.GetTransformXM();
+	const auto transform = m_parent.GetTransformXM() * W2Camera::Get()->GetViewMatrix();
 	const TRANSFORM_DESC td
 	{
 		DirectX::XMMatrixTranspose(transform),
-		DirectX::XMMatrixTranspose(transform * W2Camera::Get()->GetViewMatrix() * W2Camera::Get()->GetProjectionMatrix()),
+		DirectX::XMMatrixTranspose(transform * W2Camera::Get()->GetProjectionMatrix()),
 	};
 	m_vertexConstantBuffer->Update(td);
 	m_vertexConstantBuffer->Bind();

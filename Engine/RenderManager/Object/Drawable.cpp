@@ -8,6 +8,7 @@
 
 void Drawable::Draw() const noexcept(!ON_DEBUG)
 {
+	if (pSurfaceTextures) pSurfaceTextures->Bind();
 	for (auto& b: m_binds)
 	{
 		b->Bind();
@@ -16,7 +17,6 @@ void Drawable::Draw() const noexcept(!ON_DEBUG)
 	{
 		b->Bind();
 	}
-	if (pSurfaceTextures) pSurfaceTextures->Bind();
 	W2RenderAPI::Get()->DrawIndexed(pIndexBuffer->GetCount());
 }
 

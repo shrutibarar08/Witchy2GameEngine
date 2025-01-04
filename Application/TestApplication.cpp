@@ -60,6 +60,7 @@ TestApplication::TestApplication()
 
 void TestApplication::BeginPlay()
 {
+	// TODO: Create Asset Loader.
 	m_availableTextures.push_back("Contents/Textures/CubTextures/pexels_didsss.dds");
 	m_availableTextures.push_back("Contents/Textures/CubTextures/tie_dye.dds");
 	m_availableTextures.push_back("Contents/Textures/CubTextures/crumpled_black_paper.dds");
@@ -67,8 +68,7 @@ void TestApplication::BeginPlay()
 	m_availableTextures.push_back("Contents/Textures/rocks.dds");
 	m_availableTextures.push_back("Contents/Textures/Tiles.dds");
 	m_availableTextures.push_back("Contents/Textures/Wood.dds");
-	currentTexture = "";
-	// currentTexture = m_objects[0]->GetTexture()->GetTopTexture();
+	currentTexture = m_objects[0]->GetTexture()->GetTopTexture();
 }
 
 void TestApplication::Tick(float deltaTime)
@@ -78,10 +78,10 @@ void TestApplication::Tick(float deltaTime)
 	{
 		m_objects[i]->Update(deltaTime * m_speedFactor);
 		m_objects[i]->Draw();
-		//if (currentTexture != m_objects[i]->GetTexture()->GetTopTexture())
-		//{
-		//	m_objects[i]->GetTexture()->UpdateTexture(currentTexture);
-		//}
+		if (currentTexture != m_objects[i]->GetTexture()->GetTopTexture())
+		{
+			m_objects[i]->GetTexture()->UpdateTexture(currentTexture);
+		}
 	}
 	m_light.Draw();
 }
@@ -95,20 +95,21 @@ void TestApplication::DebugUI()
 		ImGui::SliderFloat("Speed Factor", &m_speedFactor, 0.0f, 4.0f);
 		ImGui::Text("Application average %.3f", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::SliderInt("Mesh Count", &m_meshCount, 0, 100);
-		ImGui::End();
-	}
 
-	if (ImGui::BeginCombo("Select Options", currentTexture.c_str()))
-	{
-		for (size_t i = 0; i < m_availableTextures.size(); i++)
+		if (ImGui::BeginCombo("Select Textures", currentTexture.c_str()))
 		{
-			bool isSelected = (currentTexture == m_availableTextures[i]);
-			if (ImGui::Selectable(m_availableTextures[i].c_str(), isSelected))
+			for (size_t i = 0; i < m_availableTextures.size(); i++)
 			{
-				currentTexture = m_availableTextures[i];
+				bool isSelected = (currentTexture == m_availableTextures[i]);
+				if (ImGui::Selectable(m_availableTextures[i].c_str(), isSelected))
+				{
+					currentTexture = m_availableTextures[i];
+				}
+				if (isSelected) ImGui::SetItemDefaultFocus();
 			}
-			if (isSelected) ImGui::SetItemDefaultFocus();
+			ImGui::EndCombo();
 		}
-		ImGui::EndCombo();
+
+		ImGui::End();
 	}
 }

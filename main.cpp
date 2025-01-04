@@ -1,4 +1,6 @@
 #include "Application/TestApplication.h"
+
+#ifdef _DEBUG
 #include <iostream>
 #include <fstream>
 
@@ -30,6 +32,9 @@ void EnableTerminal()
         MessageBox(nullptr, "Failed to allocate console.", "Error", MB_ICONERROR);
     }
 }
+
+#endif
+
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {

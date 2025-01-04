@@ -76,6 +76,15 @@ Box::Box(std::mt19937& rng,
 	texture->AddSampler(); // TODO: Can be included inside add Texture since I only need it once.
 
 	AddTexture(std::move(texture));
+
+	struct PSMaterical
+	{
+		alignas(16) DirectX::XMFLOAT3 color;
+		float specularIntensity = 0.6f;
+		float specularPower = 30.0f;
+		float padding[2];	// ensuring 32 bytes
+	} color = { {0.7f, 0.1f, 0.5f} };
+	AddBind(std::make_unique<PixelConstantBuffer<PSMaterical>>(color, 1u));
 	AddBind(std::make_unique<Transforms>(*this));
 
 	DirectX::XMStoreFloat3x3(&mt, DirectX::XMMatrixScaling(1.0f, 1.0f, bdist(rng)));
