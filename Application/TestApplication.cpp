@@ -15,7 +15,7 @@
  * @brief Tests Engine Functionality
  */
 TestApplication::TestApplication()
-	: WitchyEngine({0, 0, 1280, 720}, 
+	: WitchyEngine({0, 0, 1920, 1080}, 
 		"Application_1")
 {
 	class Factory
@@ -54,33 +54,61 @@ TestApplication::TestApplication()
 	};
 
 	Factory f{};
-	m_objects.reserve(50);
-	std::generate_n(std::back_inserter(m_objects), 50, f);
+	m_objects.reserve(m_meshCount);
+	std::generate_n(std::back_inserter(m_objects), m_meshCount, f);
 }
 
 void TestApplication::BeginPlay()
 {
-
+	m_availableTextures.push_back("Contents/Textures/CubTextures/pexels_didsss.dds");
+	m_availableTextures.push_back("Contents/Textures/CubTextures/tie_dye.dds");
+	m_availableTextures.push_back("Contents/Textures/CubTextures/crumpled_black_paper.dds");
+	m_availableTextures.push_back("Contents/Textures/Coin.dds");
+	m_availableTextures.push_back("Contents/Textures/rocks.dds");
+	m_availableTextures.push_back("Contents/Textures/Tiles.dds");
+	m_availableTextures.push_back("Contents/Textures/Wood.dds");
+	currentTexture = "";
+	// currentTexture = m_objects[0]->GetTexture()->GetTopTexture();
 }
 
 void TestApplication::Tick(float deltaTime)
 {
-	for (auto& b: m_objects)
+	m_light.Bind();
+	for (int i = 0; i < m_meshCount && i < m_objects.size(); i++)
 	{
-		b->Update(deltaTime * m_speedFactor);
-		b->Draw();
+		m_objects[i]->Update(deltaTime * m_speedFactor);
+		m_objects[i]->Draw();
+		//if (currentTexture != m_objects[i]->GetTexture()->GetTopTexture())
+		//{
+		//	m_objects[i]->GetTexture()->UpdateTexture(currentTexture);
+		//}
 	}
-
+	m_light.Draw();
 }
 
 void TestApplication::DebugUI()
 {
-	//WitchyEngine::DebugUI(); // TODO: Implement another way for this please
+	WitchyEngine::DebugUI(); // TODO: Implement another way for this please
+	m_light.InitControlWindow();
+	if (ImGui::Begin("Simulation"))
+	{
+		ImGui::SliderFloat("Speed Factor", &m_speedFactor, 0.0f, 4.0f);
+		ImGui::Text("Application average %.3f", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::SliderInt("Mesh Count", &m_meshCount, 0, 100);
+		ImGui::End();
+	}
 
-	//if (ImGui::Begin("Simulation Speed"))
-	//{
-		//ImGui::SliderFloat("Speed Factor", &m_speedFactor, 0.0f, 4.0f);
-	//	ImGui::Text("Application average %.3f", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	// }
-	// ImGui::End();
+	if (ImGui::BeginCombo("Select Options", currentTexture.c_str()))
+	{
+		for (size_t i = 0; i < m_availableTextures.size(); i++)
+		{
+			bool isSelected = (currentTexture == m_availableTextures[i]);
+			if (ImGui::Selectable(m_availableTextures[i].c_str(), isSelected))
+			{
+				currentTexture = m_availableTextures[i];
+			}
+			if (isSelected) ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndCombo();
+	}
 }

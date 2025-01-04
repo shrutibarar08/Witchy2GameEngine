@@ -1,18 +1,20 @@
 cbuffer CBuffer: register(b0)
 {
     matrix world;
-    matrix projection;;
+    matrix projection;
 };
 
 struct VSIn
 {
     float3 pos : POSITION;
+    float2 tex : TEXTCORD;
     float3 normal : NORMAL;
 };
 
 struct VSOut
 {
     float3 worldPosition : POSITION;
+    float2 tex : TEXTCORD;
     float3 normal : NORMAL;
     float4 pos : SV_Position;
 };

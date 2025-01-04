@@ -114,6 +114,12 @@
     <ClCompile Include="Engine\EngineManager\Components\W2IntializerEventPQ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\EngineManager\Components\W2PointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Contents\Shape\ShapeSphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WindowsManager\W2WindowAPI.h">
@@ -257,6 +263,12 @@
     <ClInclude Include="Contents\Primitives\PrimitiveBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\EngineManager\Components\W2PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Contents\Shape\ShapeSphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc">
@@ -295,5 +307,7 @@
     <FxCompile Include="Shaders\Code\TestShaders\TestTexturePS.hlsl" />
     <FxCompile Include="Shaders\Code\LightShaders\PointLight\PointVS.hlsl" />
     <FxCompile Include="Shaders\Code\LightShaders\PointLight\PointPS.hlsl" />
+    <FxCompile Include="Shaders\Code\TestShaders\SimpleVS.hlsl" />
+    <FxCompile Include="Shaders\Code\TestShaders\SimplePS.hlsl" />
   </ItemGroup>
 </Project>

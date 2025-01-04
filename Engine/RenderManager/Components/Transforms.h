@@ -7,10 +7,15 @@
 
 class Transforms : public Bindable
 {
+	struct TRANSFORM_DESC
+	{
+		DirectX::XMMATRIX World;
+		DirectX::XMMATRIX Projection;
+	};
 public:
 	Transforms(const Drawable& parent);
 	void Bind() noexcept override;
 private:
-	static std::unique_ptr<VertexConstantBuffer<DirectX::XMMATRIX>> m_vertexConstantBuffer;
+	static std::unique_ptr<VertexConstantBuffer<TRANSFORM_DESC>> m_vertexConstantBuffer;
 	const Drawable& m_parent;
 };

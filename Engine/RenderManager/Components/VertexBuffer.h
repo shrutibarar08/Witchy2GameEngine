@@ -26,7 +26,6 @@ public:
 		vertexBufferData.pSysMem = vertices.data();
 
 		RENDER_API_THROW(W2RenderAPI::Get()->GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &m_vertexBuffer));
-
 	}
 	void Bind() noexcept override;
 private:

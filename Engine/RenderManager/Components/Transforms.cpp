@@ -7,19 +7,20 @@ Transforms::Transforms(const Drawable& parent)
 {
 	if (m_vertexConstantBuffer == nullptr)
 	{
-		m_vertexConstantBuffer = std::make_unique<VertexConstantBuffer<DirectX::XMMATRIX>>();
+		m_vertexConstantBuffer = std::make_unique<VertexConstantBuffer<TRANSFORM_DESC>>();
 	}
 }
 
 void Transforms::Bind() noexcept
 {
-	m_vertexConstantBuffer->Update(
-		DirectX::XMMatrixTranspose(
-			m_parent.GetTransformXM() *
-			W2Camera::Get()->GetViewMatrix() *
-			W2Camera::Get()->GetProjectionMatrix()
-		));
+	const auto transform = m_parent.GetTransformXM();
+	const TRANSFORM_DESC td
+	{
+		DirectX::XMMatrixTranspose(transform),
+		DirectX::XMMatrixTranspose(transform * W2Camera::Get()->GetViewMatrix() * W2Camera::Get()->GetProjectionMatrix()),
+	};
+	m_vertexConstantBuffer->Update(td);
 	m_vertexConstantBuffer->Bind();
 }
 
-std::unique_ptr<VertexConstantBuffer<DirectX::XMMATRIX>> Transforms::m_vertexConstantBuffer;
+std::unique_ptr<VertexConstantBuffer<Transforms::TRANSFORM_DESC>> Transforms::m_vertexConstantBuffer;

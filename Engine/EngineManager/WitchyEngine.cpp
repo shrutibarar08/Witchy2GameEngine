@@ -6,6 +6,8 @@
 
 #include <sstream>
 
+#include "ImuGui/imgui.h"
+
 
 WitchyEngine::WitchyEngine(RECT rt, const char* gameName)
 {
@@ -80,6 +82,17 @@ void WitchyEngine::UpdateFrame()
 void WitchyEngine::DebugUI()
 {
 	W2Camera::Get()->InitControlWindow();
+
+	if (ImGui::Begin("Color Selection"))
+	{
+		static float color_values[4]{};
+		ImGui::SliderFloat("Red", &color_values[0], 0.0f, 1.0f, "%.2f");
+		ImGui::SliderFloat("Blue", &color_values[1], 0.0f, 1.0f, "%.2f");
+		ImGui::SliderFloat("Green", &color_values[2], 0.0f, 1.0f, "%.2f");
+		ImGui::SliderFloat("Alpha", &color_values[3], 0.0f, 1.0f, "%.2f");
+		W2RenderAPI::Get()->SetBackgroundColor(color_values);
+	}
+	ImGui::End();
 }
 
 void WitchyEngine::ComputeFPS()

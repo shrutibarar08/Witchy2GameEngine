@@ -37,6 +37,7 @@ public:
 	void RecordStart() const;
 	void RecordEnd() const;
 	void DrawIndexed(UINT count) noexcept(!ON_DEBUG);
+	void SetBackgroundColor(float color[]);
 
 private:
 	W2RenderAPI(HWND hWnd);
@@ -58,7 +59,7 @@ private:
 #else
 	UINT m_debugFlag = 0u;
 #endif
-	const float _defaultColor[4]{ 0.19f, 0.19f, 0.19f, 1.f };
+	float _defaultColor[4]{ 0.19f, 0.19f, 0.19f, 1.f };
 
 public:
 	class Exception : public W2Exception

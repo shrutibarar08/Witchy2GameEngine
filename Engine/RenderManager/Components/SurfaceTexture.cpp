@@ -6,6 +6,8 @@
 
 void SurfaceTexture::AddTexture(const std::wstring& texturePath)
 {
+	if (m_cacheInfo[texturePath]) return;
+
 	INIT_INFO();
 	ID3D11ShaderResourceView* rv;
 	RENDER_API_THROW(
@@ -14,6 +16,25 @@ void SurfaceTexture::AddTexture(const std::wstring& texturePath)
 			texturePath.c_str(),
 		nullptr, &rv));
 	m_shaderRV.emplace_back(std::move(rv));
+	m_cacheInfo[texturePath] = true;
+	m_topTexture = texturePath;
+}
+
+void SurfaceTexture::UpdateTexture(const std::wstring& texturePath)
+{
+	m_shaderRV.clear();
+	m_cacheInfo.clear();
+	AddTexture(texturePath);
+}
+
+void SurfaceTexture::UpdateTexture(const std::string& texturePath)
+{
+	UpdateTexture(std::wstring(texturePath.begin(), texturePath.end()));
+}
+
+std::string SurfaceTexture::GetTopTexture() const
+{
+	return std::string(m_topTexture.begin(), m_topTexture.end());
 }
 
 void SurfaceTexture::AddSampler()

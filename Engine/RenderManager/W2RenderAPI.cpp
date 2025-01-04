@@ -167,6 +167,14 @@ void W2RenderAPI::DrawIndexed(UINT count) noexcept(!ON_DEBUG)
 	RENDER_API_INFO_ONLY(m_deviceContext->DrawIndexed(count, 0u, 0u));
 }
 
+void W2RenderAPI::SetBackgroundColor(float color[])
+{
+	for (int i = 0; i < 4; i++)
+	{
+		_defaultColor[i] = color[i];
+	}
+}
+
 #pragma endregion
 
 

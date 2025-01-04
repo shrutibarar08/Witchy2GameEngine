@@ -32,10 +32,12 @@ Box::Box(std::mt19937& rng,
 		{
 			DirectX::XMFLOAT3 pos;
 			DirectX::XMFLOAT2 tex;
+			DirectX::XMFLOAT3 norm;
 		};
 		auto model = PrimitiveCube()
 		.BuildTexcord<Vertex>()
 		.BuildPosition<Vertex>()
+		.BuildNorm<Vertex>()
 		.GetTopology<Vertex>();
 		model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 		// Update Color on Each vertex
@@ -44,25 +46,22 @@ Box::Box(std::mt19937& rng,
 
 		AddStaticBind(std::make_unique<VertexBuffer>(model.m_vertices));
 
-		auto pvs = std::make_unique<VertexShader>(L"Shaders/Compiled/TestTextureVS.cso");
+		auto pvs = std::make_unique<VertexShader>(L"Shaders/Compiled/PointVS.cso");
 		auto pvsbc = pvs->GetBytecode();
 
 		AddStaticBind(std::move(pvs));
-		AddStaticBind(std::make_unique<PixelShader>(L"Shaders/Compiled/TestTexturePS.cso"));
+		AddStaticBind(std::make_unique<PixelShader>(L"Shaders/Compiled/PointPS.cso"));
 		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(model.m_indices));
 
-		auto texture = std::make_unique<SurfaceTexture>();
-		texture->AddTexture(L"Contents/Textures/CubTextures/pexels_didsss.dds");
-		texture->AddSampler(); // TODO: Can be included inside add Texture since I only need it once.
-
-		AddStaticBind(std::move(texture));
-
+		//~ Set Pixel Constant Buffer
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,
 				0,D3D11_INPUT_PER_VERTEX_DATA,0 },
 			{"TEXTCORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
 				12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+				20, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		};
 		AddStaticBind(std::make_unique<InputLayout>(ied, pvsbc));
 		AddStaticBind(std::make_unique<Topology>(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
@@ -71,6 +70,12 @@ Box::Box(std::mt19937& rng,
 	{
 		SetIndexFromStatic();
 	}
+
+	auto texture = std::make_unique<SurfaceTexture>();
+	texture->AddTexture(L"Contents/Textures/CubTextures/pexels_didsss.dds");
+	texture->AddSampler(); // TODO: Can be included inside add Texture since I only need it once.
+
+	AddTexture(std::move(texture));
 	AddBind(std::make_unique<Transforms>(*this));
 
 	DirectX::XMStoreFloat3x3(&mt, DirectX::XMMatrixScaling(1.0f, 1.0f, bdist(rng)));
