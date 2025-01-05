@@ -242,10 +242,6 @@
     <ResourceCompile Include="Witchy2GameEngine.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Contents\Icons\TitleIcon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Contents\Cursors\Cursor_1.cur" />
     <None Include="Engine\ExceptionManager\DXGetErrorDescription.inl" />
     <None Include="Engine\ExceptionManager\DXGetErrorString.inl" />
     <None Include="Engine\ExceptionManager\DXTrace.inl" />

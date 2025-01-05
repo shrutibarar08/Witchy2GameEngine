@@ -71,7 +71,7 @@ Box::Box(std::mt19937& rng,
 	}
 
 	auto texture = std::make_unique<SurfaceTexture>();
-	texture->AddTexture(L"Contents/Textures/CubTextures/pexels_didsss.dds");
+	texture->AddTexture(L"Assets/Textures/CubTextures/pexels_didsss.dds");
 	texture->AddSampler(); // TODO: Can be included inside add Texture since I only need it once.
 
 	AddTexture(std::move(texture));

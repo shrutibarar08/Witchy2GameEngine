@@ -61,13 +61,13 @@ TestApplication::TestApplication()
 void TestApplication::BeginPlay()
 {
 	// TODO: Create Asset Loader.
-	m_availableTextures.push_back("Contents/Textures/CubTextures/pexels_didsss.dds");
-	m_availableTextures.push_back("Contents/Textures/CubTextures/tie_dye.dds");
-	m_availableTextures.push_back("Contents/Textures/CubTextures/crumpled_black_paper.dds");
-	m_availableTextures.push_back("Contents/Textures/Coin.dds");
-	m_availableTextures.push_back("Contents/Textures/rocks.dds");
-	m_availableTextures.push_back("Contents/Textures/Tiles.dds");
-	m_availableTextures.push_back("Contents/Textures/Wood.dds");
+	m_availableTextures.push_back("Assets/Textures/CubTextures/pexels_didsss.dds");
+	m_availableTextures.push_back("Assets/Textures/CubTextures/tie_dye.dds");
+	m_availableTextures.push_back("Assets/Textures/CubTextures/crumpled_black_paper.dds");
+	m_availableTextures.push_back("Assets/Textures/Coin.dds");
+	m_availableTextures.push_back("Assets/Textures/rocks.dds");
+	m_availableTextures.push_back("Assets/Textures/Tiles.dds");
+	m_availableTextures.push_back("Assets/Textures/Wood.dds");
 	currentTexture = m_objects[0]->GetTexture()->GetTopTexture();
 }
 
