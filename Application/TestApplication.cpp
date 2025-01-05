@@ -10,6 +10,10 @@
 
 #include "ImuGui/imgui_impl_dx11.h"
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 
 /*
  * @brief Tests Engine Functionality
@@ -56,6 +60,10 @@ TestApplication::TestApplication()
 	Factory f{};
 	m_objects.reserve(m_meshCount);
 	std::generate_n(std::back_inserter(m_objects), m_meshCount, f);
+
+	// Test
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile("Assets/Models/octopus.obj", aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 }
 
 void TestApplication::BeginPlay()
