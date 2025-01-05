@@ -1,6 +1,7 @@
 #include "TestApplication.h"
 #include "Shape/Box.h"
 #include "Shape/ShapePyramid.h"
+#include "Shape/TestObject.h"
 #include "MathLib.h"
 
 #include <memory>
@@ -31,9 +32,9 @@ TestApplication::TestApplication()
 			switch (typedist(rng))
 			{
 			case 0:
-				return std::make_unique<ShapePyramid>(
+				return std::make_unique<TestObject>(
 					rng, adist, ddist,
-					odist, rdist
+					odist, rdist, bdist
 				);
 			case 1:
 				return std::make_unique<Box>(
@@ -54,7 +55,7 @@ TestApplication::TestApplication()
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
 		std::uniform_int_distribution<int> latdist{ 5,20 };
 		std::uniform_int_distribution<int> longdist{ 10,40 };
-		std::uniform_int_distribution<int> typedist{ 1,1};
+		std::uniform_int_distribution<int> typedist{ 0,1};
 	};
 
 	Factory f{};
@@ -76,7 +77,8 @@ void TestApplication::BeginPlay()
 	m_availableTextures.push_back("Assets/Textures/rocks.dds");
 	m_availableTextures.push_back("Assets/Textures/Tiles.dds");
 	m_availableTextures.push_back("Assets/Textures/Wood.dds");
-	currentTexture = m_objects[0]->GetTexture()->GetTopTexture();
+	currentTexture = "";
+	// currentTexture = m_objects[0]->GetTexture()->GetTopTexture();
 }
 
 void TestApplication::Tick(float deltaTime)
@@ -86,10 +88,10 @@ void TestApplication::Tick(float deltaTime)
 	{
 		m_objects[i]->Update(deltaTime * m_speedFactor);
 		m_objects[i]->Draw();
-		if (currentTexture != m_objects[i]->GetTexture()->GetTopTexture())
-		{
-			m_objects[i]->GetTexture()->UpdateTexture(currentTexture);
-		}
+		//if (currentTexture != m_objects[i]->GetTexture()->GetTopTexture())
+		//{
+		//	m_objects[i]->GetTexture()->UpdateTexture(currentTexture);
+		//}
 	}
 	m_light.Draw();
 }

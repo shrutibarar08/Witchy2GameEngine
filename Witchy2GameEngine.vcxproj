@@ -165,6 +165,7 @@
     <ClCompile Include="Engine\RenderManager\Components\IndexBuffer.cpp" />
     <ClCompile Include="Engine\RenderManager\Components\InputLayout.cpp" />
     <ClCompile Include="Contents\Shape\ShapeSphere.cpp" />
+    <ClCompile Include="Contents\Shape\TestObject.cpp" />
     <ClCompile Include="Utils\DDSTextureLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\WindowsManager\W2WindowAPI.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="Engine\RenderManager\Components\ConstantBuffers.h" />
     <ClInclude Include="Engine\RenderManager\Object\WObject.h" />
     <ClInclude Include="Contents\Shape\ShapeSphere.h" />
+    <ClInclude Include="Contents\Shape\TestObject.h" />
     <ClInclude Include="Utils\DDSTextureLoader.h" />
     <ClInclude Include="Utils\MathLib.h" />
     <ClInclude Include="Engine\WindowsManager\W2WindowAPI.h" />

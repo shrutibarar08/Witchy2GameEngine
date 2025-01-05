@@ -123,6 +123,9 @@
     <ClCompile Include="Engine\EngineManager\Components\LightComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Contents\Shape\TestObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WindowsManager\W2WindowAPI.h">
@@ -273,6 +276,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\EngineManager\Components\LightComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Contents\Shape\TestObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
