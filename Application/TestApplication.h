@@ -21,6 +21,6 @@ private:
 	std::vector<std::string> m_availableTextures;
 	std::string currentTexture;
 	float m_speedFactor{ 1.f };
-	int m_meshCount{ 10 };
+	int m_meshCount{ 100 };
 	W2PointLight m_light{};
 };

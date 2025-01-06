@@ -13,7 +13,7 @@ class Transforms : public Bindable
 		DirectX::XMMATRIX Projection;
 	};
 public:
-	Transforms(const Drawable& parent, UINT slot = 0u);
+	Transforms(const Drawable& parent,UINT slot = 0u);
 	void Bind() noexcept override;
 private:
 	static std::unique_ptr<VertexConstantBuffer<TRANSFORM_DESC>> m_vertexConstantBuffer;

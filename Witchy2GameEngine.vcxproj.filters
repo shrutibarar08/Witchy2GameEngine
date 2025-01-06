@@ -281,6 +281,9 @@
     <ClInclude Include="Contents\Shape\TestObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\RenderManager\Core\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc">
@@ -313,5 +316,7 @@
     <FxCompile Include="Shaders\Code\LightShaders\PointLight\PointPS.hlsl" />
     <FxCompile Include="Shaders\Code\TestShaders\SimpleVS.hlsl" />
     <FxCompile Include="Shaders\Code\TestShaders\SimplePS.hlsl" />
+    <FxCompile Include="Shaders\Code\LightShaders\PointLight\PointPST.hlsl" />
+    <FxCompile Include="Shaders\Code\LightShaders\PointLight\PointVST.hlsl" />
   </ItemGroup>
 </Project>

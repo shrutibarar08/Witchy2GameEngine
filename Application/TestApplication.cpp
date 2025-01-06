@@ -55,7 +55,7 @@ TestApplication::TestApplication()
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
 		std::uniform_int_distribution<int> latdist{ 5,20 };
 		std::uniform_int_distribution<int> longdist{ 10,40 };
-		std::uniform_int_distribution<int> typedist{ 0,1};
+		std::uniform_int_distribution<int> typedist{ 0,0};
 	};
 
 	Factory f{};
@@ -71,6 +71,7 @@ void TestApplication::BeginPlay()
 {
 	// TODO: Create Asset Loader.
 	m_availableTextures.push_back("Assets/Textures/CubTextures/pexels_didsss.dds");
+	m_availableTextures.push_back("Assets/Textures/brick/stones.DDS");
 	m_availableTextures.push_back("Assets/Textures/CubTextures/tie_dye.dds");
 	m_availableTextures.push_back("Assets/Textures/CubTextures/crumpled_black_paper.dds");
 	m_availableTextures.push_back("Assets/Textures/Coin.dds");
