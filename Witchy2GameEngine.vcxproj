@@ -247,6 +247,7 @@
     <ResourceCompile Include="Witchy2GameEngine.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Models\mainCharacter.fbx" />
     <None Include="Engine\ExceptionManager\DXGetErrorDescription.inl" />
     <None Include="Engine\ExceptionManager\DXGetErrorString.inl" />
     <None Include="Engine\ExceptionManager\DXTrace.inl" />

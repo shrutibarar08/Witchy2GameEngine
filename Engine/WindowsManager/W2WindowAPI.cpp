@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "../resource.h"
+#include "GuiManager/W2GuiAPI.h"
 
 
 //~ Static Declarations
@@ -37,7 +38,15 @@ W2WindowAPI::W2WindowAPI(RECT rect, const char* title)
 	}
 
 	ShowWindow(m_hWnd, SW_SHOWDEFAULT);
-
+	RAWINPUTDEVICE rawDevice;
+	rawDevice.usUsagePage = 0x01;
+	rawDevice.usUsage = 0x02;
+	rawDevice.dwFlags = 0;
+	rawDevice.hwndTarget = nullptr;
+	if (RegisterRawInputDevices(&rawDevice, 1, sizeof(rawDevice)) == FALSE)
+	{
+		throw W2WND_LAST_EXCEPT();
+	}
 }
 
 W2WindowAPI::~W2WindowAPI()
@@ -81,6 +90,22 @@ void W2WindowAPI::SetTitleName(const std::string& newName) const
 	{
 		throw W2WND_LAST_EXCEPT();
 	}
+}
+
+void W2WindowAPI::EnableCursor()
+{
+	m_bCursorEnable = true;
+	Mouse.ShowCursor();
+	Mouse.FreeCursor();
+	W2GuiAPI::Get()->EnableMouseInput();
+}
+
+void W2WindowAPI::DisableCursor()
+{
+	m_bCursorEnable = false;
+	Mouse.HideCursor();
+	Mouse.ConfineCursor(m_hWnd);
+	W2GuiAPI::Get()->DisableMouseInput();
 }
 
 HWND W2WindowAPI::GetHandleWindow() const noexcept
@@ -146,6 +171,23 @@ LRESULT W2WindowAPI::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 		{
 			// TODO: Add Resume Event or Callback
 		}
+		case WM_ACTIVATE:
+		{
+			if (m_bCursorEnable)
+			{
+				if (wParam & WA_ACTIVE)
+				{
+					Mouse.ConfineCursor(m_hWnd);
+					Mouse.HideCursor();
+				}
+				else
+				{
+					Mouse.FreeCursor();
+					Mouse.ShowCursor();
+				}
+			}
+			return S_OK;
+		}
 #pragma endregion
 
 #pragma region Keyboard_Input
@@ -176,6 +218,18 @@ LRESULT W2WindowAPI::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 		case WM_MOUSEMOVE:
 		{
 			const POINTS pt = MAKEPOINTS(lParam);
+
+			if (!m_bCursorEnable)
+			{
+				if (!Mouse.IsInWindow())
+				{
+					SetCapture(hWnd);
+					Mouse.OnMouseEnter();
+					Mouse.HideCursor();
+				}
+				break;
+			}
+
 			if (pt.x >= 0 && pt.x < (m_rect.right - m_rect.left) 
 				&& pt.y >= 0 && pt.y < (m_rect.bottom - m_rect.top))
 			{
@@ -202,6 +256,12 @@ LRESULT W2WindowAPI::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 		}
 		case WM_LBUTTONDOWN:
 		{
+			SetForegroundWindow(m_hWnd);
+			if (!m_bCursorEnable)
+			{
+				Mouse.ConfineCursor(m_hWnd);
+				Mouse.HideCursor();
+			}
 			const POINTS pt = MAKEPOINTS(lParam);
 			Mouse.OnLeftPressed(pt.x, pt.y);
 			return S_OK;
@@ -229,6 +289,36 @@ LRESULT W2WindowAPI::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 			const POINTS pt = MAKEPOINTS(lParam);
 			const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
 			Mouse.OnWheelDelta(pt.x, pt.y, delta);
+		}
+		case WM_INPUT:
+		{
+			UINT size;
+			if (GetRawInputData(
+				reinterpret_cast<HRAWINPUT>(lParam),
+				RID_INPUT,
+				nullptr,
+				&size,
+				sizeof(RAWINPUTHEADER)) == -1)
+			{
+				break;
+			}
+			m_rawBuffer.resize(size);
+			if (GetRawInputData(
+				reinterpret_cast<HRAWINPUT>(lParam),
+				RID_INPUT,
+				m_rawBuffer.data(),
+				&size,
+				sizeof(RAWINPUTHEADER)) != size)
+			{
+				break;
+			}
+			auto& ri = reinterpret_cast<const RAWINPUT&>(*m_rawBuffer.data());
+			if (ri.header.dwType == RIM_TYPEMOUSE &&
+				(ri.data.mouse.lLastX != 0 || ri.data.mouse.lLastY != 0))
+			{
+				Mouse.OnMouseDelta(ri.data.mouse.lLastX, ri.data.mouse.lLastY);
+			}
+			break;
 		}
 		default:
 			break;

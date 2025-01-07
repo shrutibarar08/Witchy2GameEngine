@@ -15,7 +15,8 @@ public:
 	static W2GuiAPI* Get();
 	void RecordStart();
 	void RecordEnd();
-
+	void EnableMouseInput();
+	void DisableMouseInput();
 	static void Release();
 
 private:

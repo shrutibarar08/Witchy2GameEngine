@@ -1,5 +1,7 @@
 #pragma once
 #include <queue>
+#include <Windows.h>
+#include <optional>
 
 
 class W2Mouse
@@ -82,6 +84,11 @@ public:
 		}
 	};
 
+	struct MOUSE_DELTA_DESC
+	{
+		int x;
+		int y;
+	};
 public:
 	W2Mouse() = default;
 	W2Mouse(const W2Mouse&) = delete;
@@ -94,6 +101,7 @@ public:
 	std::pair<int, int> GetPos() const noexcept;
 	int GetPosX() const noexcept;
 	int GetPosY() const noexcept;
+	std::optional<W2Mouse::MOUSE_DELTA_DESC> ReadMouseDelta() noexcept;
 
 	bool IsInWindow() const noexcept;
 
@@ -102,6 +110,12 @@ public:
 	void Flush() noexcept;
 
 private:
+	void ShowCursor() noexcept;
+	void HideCursor() noexcept;
+	void ConfineCursor(HWND hwnd) noexcept;
+	void FreeCursor() noexcept;
+	void OnMouseDelta(int dx, int dy) noexcept;
+
 	void OnMouseMove(int x, int y) noexcept;
 	void OnMouseLeave() noexcept;
 	void OnMouseEnter() noexcept;
@@ -113,6 +127,7 @@ private:
 	void OnWheelDown(int x, int y) noexcept;
 	void OnWheelDelta(int x, int y, int delta) noexcept;
 	void TrimBuffer() noexcept;
+	void TrimMouseDeltaBuffer() noexcept;
 
 private:
 	static constexpr unsigned int m_bufferSize{ 16u };
@@ -123,4 +138,5 @@ private:
 	bool m_rightIsPressed{ false };
 	bool m_isInWindow	 { true };
 	std::queue<Event> m_buffer;
+	std::queue<MOUSE_DELTA_DESC> m_mouseDeltaQueue;
 };

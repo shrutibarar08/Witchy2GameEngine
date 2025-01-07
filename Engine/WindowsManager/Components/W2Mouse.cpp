@@ -26,6 +26,17 @@ int W2Mouse::GetPosY() const noexcept
 	return m_y;
 }
 
+std::optional<W2Mouse::MOUSE_DELTA_DESC> W2Mouse::ReadMouseDelta() noexcept
+{
+	if (m_mouseDeltaQueue.empty())
+	{
+		return std::nullopt;
+	}
+	const W2Mouse::MOUSE_DELTA_DESC d = m_mouseDeltaQueue.front();
+	m_mouseDeltaQueue.pop();
+	return d;
+}
+
 bool W2Mouse::IsInWindow() const noexcept
 {
 	return m_isInWindow;
@@ -50,6 +61,35 @@ bool W2Mouse::IsEmpty() const noexcept
 void W2Mouse::Flush() noexcept
 {
 	m_buffer = std::queue<Event>();
+}
+
+void W2Mouse::ShowCursor() noexcept
+{
+	while (::ShowCursor(TRUE) < 0);
+}
+
+void W2Mouse::HideCursor() noexcept
+{
+	while (::ShowCursor(FALSE) >= 0);
+}
+
+void W2Mouse::ConfineCursor(HWND hwnd) noexcept
+{
+	RECT rect;
+	GetClientRect(hwnd, &rect);
+	MapWindowPoints(hwnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+	ClipCursor(&rect);
+}
+
+void W2Mouse::FreeCursor() noexcept
+{
+	ClipCursor(nullptr);
+}
+
+void W2Mouse::OnMouseDelta(int dx, int dy) noexcept
+{
+	m_mouseDeltaQueue.push({ dx, dy });
+	TrimBuffer();
 }
 
 void W2Mouse::OnMouseMove(int x, int y) noexcept
@@ -135,4 +175,9 @@ void W2Mouse::TrimBuffer() noexcept
 	{
 		m_buffer.pop();
 	}
+}
+
+void W2Mouse::TrimMouseDeltaBuffer() noexcept
+{
+	while (m_mouseDeltaQueue.size() > m_bufferSize) m_mouseDeltaQueue.pop();
 }

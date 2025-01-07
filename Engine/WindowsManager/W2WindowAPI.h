@@ -27,6 +27,8 @@ public:
 
 	const char* GetTitleName() const noexcept;
 	void SetTitleName(const std::string& newName) const;
+	void EnableCursor();
+	void DisableCursor();
 
 	HWND GetHandleWindow() const noexcept;
 
@@ -45,11 +47,14 @@ private:
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
 
+private:
 	//~ Members
 	RECT m_rect;
 	HWND m_hWnd;
 	const char* m_titleName;
 	static W2WindowAPI* m_instance;
+	bool m_bCursorEnable{ true };
+	std::vector<BYTE> m_rawBuffer;
 
 private:
 	/**

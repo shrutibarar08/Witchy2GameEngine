@@ -68,6 +68,6 @@
 /*
 namespace ImGui
 {
-    void MyFunction(const char* name, const MyMatrix44& v);
+    void MyFunction(const char* m_name, const MyMatrix44& v);
 }
 */

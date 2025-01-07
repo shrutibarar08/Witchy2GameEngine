@@ -48,6 +48,22 @@ void W2GuiAPI::RecordEnd()
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
+void W2GuiAPI::EnableMouseInput()
+{
+	if (m_instance)
+	{
+		ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
+	}
+}
+
+void W2GuiAPI::DisableMouseInput()
+{
+	if (m_instance)
+	{
+		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+	}
+}
+
 void W2GuiAPI::Release()
 {
 	ImGui::DestroyContext();

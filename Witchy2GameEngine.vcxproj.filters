@@ -310,6 +310,7 @@
     <None Include="Shaders\Compiled\PixelShader.cso" />
     <None Include="Shaders\Compiled\PSBlend.cso" />
     <None Include="Shaders\Compiled\VSBlend.cso" />
+    <None Include="Assets\Models\mainCharacter.fbx" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\Code\TestShaders\VertexShader.hlsl" />

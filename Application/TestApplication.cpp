@@ -17,12 +17,15 @@ TestApplication::TestApplication()
 	: WitchyEngine({0, 0, 1920, 1080}, 
 		"Application_1")
 {
+#ifdef _DEBUG
+	W2WindowAPI::Get()->EnableCursor();
+#else
+	W2WindowAPI::Get()->DisableCursor();
+#endif
 }
 
 void TestApplication::BeginPlay()
-{
-
-}
+{}
 
 void TestApplication::Tick(float deltaTime)
 {
@@ -37,20 +40,11 @@ void TestApplication::DebugUI()
 {
 	WitchyEngine::DebugUI();
 	m_light.InitControlWindow();
+	m_meshLoader.ShowWindow();
 
-	if (ImGui::Begin("Mesh"))
+	static bool showWindow = true;
+	if (showWindow)
 	{
-		using namespace std::string_literals;
-
-		ImGui::Text("Orientation");
-		ImGui::SliderAngle("Roll", &m_transform.roll, -180.0f, 180.0f);
-		ImGui::SliderAngle("Pitch", &m_transform.pitch, -180.0f, 180.0f);
-		ImGui::SliderAngle("Yaw", &m_transform.yaw, -180.0f, 180.0f);
-
-		ImGui::Text("Position");
-		ImGui::SliderFloat("X", &m_transform.x, -20.0f, 20.0f);
-		ImGui::SliderFloat("Y", &m_transform.y, -20.0f, 20.0f);
-		ImGui::SliderFloat("Z", &m_transform.z, -20.0f, 20.0f);
+		ImGui::ShowDemoWindow(&showWindow);
 	}
-	ImGui::End();
 }
