@@ -176,17 +176,15 @@ LRESULT W2WindowAPI::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 		}
 		case WM_ACTIVATE:
 		{
-			if (m_bCursorEnable)
+			if (!m_bCursorEnable)
 			{
 				if (wParam & WA_ACTIVE)
 				{
-					Mouse.ConfineCursor(m_hWnd);
-					Mouse.HideCursor();
+					Mouse.SetActive(m_hWnd);
 				}
 				else
 				{
-					Mouse.FreeCursor();
-					Mouse.ShowCursor();
+					Mouse.SetInactive();
 				}
 			}
 			return S_OK;
@@ -260,11 +258,6 @@ LRESULT W2WindowAPI::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 		case WM_LBUTTONDOWN:
 		{
 			SetForegroundWindow(m_hWnd);
-			if (!m_bCursorEnable)
-			{
-				Mouse.ConfineCursor(m_hWnd);
-				Mouse.HideCursor();
-			}
 			const POINTS pt = MAKEPOINTS(lParam);
 			Mouse.OnLeftPressed(pt.x, pt.y);
 			return S_OK;

@@ -104,7 +104,7 @@ bool W2Mouse::IsMouseDelta() const noexcept
 void W2Mouse::SetActive(HWND hWnd) noexcept
 {
 	ConfineCursor(hWnd);
-	EnableMouseDelta();
+	DisableMouseDelta();
 	ShowCursor();
 }
 
@@ -112,7 +112,7 @@ void W2Mouse::SetInactive() noexcept
 {
 	HideCursor();
 	FreeCursor();
-	DisableMouseDelta();
+	EnableMouseDelta();
 }
 
 void W2Mouse::OnMouseDelta(int dx, int dy) noexcept

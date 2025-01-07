@@ -182,7 +182,7 @@ void W2RenderAPI::SetPSShaderResources(ID3D11ShaderResourceView* srv, UINT slot)
 
 void W2RenderAPI::SetPSShaderResources(const std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>& srv, UINT slot) const
 {
-	m_deviceContext->PSSetShaderResources(slot, 1u, srv.data()->GetAddressOf());
+	m_deviceContext->PSSetShaderResources(slot, srv.size(), srv.data()->GetAddressOf());
 }
 
 #pragma endregion

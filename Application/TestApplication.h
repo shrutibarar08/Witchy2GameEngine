@@ -22,7 +22,7 @@ private:
 
 	//~ Objects
 	W2PointLight m_light{};
-	MeshModel m_meshLoader{ "Assets/Models/octopus_toy.obj" };
+	MeshModel m_meshLoader{ "Assets/Models/nano_textured/nanosuit.obj" };
 
 	struct
 	{

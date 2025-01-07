@@ -1,5 +1,6 @@
 #include "MeshLoader.h"
 #include "ImuGui/imgui.h"
+#include "RenderManager/Components/SurfaceTexture.h"
 #include <unordered_map>
 #include <sstream>
 
@@ -67,10 +68,11 @@ DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept
 
 
 // MeshNode
-MeshNode::MeshNode(const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform_in)
+MeshNode::MeshNode(int id, const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform_in)
 	:
+m_name(name),
 meshPtrs(std::move(meshPtrs)),
-m_name(name)
+m_id(id)
 {
 	dx::XMStoreFloat4x4(&m_transform, transform_in);
 	dx::XMStoreFloat4x4(&m_appliedTransform, dx::XMMatrixIdentity());
@@ -98,31 +100,24 @@ void MeshNode::AddChild(std::unique_ptr<MeshNode> pChild)
 	ppChildNodes.push_back(std::move(pChild));
 }
 
-void MeshNode::DrawChild(int& nodeIndexTracked, std::optional<int>& selectedIndex, MeshNode*& pSelectedNode) const noexcept
+void MeshNode::DrawChild(MeshNode*& pSelectedNode) const noexcept
 {
-	// nodeIndex serves as the uid for gui tree nodes, incremented throughout recursion
-	const int currentNodeIndex = nodeIndexTracked;
-	nodeIndexTracked++;
-	// build up flags for current node
+	const int selectedId = (pSelectedNode == nullptr) ? -1 : pSelectedNode->GetId();
 	const auto node_flags = ImGuiTreeNodeFlags_OpenOnArrow
-		| ((currentNodeIndex == selectedIndex.value_or(-1)) ? ImGuiTreeNodeFlags_Selected : 0)
+		| ((GetId() == selectedId) ? ImGuiTreeNodeFlags_Selected : 0)
 		| ((ppChildNodes.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
-	// render this node
 	const auto expanded = ImGui::TreeNodeEx(
-		(void*)(intptr_t)currentNodeIndex, node_flags, m_name.c_str()
+		reinterpret_cast<void*>(static_cast<intptr_t>(GetId())), node_flags, m_name.c_str()
 	);
-	// processing for selecting node
 	if (ImGui::IsItemClicked())
 	{
-		selectedIndex = currentNodeIndex;
 		pSelectedNode = const_cast<MeshNode*>(this);
 	}
-	// recursive rendering of open node's children
 	if (expanded)
 	{
 		for (const auto& pChild : ppChildNodes)
 		{
-			pChild->DrawChild(nodeIndexTracked, selectedIndex, pSelectedNode);
+			pChild->DrawChild(pSelectedNode);
 		}
 		ImGui::TreePop();
 	}
@@ -131,6 +126,11 @@ void MeshNode::DrawChild(int& nodeIndexTracked, std::optional<int>& selectedInde
 void MeshNode::SetTransform(DirectX::FXMMATRIX transform) noexcept
 {
 	dx::XMStoreFloat4x4(&m_appliedTransform, transform);
+}
+
+int MeshNode::GetId() const noexcept
+{
+	return m_id;
 }
 
 
@@ -147,12 +147,12 @@ public:
 		if (ImGui::Begin(windowName))
 		{
 			ImGui::Columns(2, nullptr, true);
-			root.DrawChild(nodeIndexTracker, selectedIndex, pSelectedNode);
+			root.DrawChild(pSelectedNode);
 
 			ImGui::NextColumn();
 			if (pSelectedNode != nullptr)
 			{
-				auto& transform = transforms[*selectedIndex];
+				auto& transform = transforms[pSelectedNode->GetId()];
 				ImGui::Text("Orientation");
 				ImGui::SliderAngle("Roll", &transform.roll, -180.0f, 180.0f);
 				ImGui::SliderAngle("Pitch", &transform.pitch, -180.0f, 180.0f);
@@ -167,7 +167,8 @@ public:
 	}
 	dx::XMMATRIX GetTransform() const noexcept
 	{
-		const auto& transform = transforms.at(*selectedIndex);
+		assert(pSelectedNode != nullptr);
+		const auto& transform = transforms.at(pSelectedNode->GetId());
 		return
 			dx::XMMatrixRotationRollPitchYaw(transform.roll, transform.pitch, transform.yaw) *
 			dx::XMMatrixTranslation(transform.x, transform.y, transform.z);
@@ -178,7 +179,7 @@ public:
 	}
 private:
 	std::optional<int> selectedIndex;
-	MeshNode* pSelectedNode;
+	MeshNode* pSelectedNode{ nullptr };
 	struct TransformParameters
 	{
 		float roll = 0.0f;
@@ -210,10 +211,11 @@ MeshModel::MeshModel(const std::string fileName)
 
 	for (size_t i = 0; i < pScene->mNumMeshes; i++)
 	{
-		ppMeshes.push_back(ParseMesh(*pScene->mMeshes[i]));
+		ppMeshes.push_back(ParseMesh(*pScene->mMeshes[i], pScene->mMaterials));
 	}
 
-	pRoot = ParseNode(*pScene->mRootNode);
+	int rootId = 0;
+	pRoot = ParseNode(rootId, *pScene->mRootNode);
 }
 
 void MeshModel::Draw() const
@@ -234,9 +236,8 @@ MeshModel::~MeshModel() noexcept
 {
 }
 
-std::unique_ptr<Mesh> MeshModel::ParseMesh(const aiMesh& mesh)
+std::unique_ptr<Mesh> MeshModel::ParseMesh(const aiMesh& mesh, const aiMaterial* const* pMaterial)
 {
-	namespace dx = DirectX;
 	using RenderCore::VertexLayout;
 
 	RenderCore::VertexBuffer vbuf(std::move(
@@ -264,19 +265,41 @@ std::unique_ptr<Mesh> MeshModel::ParseMesh(const aiMesh& mesh)
 		indices.push_back(face.mIndices[2]);
 	}
 
-	std::vector<std::unique_ptr<Bindable>> bindablePtrs;
+	std::vector<std::unique_ptr<Bindable>> ppBinds;
 
-	bindablePtrs.push_back(std::make_unique<VertexBuffer>(vbuf));
+	std::unique_ptr<SurfaceTexture> tex = std::make_unique<SurfaceTexture>();
+	tex->AddSampler();
 
-	bindablePtrs.push_back(std::make_unique<IndexBuffer>(indices));
+	if (mesh.mMaterialIndex >= 0)
+	{
+		using namespace std::string_literals;
+		auto& material = *pMaterial[mesh.mMaterialIndex];
+
+		aiString texturePath;
+		material.GetTexture(aiTextureType_DIFFUSE, 0, &texturePath);
+
+		if (texturePath.length)
+		{
+			const auto x = "Assets\\Models\\nano_textured\\"s + texturePath.C_Str();
+			std::cout << x << "\n";
+			tex->AddFileTexture(x);
+		}
+	}
+
+	if (!tex->Empty())
+	{
+		ppBinds.push_back(std::move(tex));
+	}
+
+	ppBinds.push_back(std::make_unique<VertexBuffer>(vbuf));
+	ppBinds.push_back(std::make_unique<IndexBuffer>(indices));
 
 	auto pvs = std::make_unique<VertexShader>(L"Shaders/Compiled/PointVST.cso");
 	auto pvsbc = pvs->GetBytecode();
-	bindablePtrs.push_back(std::move(pvs));
 
-	bindablePtrs.push_back(std::make_unique<PixelShader>(L"Shaders/Compiled/PointPST.cso"));
-
-	bindablePtrs.push_back(std::make_unique<InputLayout>(vbuf.GetLayout().GetD3DLayout(), pvsbc));
+	ppBinds.push_back(std::move(pvs));
+	ppBinds.push_back(std::make_unique<PixelShader>(L"Shaders/Compiled/PointPST.cso"));
+	ppBinds.push_back(std::make_unique<InputLayout>(vbuf.GetLayout().GetD3DLayout(), pvsbc));
 
 	struct PSMaterialConstant
 	{
@@ -285,11 +308,11 @@ std::unique_ptr<Mesh> MeshModel::ParseMesh(const aiMesh& mesh)
 		float specularPower = 30.0f;
 		float padding[3];
 	} pmc;
-	bindablePtrs.push_back(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(pmc, 1u));
 
-	return std::make_unique<Mesh>(std::move(bindablePtrs));
+	ppBinds.push_back(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(pmc, 1u));
+	return std::make_unique<Mesh>(std::move(ppBinds));
 }
-std::unique_ptr<MeshNode> MeshModel::ParseNode(const aiNode& node) noexcept
+std::unique_ptr<MeshNode> MeshModel::ParseNode(int& nextId, const aiNode& node) noexcept
 {
 	namespace dx = DirectX;
 	const auto transform = dx::XMMatrixTranspose(dx::XMLoadFloat4x4(
@@ -304,11 +327,10 @@ std::unique_ptr<MeshNode> MeshModel::ParseNode(const aiNode& node) noexcept
 		curMeshPtrs.push_back(ppMeshes.at(meshIdx).get());
 	}
 
-	auto pNode = std::make_unique<MeshNode>(node.mName.C_Str(), std::move(curMeshPtrs), transform);
+	auto pNode = std::make_unique<MeshNode>(nextId, node.mName.C_Str(), std::move(curMeshPtrs), transform);
 	for (size_t i = 0; i < node.mNumChildren; i++)
 	{
-		pNode->AddChild(ParseNode(*node.mChildren[i]));
+		pNode->AddChild(ParseNode(nextId, *node.mChildren[i]));
 	}
-
 	return pNode;
 }

@@ -95,7 +95,7 @@ void W2Camera::UpdateFreeCamera(float deltaTime)
 	{
 		if (!W2WindowAPI::Get()->IsCursorEnable())
 		{
-			W2Camera::Get()->Rotate(delta->x, delta->y);
+			W2Camera::Get()->Rotate(static_cast<float>(delta->x), static_cast<float>(delta->y));
 		}
 	}
 }

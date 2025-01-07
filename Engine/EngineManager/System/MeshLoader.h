@@ -8,6 +8,7 @@
 #include <assimp/postprocess.h>
 #include "ExceptionManager/W2Exception.h"
 
+#include <iostream>
 
 class ModelException : public W2Exception
 {
@@ -33,20 +34,23 @@ private:
 class MeshNode
 {
 	friend class MeshModel;
-	friend class ModelWindow;
 public:
-	MeshNode(const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform);
+	MeshNode(int id, const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform);
 	void Draw(DirectX::FXMMATRIX accumulatedTransform) const;
+	void DrawChild(MeshNode*& pSelectedNode) const noexcept;
+
 	void SetTransform(DirectX::FXMMATRIX transform) noexcept;
+	int GetId() const noexcept;
+
 private:
 	void AddChild(std::unique_ptr<MeshNode> pChild);
-	void DrawChild(int& nodeIndex, std::optional<int>& selectedIndex, MeshNode*& pSelectedNode) const noexcept;
 private:
 	std::string m_name;
 	std::vector<std::unique_ptr<MeshNode>> ppChildNodes;
 	std::vector<Mesh*> meshPtrs;
 	DirectX::XMFLOAT4X4 m_transform;
 	DirectX::XMFLOAT4X4 m_appliedTransform;
+	int m_id;
 };
 
 class MeshModel
@@ -57,8 +61,8 @@ public:
 	void ShowWindow(const char* windowName = nullptr) noexcept;
 	~MeshModel() noexcept;
 private:
-	static std::unique_ptr<Mesh> ParseMesh(const aiMesh& mesh);
-	std::unique_ptr<MeshNode> ParseNode(const aiNode& node) noexcept;
+	static std::unique_ptr<Mesh> ParseMesh(const aiMesh& mesh, const aiMaterial* const* pMaterial);
+	std::unique_ptr<MeshNode> ParseNode(int& nextId, const aiNode& node) noexcept;
 private:
 	std::unique_ptr<MeshNode> pRoot;
 	std::vector<std::unique_ptr<Mesh>> ppMeshes;

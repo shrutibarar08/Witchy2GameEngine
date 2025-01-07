@@ -20,6 +20,72 @@ void SurfaceTexture::AddTexture(const std::wstring& texturePath)
 	m_topTexture = texturePath;
 }
 
+void SurfaceTexture::AddTexture(const std::string& texturePath)
+{
+	AddTexture(std::string(m_topTexture.begin(), m_topTexture.end()));
+}
+
+void SurfaceTexture::AddFileTexture(const std::string& texturePath)
+{
+	INIT_INFO();
+	DirectX::ScratchImage image = GetScratchImage(texturePath);
+
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture = nullptr;
+	D3D11_TEXTURE2D_DESC texDesc{};
+	texDesc.Width = static_cast<UINT>(image.GetMetadata().width);
+	texDesc.Height = static_cast<UINT>(image.GetMetadata().height);
+	texDesc.MipLevels = static_cast<UINT>(image.GetMetadata().mipLevels);
+	texDesc.ArraySize = 1;
+	texDesc.Format = m_format;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = image.GetImages()->pixels;
+	initData.SysMemPitch = static_cast<UINT>(image.GetImages()->rowPitch);
+	initData.SysMemSlicePitch = static_cast<UINT>(image.GetImages()->slicePitch);
+
+	RENDER_API_THROW(W2RenderAPI::Get()->GetDevice()->CreateTexture2D(&texDesc, &initData, &texture));
+
+	ID3D11ShaderResourceView* srv = nullptr;
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = texDesc.Format;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+
+	RENDER_API_THROW(W2RenderAPI::Get()->GetDevice()->CreateShaderResourceView(texture.Get(), &srvDesc, &srv));
+	m_shaderRV.emplace_back(std::move(srv));
+}
+
+DirectX::ScratchImage SurfaceTexture::GetScratchImage(const std::string& texturePath)
+{
+	INIT_INFO();
+	DirectX::ScratchImage image;
+	DirectX::TexMetadata metadata;
+
+	std::wstring wPath = std::wstring(texturePath.begin(), texturePath.end());
+
+	RENDER_API_THROW(DirectX::LoadFromWICFile(wPath.c_str(), DirectX::WIC_FLAGS_IGNORE_SRGB, nullptr, image));
+
+	if (image.GetImage(0, 0, 0)->format != m_format)
+	{
+		DirectX::ScratchImage converted;
+		RENDER_API_THROW(DirectX::Convert(*image.GetImage(0, 0, 0),
+			m_format,
+			DirectX::TEX_FILTER_DEFAULT,
+			DirectX::TEX_THRESHOLD_DEFAULT,
+			converted));
+
+		image = std::move(converted);
+	}
+	return std::move(image);
+}
+
 void SurfaceTexture::UpdateTexture(const std::wstring& texturePath)
 {
 	m_shaderRV.clear();
@@ -60,6 +126,11 @@ void SurfaceTexture::AddSampler()
 	m_samplerState.emplace_back(std::move(ss));
 }
 
+bool SurfaceTexture::Empty() const
+{
+	return m_shaderRV.empty();
+}
+
 SurfaceTexture::~SurfaceTexture()
 {
 	for (auto& x: m_shaderRV) x->Release();
@@ -69,7 +140,6 @@ SurfaceTexture::~SurfaceTexture()
 void SurfaceTexture::Bind() noexcept
 {
 	W2RenderAPI::Get()->SetPSShaderResources(m_shaderRV, 0u);
-
 	W2RenderAPI::Get()->GetDeviceContext()->PSSetSamplers(
 		0u, m_samplerState.size(), m_samplerState.data()->GetAddressOf()
 	);
