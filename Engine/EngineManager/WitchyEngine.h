@@ -24,6 +24,8 @@ public:
 
 private:
 	void ComputeFPS();
+	void ShowMouseInputWindow();
+	void ListenMouseInput();
 
 private:
 	W2Timer  m_timer{};
@@ -31,4 +33,6 @@ private:
 	//~ Logic members
 	int   m_updateCount{ 0 };
 	float m_accumulatedDelta{ 0.0f };
+	int m_posX{ 0 };
+	int m_posY{ 0 };
 };

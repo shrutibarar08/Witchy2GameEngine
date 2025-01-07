@@ -30,8 +30,6 @@ void TestApplication::BeginPlay()
 void TestApplication::Tick(float deltaTime)
 {
 	m_light.Bind();
-	const auto transform = DirectX::XMMatrixRotationRollPitchYaw(m_transform.roll, m_transform.pitch, m_transform.yaw)
-		* DirectX::XMMatrixTranslation(m_transform.x, m_transform.y, m_transform.z);
 	m_meshLoader.Draw();
 	m_light.Draw();
 }

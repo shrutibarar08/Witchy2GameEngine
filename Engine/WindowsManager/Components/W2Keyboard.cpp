@@ -1,4 +1,5 @@
 #include "W2Keyboard.h"
+#include <optional>
 
 
 bool W2Keyboard::KeyIsPressed(unsigned char keycode) const noexcept
@@ -16,7 +17,7 @@ bool W2Keyboard::CharBufferIsEmpty() const noexcept
 	return m_charBuffer.empty();
 }
 
-W2Keyboard::Event W2Keyboard::ReadKey() noexcept
+std::optional<W2Keyboard::Event> W2Keyboard::ReadKey() noexcept
 {
 	if (!m_keyBuffer.empty())
 	{
@@ -24,10 +25,10 @@ W2Keyboard::Event W2Keyboard::ReadKey() noexcept
 		m_keyBuffer.pop();
 		return e;
 	}
-	return W2Keyboard::Event();
+	return {};
 }
 
-unsigned char W2Keyboard::ReadChar() noexcept
+std::optional<unsigned char> W2Keyboard::ReadChar() noexcept
 {
 	if (!m_charBuffer.empty())
 	{

@@ -29,6 +29,7 @@ public:
 	void SetTitleName(const std::string& newName) const;
 	void EnableCursor();
 	void DisableCursor();
+	bool IsCursorEnable() const;
 
 	HWND GetHandleWindow() const noexcept;
 

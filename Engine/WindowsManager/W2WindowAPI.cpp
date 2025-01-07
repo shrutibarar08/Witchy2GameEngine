@@ -108,6 +108,11 @@ void W2WindowAPI::DisableCursor()
 	W2GuiAPI::Get()->DisableMouseInput();
 }
 
+bool W2WindowAPI::IsCursorEnable() const
+{
+	return m_bCursorEnable;
+}
+
 HWND W2WindowAPI::GetHandleWindow() const noexcept
 {
 	return m_hWnd;

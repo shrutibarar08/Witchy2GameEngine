@@ -31,9 +31,7 @@ WitchyEngine::WitchyEngine(RECT rt, const char* gameName)
 	// Init RenderAPI
 	W2RenderAPI::Init();	// Init RenderManager (API)
 	// Init GuiAPI
-#ifdef _DEBUG
 	W2GuiAPI::Init();
-#endif
 }
 
 WitchyEngine::~WitchyEngine()
@@ -72,7 +70,10 @@ void WitchyEngine::UpdateFrame()
 
 	Tick(m_timer.DeltaTime());	// Sends Update Event to Application Inherited this Engine
 	ComputeFPS();
+#ifdef _DEBUG
 	DebugUI();
+#endif
+	ListenMouseInput();
 
 	//~ End Recordings
 	W2GuiAPI::Get()->RecordEnd();
@@ -81,6 +82,7 @@ void WitchyEngine::UpdateFrame()
 
 void WitchyEngine::DebugUI()
 {
+	ShowMouseInputWindow();
 	W2Camera::Get()->InitControlWindow();
 
 	if (ImGui::Begin("Color Selection"))
@@ -110,4 +112,33 @@ void WitchyEngine::ComputeFPS()
 		m_updateCount = 0;
 	}
 	m_updateCount++;
+}
+
+void WitchyEngine::ShowMouseInputWindow()
+{
+	while (const auto d = W2WindowAPI::Get()->Mouse.ReadMouseDelta())
+	{
+		m_posX += d->x;
+		m_posY += d->y;
+	}
+	if (ImGui::Begin("Raw Input"))
+	{
+		ImGui::Text("Tally: (%d,%d)", m_posX, m_posY);
+	}
+	ImGui::End();
+}
+
+void WitchyEngine::ListenMouseInput()
+{
+	while (const auto e = W2WindowAPI::Get()->Keyboard.ReadKey())
+	{
+		if (e->IsPress() && e->GetCode() == VK_SPACE)
+		{
+			if (W2WindowAPI::Get()->IsCursorEnable())
+			{
+				W2WindowAPI::Get()->DisableCursor();
+			}
+			else W2WindowAPI::Get()->EnableCursor();
+		}
+	}
 }

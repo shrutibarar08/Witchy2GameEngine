@@ -1,5 +1,6 @@
 #pragma once
 #include <queue>
+#include <optional>
 #include <bitset>
 
 
@@ -63,8 +64,8 @@ public:
 	bool KeyBufferIsEmpty() const noexcept;
 	bool CharBufferIsEmpty() const noexcept;
 	
-	W2Keyboard::Event ReadKey() noexcept;
-	unsigned char ReadChar() noexcept;
+	std::optional<W2Keyboard::Event> ReadKey() noexcept;
+	std::optional<unsigned char> ReadChar() noexcept;
 	
 	void FlushKey() noexcept;
 	void FlushChar() noexcept;
