@@ -58,8 +58,6 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Texture2D>		   m_depthT2D;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthSV;
 
-	mutable std::unordered_map<UINT, bool> m_psSlotCheck;
-
 #ifdef _DEBUG
 	DxgiInfoManager m_dxgiInfoManager;
 	UINT m_debugFlag = D3D11_CREATE_DEVICE_DEBUG;

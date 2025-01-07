@@ -152,6 +152,7 @@
     <ClCompile Include="Engine\EngineManager\Components\LightComponent.cpp" />
     <ClCompile Include="Engine\EngineManager\Player\W2Camera.cpp" />
     <ClCompile Include="Contents\Shape\Box.cpp" />
+    <ClCompile Include="Engine\EngineManager\System\MeshLoader.cpp" />
     <ClCompile Include="Externals\ImuGui\imgui.cpp" />
     <ClCompile Include="Externals\ImuGui\imgui_demo.cpp" />
     <ClCompile Include="Externals\ImuGui\imgui_draw.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Engine\EngineManager\Light\W2PointLight.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\EngineManager\System\MeshLoader.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveBase.h" />
     <ClInclude Include="Engine\EngineManager\Components\LightComponent.h" />
     <ClInclude Include="Engine\EngineManager\Player\W2Camera.h" />

@@ -126,6 +126,9 @@
     <ClCompile Include="Contents\Shape\TestObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\EngineManager\System\MeshLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WindowsManager\W2WindowAPI.h">
@@ -282,6 +285,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\RenderManager\Core\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineManager\System\MeshLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

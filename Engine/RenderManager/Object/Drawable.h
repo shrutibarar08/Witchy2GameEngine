@@ -18,7 +18,7 @@ public:
 
 	void Draw() const noexcept(!ON_DEBUG);
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
-	virtual void Update(float dt) noexcept = 0;
+	virtual void Update(float dt) noexcept {};
 	SurfaceTexture* GetTexture() noexcept;
 
 protected:

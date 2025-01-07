@@ -165,7 +165,6 @@ void W2RenderAPI::RecordEnd() const
 void W2RenderAPI::DrawIndexed(UINT count) noexcept(!ON_DEBUG)
 {
 	RENDER_API_INFO_ONLY(m_deviceContext->DrawIndexed(count, 0u, 0u));
-	m_psSlotCheck.clear();
 }
 
 void W2RenderAPI::SetBackgroundColor(float color[])
@@ -178,18 +177,12 @@ void W2RenderAPI::SetBackgroundColor(float color[])
 
 void W2RenderAPI::SetPSShaderResources(ID3D11ShaderResourceView* srv, UINT slot) const
 {
-	if (m_psSlotCheck[slot]) throw std::runtime_error("Slot is already consumed and yet got shader to update it again!");
-
 	m_deviceContext->PSSetShaderResources(slot, 1u, &srv);
-	m_psSlotCheck[slot] = true;
 }
 
 void W2RenderAPI::SetPSShaderResources(const std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>& srv, UINT slot) const
 {
-	if (m_psSlotCheck[slot]) throw std::runtime_error("Slot is already consumed and yet got shader to update it again!");
-
 	m_deviceContext->PSSetShaderResources(slot, 1u, srv.data()->GetAddressOf());
-	m_psSlotCheck[slot] = true;
 }
 
 #pragma endregion

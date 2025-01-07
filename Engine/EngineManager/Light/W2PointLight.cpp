@@ -40,6 +40,6 @@ void W2PointLight::Bind() const noexcept
 	auto data = m_data;
 	const auto translation = DirectX::XMLoadFloat3(&m_data.LightPosition);
 	DirectX::XMStoreFloat3(&data.LightPosition, DirectX::XMVector3Transform(translation, W2Camera::Get()->GetViewMatrix()));
-	m_lightBuffer.Update(LightBuffer{ data });
+	m_lightBuffer.Update(LightBuffer{ data});
 	m_lightBuffer.Bind();
 }

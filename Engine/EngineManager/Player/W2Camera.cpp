@@ -38,7 +38,7 @@ void W2Camera::InitControlWindow() noexcept
 	if (ImGui::Begin("Camera Component"))
 	{
 		ImGui::Text("Position");
-		ImGui::SliderFloat("R", &m_radius, 0.0f, 80.0f, "%.1f");
+		ImGui::SliderFloat("R", &m_radius, 0.5f, 80.0f, "%.1f");
 		ImGui::SliderAngle("Theta", &m_theta, -180.0f, 180.0f);
 		ImGui::SliderAngle("Phi", &m_phi, -89.0f, 89.0f);
 		ImGui::Text("Orientation");
