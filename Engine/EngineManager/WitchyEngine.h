@@ -25,7 +25,6 @@ public:
 private:
 	void ComputeFPS();
 	void ShowMouseInputWindow();
-	void ListenMouseInput();
 
 private:
 	W2Timer  m_timer{};

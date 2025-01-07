@@ -112,8 +112,16 @@ public:
 private:
 	void ShowCursor() noexcept;
 	void HideCursor() noexcept;
-	void ConfineCursor(HWND hwnd) noexcept;
+	void ConfineCursor(HWND hWnd) noexcept;
 	void FreeCursor() noexcept;
+
+	void EnableMouseDelta() noexcept;
+	void DisableMouseDelta() noexcept;
+	bool IsMouseDelta() const noexcept;
+
+	void SetActive(HWND hWnd) noexcept;
+	void SetInactive() noexcept;
+
 	void OnMouseDelta(int dx, int dy) noexcept;
 
 	void OnMouseMove(int x, int y) noexcept;
@@ -139,4 +147,5 @@ private:
 	bool m_isInWindow	 { true };
 	std::queue<Event> m_buffer;
 	std::queue<MOUSE_DELTA_DESC> m_mouseDeltaQueue;
+	bool m_bMouseDelta{ false };
 };

@@ -95,16 +95,14 @@ void W2WindowAPI::SetTitleName(const std::string& newName) const
 void W2WindowAPI::EnableCursor()
 {
 	m_bCursorEnable = true;
-	Mouse.ShowCursor();
-	Mouse.FreeCursor();
+	Mouse.SetActive(m_hWnd);
 	W2GuiAPI::Get()->EnableMouseInput();
 }
 
 void W2WindowAPI::DisableCursor()
 {
 	m_bCursorEnable = false;
-	Mouse.HideCursor();
-	Mouse.ConfineCursor(m_hWnd);
+	Mouse.SetInactive();
 	W2GuiAPI::Get()->DisableMouseInput();
 }
 
@@ -297,6 +295,10 @@ LRESULT W2WindowAPI::HandleMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 		}
 		case WM_INPUT:
 		{
+			if (!Mouse.IsMouseDelta())
+			{
+				break;
+			}
 			UINT size;
 			if (GetRawInputData(
 				reinterpret_cast<HRAWINPUT>(lParam),

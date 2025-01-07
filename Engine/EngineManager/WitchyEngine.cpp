@@ -73,7 +73,8 @@ void WitchyEngine::UpdateFrame()
 #ifdef _DEBUG
 	DebugUI();
 #endif
-	ListenMouseInput();
+
+	W2Camera::UpdateFreeCamera(m_timer.DeltaTime());
 
 	//~ End Recordings
 	W2GuiAPI::Get()->RecordEnd();
@@ -126,19 +127,4 @@ void WitchyEngine::ShowMouseInputWindow()
 		ImGui::Text("Tally: (%d,%d)", m_posX, m_posY);
 	}
 	ImGui::End();
-}
-
-void WitchyEngine::ListenMouseInput()
-{
-	while (const auto e = W2WindowAPI::Get()->Keyboard.ReadKey())
-	{
-		if (e->IsPress() && e->GetCode() == VK_SPACE)
-		{
-			if (W2WindowAPI::Get()->IsCursorEnable())
-			{
-				W2WindowAPI::Get()->DisableCursor();
-			}
-			else W2WindowAPI::Get()->EnableCursor();
-		}
-	}
 }

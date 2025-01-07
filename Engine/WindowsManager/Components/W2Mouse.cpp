@@ -73,17 +73,46 @@ void W2Mouse::HideCursor() noexcept
 	while (::ShowCursor(FALSE) >= 0);
 }
 
-void W2Mouse::ConfineCursor(HWND hwnd) noexcept
+void W2Mouse::ConfineCursor(HWND hWnd) noexcept
 {
 	RECT rect;
-	GetClientRect(hwnd, &rect);
-	MapWindowPoints(hwnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+	GetClientRect(hWnd, &rect);
+	MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
 	ClipCursor(&rect);
 }
 
 void W2Mouse::FreeCursor() noexcept
 {
 	ClipCursor(nullptr);
+}
+
+void W2Mouse::EnableMouseDelta() noexcept
+{
+	m_bMouseDelta = true;
+}
+
+void W2Mouse::DisableMouseDelta() noexcept
+{
+	m_bMouseDelta = false;
+}
+
+bool W2Mouse::IsMouseDelta() const noexcept
+{
+	return m_bMouseDelta;
+}
+
+void W2Mouse::SetActive(HWND hWnd) noexcept
+{
+	ConfineCursor(hWnd);
+	EnableMouseDelta();
+	ShowCursor();
+}
+
+void W2Mouse::SetInactive() noexcept
+{
+	HideCursor();
+	FreeCursor();
+	DisableMouseDelta();
 }
 
 void W2Mouse::OnMouseDelta(int dx, int dy) noexcept
