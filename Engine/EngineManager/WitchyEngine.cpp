@@ -38,9 +38,7 @@ WitchyEngine::~WitchyEngine()
 {
 	// TODO: Create PQ for structured release.
 	W2Camera::Release();
-#ifdef _DEBUG
 	W2GuiAPI::Release();
-#endif
 	W2RenderAPI::Release();
 	W2WindowAPI::Release();
 }
@@ -70,10 +68,7 @@ void WitchyEngine::UpdateFrame()
 
 	Tick(m_timer.DeltaTime());	// Sends Update Event to Application Inherited this Engine
 	ComputeFPS();
-#ifdef _DEBUG
 	DebugUI();
-#endif
-
 	W2Camera::UpdateFreeCamera(m_timer.DeltaTime());
 
 	//~ End Recordings
