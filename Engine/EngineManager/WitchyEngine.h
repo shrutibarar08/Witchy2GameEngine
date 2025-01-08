@@ -26,8 +26,10 @@ private:
 	void ComputeFPS();
 	void ShowMouseInputWindow();
 
-private:
+protected:
 	W2Timer  m_timer{};
+
+private:
 
 	//~ Logic members
 	int   m_updateCount{ 0 };

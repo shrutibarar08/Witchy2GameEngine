@@ -96,6 +96,15 @@ W2RenderAPI::W2RenderAPI(HWND hWnd)
 W2RenderAPI::~W2RenderAPI()
 {}
 
+void W2RenderAPI::ClearPSShaderResources()
+{
+	for (auto& i: m_usedSlots)
+	{
+		m_deviceContext->PSSetShaderResources(i, 0u, nullptr);
+	}
+	m_usedSlots.clear();
+}
+
 void W2RenderAPI::Init()
 {
 	if (m_instance == nullptr)
@@ -165,6 +174,7 @@ void W2RenderAPI::RecordEnd() const
 void W2RenderAPI::DrawIndexed(UINT count) noexcept(!ON_DEBUG)
 {
 	RENDER_API_INFO_ONLY(m_deviceContext->DrawIndexed(count, 0u, 0u));
+	ClearPSShaderResources();
 }
 
 void W2RenderAPI::SetBackgroundColor(float color[])
@@ -175,14 +185,15 @@ void W2RenderAPI::SetBackgroundColor(float color[])
 	}
 }
 
-void W2RenderAPI::SetPSShaderResources(ID3D11ShaderResourceView* srv, UINT slot) const
+void W2RenderAPI::SetPSShaderResources(ID3D11ShaderResourceView* srv, UINT slot)
 {
 	m_deviceContext->PSSetShaderResources(slot, 1u, &srv);
 }
 
-void W2RenderAPI::SetPSShaderResources(const std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>& srv, UINT slot) const
+void W2RenderAPI::SetPSShaderResources(const std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>& srv, unsigned int slot)
 {
-	m_deviceContext->PSSetShaderResources(slot, srv.size(), srv.data()->GetAddressOf());
+	m_usedSlots.push_back(slot);
+ 	m_deviceContext->PSSetShaderResources(slot, srv.size(), srv.data()->GetAddressOf());
 }
 
 #pragma endregion

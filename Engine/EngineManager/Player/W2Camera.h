@@ -18,6 +18,7 @@ public:
 	static void Release();
 	static void UpdateFreeCamera(float deltaTime);
 	void UpdateFocusCamera(float deltaTime); // TODO: THIS SHOULD STAY FOCUSED ON A MESH TRANSFORM.
+	void SetTargetPosition(const DirectX::XMFLOAT3& targetPosition);
 
 	void InitControlWindow() noexcept;
 
@@ -42,7 +43,7 @@ private:
 private:
 	static W2Camera* m_instance;
 	// TODO: Replace it with W2Camera Position, Rotation and quaternion vectors
-	DirectX::XMFLOAT3 m_translation{0, 0, 0};
+	DirectX::XMFLOAT3 m_translation{6.9, 3.1, -15};
 	float m_pitch = 0.0f;
 	float m_yaw = 0.0f;
 
@@ -52,4 +53,5 @@ private:
 
 	DirectX::XMMATRIX mWorldMatrix;
 	DirectX::XMMATRIX mProjectionMatrix;
+	DirectX::XMFLOAT3 mTargetPosition{ 0, 0, -10 };
 };

@@ -23,7 +23,7 @@ WitchyEngine::WitchyEngine(RECT rt, const char* gameName)
 	GetClientRect(W2WindowAPI::Get()->GetHandleWindow(), &rt);
 	const float width = static_cast<float>(rt.right - rt.left);
 	const float height = static_cast<float>(rt.bottom - rt.top);
-	desc.ProjectionMatrix = DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f);
+	desc.ProjectionMatrix = DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 140.0f);
 	desc.WorldMatrix = DirectX::XMMatrixIdentity();
 
 	W2Camera::Init(desc);	// TODO: create a way of saving and passing it as a start position.
@@ -88,7 +88,7 @@ void WitchyEngine::DebugUI()
 
 	if (ImGui::Begin("Color Selection"))
 	{
-		static float color_values[4]{};
+		static float color_values[4]{0.13, 0.20, 0.22, 1.0f};
 		ImGui::SliderFloat("Red", &color_values[0], 0.0f, 1.0f, "%.2f");
 		ImGui::SliderFloat("Blue", &color_values[1], 0.0f, 1.0f, "%.2f");
 		ImGui::SliderFloat("Green", &color_values[2], 0.0f, 1.0f, "%.2f");

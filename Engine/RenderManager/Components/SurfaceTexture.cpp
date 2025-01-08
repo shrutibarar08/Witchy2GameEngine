@@ -4,7 +4,7 @@
 #include "ExceptionManager/RenderAPIMacros.h"
 
 
-void SurfaceTexture::AddTexture(const std::wstring& texturePath)
+void SurfaceTexture::AddTexture(const std::wstring& texturePath, UINT slot)
 {
 	if (m_cacheInfo[texturePath]) return;
 
@@ -15,17 +15,17 @@ void SurfaceTexture::AddTexture(const std::wstring& texturePath)
 			W2RenderAPI::Get()->GetDevice(),
 			texturePath.c_str(),
 		nullptr, &rv));
-	m_shaderRV.emplace_back(std::move(rv));
+	m_shaderRV[slot].emplace_back(std::move(rv));
 	m_cacheInfo[texturePath] = true;
 	m_topTexture = texturePath;
 }
 
-void SurfaceTexture::AddTexture(const std::string& texturePath)
+void SurfaceTexture::AddTexture(const std::string& texturePath, UINT slot)
 {
-	AddTexture(std::string(m_topTexture.begin(), m_topTexture.end()));
+	AddTexture(std::string(m_topTexture.begin(), m_topTexture.end()), slot);
 }
 
-void SurfaceTexture::AddFileTexture(const std::string& texturePath)
+void SurfaceTexture::AddFileTexture(const std::string& texturePath, UINT slot)
 {
 	INIT_INFO();
 	DirectX::ScratchImage image = GetScratchImage(texturePath);
@@ -59,7 +59,7 @@ void SurfaceTexture::AddFileTexture(const std::string& texturePath)
 	srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
 
 	RENDER_API_THROW(W2RenderAPI::Get()->GetDevice()->CreateShaderResourceView(texture.Get(), &srvDesc, &srv));
-	m_shaderRV.emplace_back(std::move(srv));
+	m_shaderRV[slot].emplace_back(std::move(srv));
 }
 
 DirectX::ScratchImage SurfaceTexture::GetScratchImage(const std::string& texturePath)
@@ -86,16 +86,16 @@ DirectX::ScratchImage SurfaceTexture::GetScratchImage(const std::string& texture
 	return std::move(image);
 }
 
-void SurfaceTexture::UpdateTexture(const std::wstring& texturePath)
+void SurfaceTexture::UpdateTexture(const std::wstring& texturePath, UINT slot)
 {
 	m_shaderRV.clear();
 	m_cacheInfo.clear();
-	AddTexture(texturePath);
+	AddTexture(texturePath, slot);
 }
 
-void SurfaceTexture::UpdateTexture(const std::string& texturePath)
+void SurfaceTexture::UpdateTexture(const std::string& texturePath, UINT slot)
 {
-	UpdateTexture(std::wstring(texturePath.begin(), texturePath.end()));
+	UpdateTexture(std::wstring(texturePath.begin(), texturePath.end()), slot);
 }
 
 std::string SurfaceTexture::GetTopTexture() const
@@ -133,13 +133,19 @@ bool SurfaceTexture::Empty() const
 
 SurfaceTexture::~SurfaceTexture()
 {
-	for (auto& x: m_shaderRV) x->Release();
+	for (auto& resource: m_shaderRV)
+	{
+		for (auto& x : resource.second) x->Release();
+	}
 	for (auto& x: m_samplerState) x->Release();
 }
 
 void SurfaceTexture::Bind() noexcept
 {
-	W2RenderAPI::Get()->SetPSShaderResources(m_shaderRV, 0u);
+	for (auto& resource: m_shaderRV)
+	{
+		W2RenderAPI::Get()->SetPSShaderResources(resource.second, resource.first);
+	}
 	W2RenderAPI::Get()->GetDeviceContext()->PSSetSamplers(
 		0u, m_samplerState.size(), m_samplerState.data()->GetAddressOf()
 	);

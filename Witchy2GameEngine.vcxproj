@@ -188,6 +188,7 @@
     <ClCompile Include="Engine\GuiManager\W2GuiAPI.cpp" />
     <ClCompile Include="Engine\EngineManager\System\W2IntializerEventPQ.cpp" />
     <ClCompile Include="Engine\EngineManager\Light\W2PointLight.cpp" />
+    <ClCompile Include="Engine\EngineManager\Player\W2PlayerCharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\EngineManager\System\MeshLoader.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Contents\Primitives\PrimitiveSphere.h" />
     <ClInclude Include="Contents\Primitives\PrimitiveTriangle.h" />
     <ClInclude Include="Contents\Shape\Box.h" />
+    <ClInclude Include="Engine\EngineManager\System\TextLoader.h" />
     <ClInclude Include="Engine\RenderManager\Core\Vertex.h" />
     <ClInclude Include="Externals\ImuGui\imconfig.h" />
     <ClInclude Include="Externals\ImuGui\imgui.h" />
@@ -242,6 +244,7 @@
     <ClInclude Include="Engine\GuiManager\W2GuiAPI.h" />
     <ClInclude Include="Engine\EngineManager\System\W2IntializerEventPQ.h" />
     <ClInclude Include="Engine\EngineManager\Light\W2PointLight.h" />
+    <ClInclude Include="Engine\EngineManager\Player\W2PlayerCharacter.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc" />
@@ -251,6 +254,7 @@
     <None Include="Engine\ExceptionManager\DXGetErrorDescription.inl" />
     <None Include="Engine\ExceptionManager\DXGetErrorString.inl" />
     <None Include="Engine\ExceptionManager\DXTrace.inl" />
+    <None Include="packages.config" />
     <None Include="Shaders\Compiled\PixelShader.cso" />
     <None Include="Shaders\Compiled\PSBlend.cso" />
     <None Include="Shaders\Compiled\VertexShader.cso" />

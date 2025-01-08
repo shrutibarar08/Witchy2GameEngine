@@ -1,0 +1,11 @@
+Model Information:
+* title:	Rocky Desert Landscape
+* source:	https://sketchfab.com/3d-models/rocky-desert-landscape-3ad600db5d9240788a12414693b04088
+* author:	Nordic_Face (https://sketchfab.com/Nordic_Face)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Rocky Desert Landscape" (https://sketchfab.com/3d-models/rocky-desert-landscape-3ad600db5d9240788a12414693b04088) by Nordic_Face (https://sketchfab.com/Nordic_Face) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

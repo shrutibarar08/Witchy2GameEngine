@@ -17,7 +17,9 @@ cbuffer LightUpdates
 }
 
 Texture2D txColorMat : register(t0);
+Texture2D txSpecMat : register(t1);
 SamplerState txSampler : register(s0);
+
 
 float4 main(float3 worldPos : POSITION, float2 tex : TEXTCORD, float3 n : NORMAL) : SV_Target
 {
@@ -35,10 +37,15 @@ float4 main(float3 worldPos : POSITION, float2 tex : TEXTCORD, float3 n : NORMAL
     // Specular calculation
     float3 w = n * dot(vToL, n);
     float3 r = w * 2.0f - vToL;
-    float3 specular = att * (diffuseColor * diffuseIntensity) * specularIntensity *
-                      pow(max(0.0f, dot(normalize(-r), normalize(worldPos))), specularPower);
 
-    // Sample texture
+    // Sample the specular texture
+    float4 specMat = txSpecMat.Sample(txSampler, tex);
+
+    // Modulate specular intensity with the specular texture
+    float3 specular = att * (diffuseColor * diffuseIntensity) * specularIntensity *
+                      pow(max(0.0f, dot(normalize(-r), normalize(worldPos))), specularPower) * specMat.rgb;
+
+    // Sample the color texture
     float4 colorMat = txColorMat.Sample(txSampler, tex);
 
     // Combine lighting and texture
@@ -46,6 +53,5 @@ float4 main(float3 worldPos : POSITION, float2 tex : TEXTCORD, float3 n : NORMAL
     float3 finalColor = saturate(colorMat.rgb * lighting);
 
     // Output final color
-
     return float4(finalColor, colorMat.a);
 }

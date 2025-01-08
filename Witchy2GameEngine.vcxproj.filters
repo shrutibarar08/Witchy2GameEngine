@@ -126,6 +126,9 @@
     <ClCompile Include="Engine\EngineManager\System\MeshLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\EngineManager\Player\W2PlayerCharacter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WindowsManager\W2WindowAPI.h">
@@ -284,6 +287,12 @@
     <ClInclude Include="Engine\EngineManager\System\MeshLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\EngineManager\Player\W2PlayerCharacter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineManager\System\TextLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witchy2GameEngine.rc">
@@ -305,6 +314,7 @@
     <None Include="Shaders\Compiled\PSBlend.cso" />
     <None Include="Shaders\Compiled\VSBlend.cso" />
     <None Include="Assets\Models\mainCharacter.fbx" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\Code\TestShaders\VertexShader.hlsl" />

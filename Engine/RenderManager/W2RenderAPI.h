@@ -6,6 +6,7 @@
 #include <wrl.h>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "ExceptionManager/W2Exception.h"
 #include "ExceptionManager/DxgiInfoManager.h"
@@ -36,8 +37,8 @@ public:
 
 	//~ Render Setups
 	void SetBackgroundColor(float color[]);
-	void SetPSShaderResources(ID3D11ShaderResourceView* srv, UINT slot) const;
-	void SetPSShaderResources(const std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>& srv, UINT slot) const;
+	void SetPSShaderResources(ID3D11ShaderResourceView* srv, UINT slot);
+	void SetPSShaderResources(const std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>& srv, UINT slot);
 
 	//~ Render Methods
 	void RecordStart() const;
@@ -49,6 +50,7 @@ private:
 	~W2RenderAPI();
 
 	static W2RenderAPI* m_instance;
+	void ClearPSShaderResources();
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device>		   m_device;
@@ -57,6 +59,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_renderTV;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D>		   m_depthT2D;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthSV;
+	std::vector<UINT> m_usedSlots;
 
 #ifdef _DEBUG
 	DxgiInfoManager m_dxgiInfoManager;

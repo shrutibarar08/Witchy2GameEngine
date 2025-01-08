@@ -22,6 +22,14 @@ TestApplication::TestApplication()
 #else
 	W2WindowAPI::Get()->DisableCursor();
 #endif
+
+
+	for (int i = 0; i < 10; i++)
+	{
+		std::unique_ptr<MeshModel> x = std::make_unique<MeshModel>("Assets\\Models\\projectile\\scene.gltf",
+			ModelWindow::TRANSFORM_PARAM_DESC(), true);
+		m_bullets.emplace_back(std::move(x));
+	}
 }
 
 void TestApplication::BeginPlay()
@@ -30,19 +38,23 @@ void TestApplication::BeginPlay()
 void TestApplication::Tick(float deltaTime)
 {
 	m_light.Bind();
-	m_meshLoader.Draw();
-	m_light.Draw();
+	playerCharacter.Draw();
+	m_ground.Draw();
+	for (int i = 0; i < 10; i++)
+	{
+		m_bullets[i]->Draw();
+	}
+	m_light.Draw(deltaTime);
 }
 
 void TestApplication::DebugUI()
 {
-	WitchyEngine::DebugUI();
-	m_light.InitControlWindow();
-	m_meshLoader.ShowWindow();
-
-	static bool showWindow = true;
-	if (showWindow)
+	//WitchyEngine::DebugUI();
+	//m_light.InitControlWindow();
+	// m_bullet.ShowWindow(m_timer.DeltaTime());
+	for (int i = 0; i < 10; i++)
 	{
-		ImGui::ShowDemoWindow(&showWindow);
+		m_bullets[i]->Launch(m_timer.DeltaTime());
 	}
+	playerCharacter.InitControlUI(m_timer.DeltaTime());
 }

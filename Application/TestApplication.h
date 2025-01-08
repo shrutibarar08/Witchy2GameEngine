@@ -3,6 +3,8 @@
 #include "EngineManager/WitchyEngine.h"
 #include "EngineManager/Light/W2PointLight.h"
 #include "EngineManager/System/MeshLoader.h"
+#include "EngineManager/Player/W2PlayerCharacter.h"
+#include "EngineManager/System/MeshLoader.h"
 
 /**
  * @brief Test Application Class
@@ -22,7 +24,13 @@ private:
 
 	//~ Objects
 	W2PointLight m_light{};
-	MeshModel m_meshLoader{ "Assets/Models/nano_textured/nanosuit.obj" };
+	//~ For Testing stress
+	std::vector<std::unique_ptr<MeshModel>> m_bullets;
+	MeshModel m_ground{ "Assets\\Models\\rocky_desert_landscape\\scene.gltf",
+	ModelWindow::TRANSFORM_PARAM_DESC{
+		-0.104, 0.034, 0, 5.68, 2.31, 3.579
+	}};
+	W2PlayerCharacter playerCharacter{};
 
 	struct
 	{
@@ -34,3 +42,4 @@ private:
 		float z = 0.0f;
 	} m_transform;
 };
+

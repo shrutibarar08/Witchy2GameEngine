@@ -20,12 +20,12 @@ public:
 	SurfaceTexture&& operator=(SurfaceTexture&&) = delete;
 
 	void Bind() noexcept override;
-	void AddTexture(const std::wstring& texturePath);
-	void AddTexture(const std::string& texturePath);
-	void AddFileTexture(const std::string& texturePath);
+	void AddTexture(const std::wstring& texturePath, UINT slot);
+	void AddTexture(const std::string& texturePath, UINT slot);
+	void AddFileTexture(const std::string& texturePath, UINT slot);
 
-	void UpdateTexture(const std::wstring& texturePath);
-	void UpdateTexture(const std::string& texturePath);
+	void UpdateTexture(const std::wstring& texturePath, UINT slot);
+	void UpdateTexture(const std::string& texturePath, UINT slot);
 	std::string GetTopTexture() const;
 	void AddSampler();
 
@@ -35,7 +35,7 @@ private:
 	DirectX::ScratchImage GetScratchImage(const std::string& texturePath);
 
 private:
-	std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> m_shaderRV;
+	std::unordered_map<UINT, std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>> m_shaderRV;
 	std::vector<Microsoft::WRL::ComPtr<ID3D11SamplerState>> m_samplerState;
 	std::unordered_map<std::wstring, bool> m_cacheInfo;
 	std::wstring m_topTexture;

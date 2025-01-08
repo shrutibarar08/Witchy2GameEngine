@@ -5,8 +5,9 @@
 
 
 W2PointLight::W2PointLight(float radius)
-	: m_data{}, m_sphereMesh(radius), m_lightBuffer()
-{}
+	:m_sphereMesh(radius), m_lightBuffer()
+{
+}
 
 void W2PointLight::InitControlWindow() noexcept
 {
@@ -29,8 +30,10 @@ void W2PointLight::InitControlWindow() noexcept
 	ImGui::End();
 }
 
-void W2PointLight::Draw() const noexcept
+void W2PointLight::Draw(float deltaTime) noexcept
 {
+	m_data.LightPosition.x += deltaTime * 5;
+	if (m_data.LightPosition.x >= 65) m_data.LightPosition.x = -70.f;
 	m_sphereMesh.SetTranslation(m_data.LightPosition);
 	m_sphereMesh.Draw();
 }

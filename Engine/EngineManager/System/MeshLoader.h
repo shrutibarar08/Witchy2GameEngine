@@ -7,8 +7,10 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "ExceptionManager/W2Exception.h"
+#include "TextLoader.h"
 
 #include <iostream>
+
 
 class ModelException : public W2Exception
 {
@@ -53,18 +55,58 @@ private:
 	int m_id;
 };
 
+// MeshModel
+class ModelWindow // pImpl idiom, only defined in this .cpp
+{
+public:
+
+	struct TRANSFORM_PARAM_DESC
+	{
+		float roll = 0.0f;
+		float pitch = 0.0f;
+		float yaw = 0.0f;
+		float x = 0.0f;
+		float y = 0.0f;
+		float z = 0.0f;
+	};
+
+	ModelWindow(const std::string& name, const TRANSFORM_PARAM_DESC& param = {});
+	~ModelWindow() = default;
+
+	void Show(const char* windowName, const MeshNode& root, float deltaTime, bool controller) noexcept;
+	void Launch(float deltaTime) noexcept;
+	DirectX::XMMATRIX GetTransform() const noexcept;
+	MeshNode* GetSelectedNode() const noexcept;
+
+private:
+	std::optional<int> selectedIndex;
+	MeshNode* pSelectedNode{ nullptr };
+
+	std::unordered_map<int, TRANSFORM_PARAM_DESC> transforms;
+	std::string m_name;
+	TextFileHandler m_handler{};
+	bool m_launched{ false };
+	const float m_rightHand{ 24.f };
+	const float m_leftHand{ -10.f };
+	const float m_top{ -15.f };
+	const float m_lower{ 0.0f };
+};
+
 class MeshModel
 {
 public:
-	MeshModel(const std::string fileName);
+	MeshModel(const std::string fileName, const ModelWindow::TRANSFORM_PARAM_DESC& param={}, bool normalize=false);
 	void Draw() const;
-	void ShowWindow(const char* windowName = nullptr) noexcept;
+	void ShowWindow(float deltaTime, const char* windowName = nullptr, bool controller = false) noexcept;
+	void Launch(float deltaTime) noexcept;
 	~MeshModel() noexcept;
 private:
-	static std::unique_ptr<Mesh> ParseMesh(const aiMesh& mesh, const aiMaterial* const* pMaterial);
+	std::unique_ptr<Mesh> ParseMesh(const aiMesh& mesh, const aiMaterial* const* pMaterial);
 	std::unique_ptr<MeshNode> ParseNode(int& nextId, const aiNode& node) noexcept;
 private:
 	std::unique_ptr<MeshNode> pRoot;
 	std::vector<std::unique_ptr<Mesh>> ppMeshes;
 	std::unique_ptr<class ModelWindow> pWindow;
+	std::string m_basePath{ "" };
+	bool m_normalize;
 };

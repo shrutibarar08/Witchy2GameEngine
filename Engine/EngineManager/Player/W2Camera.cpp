@@ -6,6 +6,8 @@
 
 #include "ImuGui/imgui.h"
 #include "MathLib.h"
+#include "W2Timer.h"
+#include "RenderManager/W2RenderAPI.h"
 
 #include "WindowsManager/W2WindowAPI.h"
 
@@ -47,20 +49,7 @@ void W2Camera::UpdateFreeCamera(float deltaTime)
 		{
 			continue;
 		}
-
-		switch (e->GetCode())
-		{
-		case VK_ESCAPE:
-			if (W2WindowAPI::Get()->IsCursorEnable())
-			{
-				W2WindowAPI::Get()->DisableCursor();
-			}
-			else
-			{
-				W2WindowAPI::Get()->EnableCursor();
-			}
-			break;
-		}
+		W2WindowAPI::Get()->EnableCursor();
 	}
 
 	if (!W2WindowAPI::Get()->IsCursorEnable())
@@ -98,6 +87,11 @@ void W2Camera::UpdateFreeCamera(float deltaTime)
 			W2Camera::Get()->Rotate(static_cast<float>(delta->x), static_cast<float>(delta->y));
 		}
 	}
+}
+
+void W2Camera::UpdateFocusCamera(float deltaTime)
+{
+
 }
 
 void W2Camera::InitControlWindow() noexcept

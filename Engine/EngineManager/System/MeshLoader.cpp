@@ -4,6 +4,11 @@
 #include <unordered_map>
 #include <sstream>
 
+#include "EngineManager/Player/W2Camera.h"
+#include "WindowsManager/W2WindowAPI.h"
+
+#include <random>
+
 namespace dx = DirectX;
 
 
@@ -12,6 +17,7 @@ ModelException::ModelException(int line, const char* file, std::string note) noe
 	W2Exception(line, file),
 	note(std::move(note))
 {
+
 }
 
 const char* ModelException::what() const noexcept
@@ -36,10 +42,8 @@ const std::string& ModelException::GetNote() const noexcept
 // Mesh
 Mesh::Mesh(std::vector<std::unique_ptr<Bindable>> bindPtrs)
 {
-	if (!IsStaticInitialized())
-	{
-		AddStaticBind(std::make_unique<Topology>(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	}
+
+	AddBind(std::make_unique<Topology>(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
 	for (auto& pb : bindPtrs)
 	{
@@ -100,6 +104,117 @@ void MeshNode::AddChild(std::unique_ptr<MeshNode> pChild)
 	ppChildNodes.push_back(std::move(pChild));
 }
 
+ModelWindow::ModelWindow(const std::string& name, const TRANSFORM_PARAM_DESC& param)
+: m_name(name)
+{
+	transforms[0] = param;
+}
+
+void ModelWindow::Show(const char* windowName, const MeshNode& root, float deltaTime, bool controller) noexcept
+{
+	// window m_name defaults to "MeshModel"
+	windowName = windowName ? windowName : m_name.c_str();
+	// need an ints to track node indices and selected node
+	int nodeIndexTracker = 0;
+	if (!controller && ImGui::Begin(windowName))
+	{
+		ImGui::Columns(2, nullptr, true);
+		root.DrawChild(pSelectedNode);
+		ImGui::NextColumn();
+		if (pSelectedNode != nullptr)
+		{
+			auto& transform = transforms[pSelectedNode->GetId()];
+			ImGui::Text("Orientation");
+			ImGui::SliderAngle("Roll", &transform.roll, -180.0f, 180.0f);
+			ImGui::SliderAngle("Pitch", &transform.pitch, -180.0f, 180.0f);
+			ImGui::SliderAngle("Yaw", &transform.yaw, -180.0f, 180.0f);
+			ImGui::Text("Position");
+			ImGui::SliderFloat("X", &transform.x, -20.0f, 20.0f);
+			ImGui::SliderFloat("Y", &transform.y, -20.0f, 20.0f);
+			ImGui::SliderFloat("Z", &transform.z, -20.0f, 20.0f);
+		}
+		ImGui::End();
+	}
+
+	if (W2WindowAPI::Get()->Keyboard.KeyIsPressed('F'))
+	{
+		std::cout << "I am: " << m_name << "\n";
+		std::cout << "Translation: " << transforms[root.GetId()].x << ", "
+			<< transforms[root.GetId()].y << ", " << transforms[root.GetId()].z << "\n";
+
+		std::cout << "Rotation: " << transforms[root.GetId()].roll << ", "
+			<< transforms[root.GetId()].pitch << ", " << transforms[root.GetId()].yaw << "\n";
+	}
+
+	static bool turn = false;
+	if (W2WindowAPI::Get()->Keyboard.KeyIsPressed('D') && controller)
+	{
+		transforms[root.GetId()].x += deltaTime * 10;
+
+		if (transforms[root.GetId()].roll >= 0.2) turn = true;
+		if (transforms[root.GetId()].roll <= -0.2) turn = false;
+
+		if (!turn) transforms[root.GetId()].roll += deltaTime;
+		else transforms[root.GetId()].roll -= deltaTime;
+	}
+
+	if (W2WindowAPI::Get()->Keyboard.KeyIsPressed('A') && controller)
+	{
+		transforms[root.GetId()].x -= deltaTime * 10;
+
+		if (transforms[root.GetId()].roll >= 0.2) turn = false;
+		if (transforms[root.GetId()].roll <= -0.2) turn = true;
+
+		if (!turn) transforms[root.GetId()].roll -= deltaTime;
+		else transforms[root.GetId()].roll += deltaTime;
+	}
+
+	if (W2WindowAPI::Get()->Keyboard.KeyIsPressed('W') && controller)
+	{
+		transforms[root.GetId()].z -= deltaTime * 20;
+	}
+
+	if (W2WindowAPI::Get()->Keyboard.KeyIsPressed('S') && controller)
+	{
+		transforms[root.GetId()].z += deltaTime * 20;
+	}
+}
+
+void ModelWindow::Launch(float deltaTime) noexcept
+{
+	if (!m_launched)
+	{
+		//~ Do Something
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<> dist(-15.0, 0.0);
+		transforms.at(0).z = dist(gen);
+		transforms.at(0).y = 0.0f;
+		transforms.at(0).x = m_rightHand;
+		m_launched = true;
+	}
+
+	if (m_launched)
+	{
+		transforms.at(0).x -= deltaTime * 10.f;
+	}
+
+	if (transforms.at(0).x <= m_leftHand) m_launched = false;
+}
+
+DirectX::XMMATRIX ModelWindow::GetTransform() const noexcept
+{
+	const auto& transform = transforms.at(0);
+	return
+		DirectX::XMMatrixRotationRollPitchYaw(transform.roll, transform.pitch, transform.yaw) *
+		DirectX::XMMatrixTranslation(transform.x, transform.y, transform.z);
+}
+
+MeshNode* ModelWindow::GetSelectedNode() const noexcept
+{
+	return pSelectedNode;
+}
+
 void MeshNode::DrawChild(MeshNode*& pSelectedNode) const noexcept
 {
 	const int selectedId = (pSelectedNode == nullptr) ? -1 : pSelectedNode->GetId();
@@ -133,69 +248,21 @@ int MeshNode::GetId() const noexcept
 	return m_id;
 }
 
-
-// MeshModel
-class ModelWindow // pImpl idiom, only defined in this .cpp
-{
-public:
-	void Show(const char* windowName, const MeshNode& root) noexcept
-	{
-		// window m_name defaults to "MeshModel"
-		windowName = windowName ? windowName : "MeshModel";
-		// need an ints to track node indices and selected node
-		int nodeIndexTracker = 0;
-		if (ImGui::Begin(windowName))
-		{
-			ImGui::Columns(2, nullptr, true);
-			root.DrawChild(pSelectedNode);
-
-			ImGui::NextColumn();
-			if (pSelectedNode != nullptr)
-			{
-				auto& transform = transforms[pSelectedNode->GetId()];
-				ImGui::Text("Orientation");
-				ImGui::SliderAngle("Roll", &transform.roll, -180.0f, 180.0f);
-				ImGui::SliderAngle("Pitch", &transform.pitch, -180.0f, 180.0f);
-				ImGui::SliderAngle("Yaw", &transform.yaw, -180.0f, 180.0f);
-				ImGui::Text("Position");
-				ImGui::SliderFloat("X", &transform.x, -20.0f, 20.0f);
-				ImGui::SliderFloat("Y", &transform.y, -20.0f, 20.0f);
-				ImGui::SliderFloat("Z", &transform.z, -20.0f, 20.0f);
-			}
-		}
-		ImGui::End();
-	}
-	dx::XMMATRIX GetTransform() const noexcept
-	{
-		assert(pSelectedNode != nullptr);
-		const auto& transform = transforms.at(pSelectedNode->GetId());
-		return
-			dx::XMMatrixRotationRollPitchYaw(transform.roll, transform.pitch, transform.yaw) *
-			dx::XMMatrixTranslation(transform.x, transform.y, transform.z);
-	}
-	MeshNode* GetSelectedNode() const noexcept
-	{
-		return pSelectedNode;
-	}
-private:
-	std::optional<int> selectedIndex;
-	MeshNode* pSelectedNode{ nullptr };
-	struct TransformParameters
-	{
-		float roll = 0.0f;
-		float pitch = 0.0f;
-		float yaw = 0.0f;
-		float x = 0.0f;
-		float y = 0.0f;
-		float z = 0.0f;
-	};
-	std::unordered_map<int, TransformParameters> transforms;
-};
-
-MeshModel::MeshModel(const std::string fileName)
+MeshModel::MeshModel(const std::string fileName, const ModelWindow::TRANSFORM_PARAM_DESC& param, bool normalize)
 	:
-	pWindow(std::make_unique<ModelWindow>())
+	pWindow(std::make_unique<ModelWindow>(fileName, param)), m_normalize(normalize)
 {
+	for (int i = fileName.size() - 1; i >= 0; i--)
+	{
+		if (fileName[i] == '\\' || fileName[i] == '/')
+		{
+			m_basePath = std::string(fileName.begin(), fileName.begin() + i);
+			std::cout << "Selected Base: " << m_basePath << "\n";
+			m_basePath += '/';
+			break;
+		}
+	}
+
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(fileName.c_str(),
 		aiProcess_Triangulate |
@@ -220,16 +287,18 @@ MeshModel::MeshModel(const std::string fileName)
 
 void MeshModel::Draw() const
 {
-	if (auto node = pWindow->GetSelectedNode())
-	{
-		node->SetTransform(pWindow->GetTransform());
-	}
+	pRoot->SetTransform(pWindow->GetTransform());
 	pRoot->Draw(dx::XMMatrixIdentity());
 }
 
-void MeshModel::ShowWindow(const char* windowName) noexcept
+void MeshModel::ShowWindow(float deltaTime, const char* windowName, bool controller) noexcept
 {
-	pWindow->Show(windowName, *pRoot);
+	pWindow->Show(windowName, *pRoot, deltaTime, controller);
+}
+
+void MeshModel::Launch(float deltaTime) noexcept
+{
+	pWindow->Launch(deltaTime);
 }
 
 MeshModel::~MeshModel() noexcept
@@ -243,15 +312,27 @@ std::unique_ptr<Mesh> MeshModel::ParseMesh(const aiMesh& mesh, const aiMaterial*
 	RenderCore::VertexBuffer vbuf(std::move(
 		VertexLayout{}
 		.Append(VertexLayout::Position3D)
+		.Append(VertexLayout::Texture2D)
 		.Append(VertexLayout::Normal)
 	));
 
 	for (unsigned int i = 0; i < mesh.mNumVertices; i++)
 	{
-		vbuf.EmplaceBack(
-			*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mVertices[i]),
-			*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mNormals[i])
-		);
+		if (m_normalize)
+		{
+			vbuf.EmplaceBack(
+				*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mVertices[i].Normalize()),
+				*reinterpret_cast<dx::XMFLOAT2*>(&mesh.mTextureCoords[0][i]),
+				*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mNormals[i])
+			);
+		}else
+		{
+			vbuf.EmplaceBack(
+				*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mVertices[i]),
+				*reinterpret_cast<dx::XMFLOAT2*>(&mesh.mTextureCoords[0][i]),
+				*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mNormals[i])
+			);
+		}
 	}
 
 	std::vector<unsigned short> indices;
@@ -266,7 +347,6 @@ std::unique_ptr<Mesh> MeshModel::ParseMesh(const aiMesh& mesh, const aiMaterial*
 	}
 
 	std::vector<std::unique_ptr<Bindable>> ppBinds;
-
 	std::unique_ptr<SurfaceTexture> tex = std::make_unique<SurfaceTexture>();
 	tex->AddSampler();
 
@@ -280,9 +360,18 @@ std::unique_ptr<Mesh> MeshModel::ParseMesh(const aiMesh& mesh, const aiMaterial*
 
 		if (texturePath.length)
 		{
-			const auto x = "Assets\\Models\\nano_textured\\"s + texturePath.C_Str();
+			const auto x =  m_basePath + texturePath.C_Str();
 			std::cout << x << "\n";
-			tex->AddFileTexture(x);
+			tex->AddFileTexture(x, 0u);
+		}
+
+		material.GetTexture(aiTextureType_SPECULAR, 0, &texturePath);
+
+		if (texturePath.length)
+		{
+			const auto x = m_basePath + texturePath.C_Str();
+			std::cout << x << "\n";
+			tex->AddFileTexture(x, 1u);
 		}
 	}
 
@@ -294,18 +383,18 @@ std::unique_ptr<Mesh> MeshModel::ParseMesh(const aiMesh& mesh, const aiMaterial*
 	ppBinds.push_back(std::make_unique<VertexBuffer>(vbuf));
 	ppBinds.push_back(std::make_unique<IndexBuffer>(indices));
 
-	auto pvs = std::make_unique<VertexShader>(L"Shaders/Compiled/PointVST.cso");
+	auto pvs = std::make_unique<VertexShader>(L"Shaders/Compiled/PointVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 
 	ppBinds.push_back(std::move(pvs));
-	ppBinds.push_back(std::make_unique<PixelShader>(L"Shaders/Compiled/PointPST.cso"));
+	ppBinds.push_back(std::make_unique<PixelShader>(L"Shaders/Compiled/PointPS.cso"));
 	ppBinds.push_back(std::make_unique<InputLayout>(vbuf.GetLayout().GetD3DLayout(), pvsbc));
 
 	struct PSMaterialConstant
 	{
 		DirectX::XMFLOAT3 color = { 0.6f,0.6f,0.8f };
-		float specularIntensity = 0.6f;
-		float specularPower = 30.0f;
+		float specularIntensity = 0.8f;
+		float specularPower = 40.0f;
 		float padding[3];
 	} pmc;
 

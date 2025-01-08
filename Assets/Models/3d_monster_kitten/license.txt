@@ -1,0 +1,11 @@
+Model Information:
+* title:	3d monster kitten
+* source:	https://sketchfab.com/3d-models/3d-monster-kitten-69feaf783055478fa4418b1bd46e10b2
+* author:	sokoban (https://sketchfab.com/sokoban)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "3d monster kitten" (https://sketchfab.com/3d-models/3d-monster-kitten-69feaf783055478fa4418b1bd46e10b2) by sokoban (https://sketchfab.com/sokoban) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
