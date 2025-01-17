@@ -17,12 +17,7 @@ TestApplication::TestApplication()
 	: WitchyEngine({0, 0, 1920, 1080}, 
 		"Application_1")
 {
-#ifdef _DEBUG
 	W2WindowAPI::Get()->EnableCursor();
-#else
-	W2WindowAPI::Get()->DisableCursor();
-#endif
-
 
 	for (int i = 0; i < 10; i++)
 	{
